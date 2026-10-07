@@ -102,54 +102,7 @@ interface QuestionAnalytics {
   distribution?: { label: string; count: number }[];
 }
 
-interface SummaryStats {
-  count: number;
-  mean?: number;
-  median?: number;
-  min?: number;
-  max?: number;
-  mode?: string;
-  stdDev?: number;
-}
 
-function computeSummaryStats(chartData: any[], valueKey: string, labelKey: string): SummaryStats {
-  const values = chartData.map((d) => Number(d[valueKey])).filter((v) => !isNaN(v));
-  if (values.length === 0) return { count: 0 };
-
-  const count = values.length;
-  const sum = values.reduce((a, b) => a + b, 0);
-  const mean = sum / count;
-
-  const sorted = [...values].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  const median = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-
-  const min = sorted[0];
-  const max = sorted[sorted.length - 1];
-
-  // Standard deviation
-  const variance = values.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / count;
-  const stdDev = Math.sqrt(variance);
-
-  // Mode (for categorical: most frequent label)
-  const freqMap: Record<string, number> = {};
-  chartData.forEach((d) => {
-    const label = String(d[labelKey] ?? d[valueKey]);
-    freqMap[label] = (freqMap[label] || 0) + 1;
-  });
-  const modeEntry = Object.entries(freqMap).sort((a, b) => b[1] - a[1])[0];
-  const mode = modeEntry ? modeEntry[0] : undefined;
-
-  return {
-    count,
-    mean: Math.round(mean * 100) / 100,
-    median: Math.round(median * 100) / 100,
-    min,
-    max,
-    stdDev: Math.round(stdDev * 100) / 100,
-    mode,
-  };
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -168,7 +121,7 @@ export const AnalyticsPage: React.FC = () => {
   const [xAxisQuestion, setXAxisQuestion] = useState<string>('');
   const [yAxisQuestion, setYAxisQuestion] = useState<string>('count');
   const [colorPalette, setColorPalette] = useState<string>('violet');
-  const [showStatsPanel, setShowStatsPanel] = useState(true);
+
 
   const plotRef = useRef<HTMLDivElement>(null);
 
@@ -214,7 +167,7 @@ export const AnalyticsPage: React.FC = () => {
   }, [analytics, xAxisQuestion]);
 
   const chartData = useMemo(() => {
-    if (!selectedQuestion) return [] as { label: string; count: number; percentage?: number }[];
+    if (!selectedQuestion) return [] as { label: string; count: number; percentage?: number; mean?: number; median?: number; min?: number; max?: number }[];
 
     if (isCategoricalQuestion(selectedQuestion.type) && Array.isArray(selectedQuestion.data)) {
       return selectedQuestion.data.map((d: any) => ({
@@ -225,39 +178,84 @@ export const AnalyticsPage: React.FC = () => {
     }
 
     if (isNumericQuestion(selectedQuestion.type)) {
+      if (['mean', 'median', 'min', 'max'].includes(yAxisQuestion)) {
+        let mean, median, min, max, totalCount = 0;
+        if (Array.isArray(selectedQuestion.data)) {
+          let sum = 0;
+          let values: number[] = [];
+          for (const item of selectedQuestion.data) {
+            const val = Number(item.label);
+            if (!isNaN(val)) {
+              totalCount += item.count;
+              sum += val * item.count;
+              for (let i = 0; i < item.count; i++) values.push(val);
+            }
+          }
+          if (totalCount > 0) {
+            mean = Math.round((sum / totalCount) * 100) / 100;
+            values.sort((a, b) => a - b);
+            min = values[0];
+            max = values[values.length - 1];
+            const mid = Math.floor(values.length / 2);
+            const rawMedian = values.length % 2 !== 0 ? values[mid] : (values[mid - 1] + values[mid]) / 2;
+            median = Math.round(rawMedian * 100) / 100;
+          }
+        } else if (selectedQuestion.data) {
+          totalCount = selectedQuestion.data.count || 0;
+          mean = selectedQuestion.data.avg;
+          median = selectedQuestion.data.median;
+          min = selectedQuestion.data.min;
+          max = selectedQuestion.data.max;
+        }
+
+        return [
+          { 
+            label: selectedQuestion.title,
+            count: totalCount,
+            mean: mean,
+            median: median,
+            min: min,
+            max: max,
+            percentage: undefined
+          }
+        ];
+      }
+
       if (selectedQuestion.distribution && selectedQuestion.distribution.length > 0) {
-        return selectedQuestion.distribution.map((d) => ({
+        return selectedQuestion.distribution.map((d: any) => ({
           label: d.label,
           count: d.count,
-          percentage: undefined as number | undefined,
+          percentage: undefined,
         }));
       }
-      if (selectedQuestion.data && !Array.isArray(selectedQuestion.data)) {
-        // Numeric summary — create a single-bar representation
+
+      if (Array.isArray(selectedQuestion.data)) {
+        return selectedQuestion.data.map((d: any) => ({
+          label: d.label as string,
+          count: d.count as number,
+          percentage: d.percentage as number | undefined,
+        }));
+      }
+
+      if (selectedQuestion.data) {
         return [
-          { label: 'Avg', count: selectedQuestion.data.avg as number, percentage: undefined as number | undefined },
-          { label: 'Median', count: selectedQuestion.data.median as number, percentage: undefined as number | undefined },
-          { label: 'Min', count: selectedQuestion.data.min as number, percentage: undefined as number | undefined },
-          { label: 'Max', count: selectedQuestion.data.max as number, percentage: undefined as number | undefined },
+          { 
+            label: selectedQuestion.title,
+            count: selectedQuestion.data.count as number || 0,
+            mean: selectedQuestion.data.avg as number,
+            median: selectedQuestion.data.median as number,
+            min: selectedQuestion.data.min as number,
+            max: selectedQuestion.data.max as number,
+            percentage: undefined as number | undefined 
+          }
         ];
       }
     }
 
     return [] as { label: string; count: number; percentage?: number }[];
-  }, [selectedQuestion]);
+  }, [selectedQuestion, yAxisQuestion]);
 
-  const summaryStats = useMemo(() => {
-    if (chartData.length === 0) return null;
-    return computeSummaryStats(chartData, 'count', 'label');
-  }, [chartData]);
 
-  const numericSummary = useMemo(() => {
-    if (!selectedQuestion) return null;
-    if (isNumericQuestion(selectedQuestion.type) && selectedQuestion.data && !Array.isArray(selectedQuestion.data)) {
-      return selectedQuestion.data;
-    }
-    return null;
-  }, [selectedQuestion]);
 
   const colors = COLOR_PALETTES[colorPalette] || COLOR_PALETTES.violet;
 
@@ -268,12 +266,20 @@ export const AnalyticsPage: React.FC = () => {
     if (selectedQuestion && isCategoricalQuestion(selectedQuestion.type)) {
       options.push({ label: 'Percentage (%)', value: 'percentage' });
     }
+    if (selectedQuestion && isNumericQuestion(selectedQuestion.type)) {
+      options.push({ label: 'Mean', value: 'mean' });
+      options.push({ label: 'Median', value: 'median' });
+      options.push({ label: 'Min', value: 'min' });
+      options.push({ label: 'Max', value: 'max' });
+    }
     return options;
   }, [selectedQuestion]);
 
-  const activeYKey = yAxisQuestion === 'percentage' && isCategoricalQuestion(selectedQuestion?.type || 'short_text')
-    ? 'percentage'
-    : 'count';
+  const activeYKey = useMemo(() => {
+    if (yAxisQuestion === 'percentage' && isCategoricalQuestion(selectedQuestion?.type || 'short_text')) return 'percentage';
+    if (['mean', 'median', 'min', 'max'].includes(yAxisQuestion) && isNumericQuestion(selectedQuestion?.type || 'short_text')) return yAxisQuestion;
+    return 'count';
+  }, [yAxisQuestion, selectedQuestion]);
 
   // ─── Export ───────────────────────────────────────────────────────────
 
@@ -286,11 +292,9 @@ export const AnalyticsPage: React.FC = () => {
       const dataUrl = await toPng(plotRef.current, {
         quality: 1,
         pixelRatio: 2,
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#0b0914' : '#faf9ff',
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#0b0914' : '#ffffff',
         style: {
-          padding: '32px',
           margin: '0',
-          borderRadius: '0',
         },
       });
 
@@ -315,7 +319,7 @@ export const AnalyticsPage: React.FC = () => {
     setPlotType('bar');
     setYAxisQuestion('count');
     setColorPalette('violet');
-    setShowStatsPanel(true);
+
     if (plottableQuestions.length > 0) {
       setXAxisQuestion(plottableQuestions[0].id);
     }
@@ -350,24 +354,24 @@ export const AnalyticsPage: React.FC = () => {
         return (
           <ResponsiveContainer width="100%" height={380}>
             <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" opacity={0.4} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.6} />
               <XAxis
                 dataKey="label"
                 tick={{ fontSize: 11, fill: 'var(--foreground)' }}
-                axisLine={false}
-                tickLine={false}
+                axisLine={{ stroke: 'var(--border)' }}
+                tickLine={{ stroke: 'var(--border)' }}
                 angle={-35}
                 textAnchor="end"
                 height={60}
               />
               <YAxis
                 tick={{ fontSize: 11, fill: 'var(--foreground)' }}
-                axisLine={false}
-                tickLine={false}
+                axisLine={{ stroke: 'var(--border)' }}
+                tickLine={{ stroke: 'var(--border)' }}
                 label={{ value: yLabel, angle: -90, position: 'insideLeft', style: { fill: 'var(--muted-foreground)', fontSize: 11 } }}
               />
               <RechartsTooltip cursor={{ fill: 'var(--muted)', opacity: 0.3 }} contentStyle={tooltipStyle} />
-              <Bar dataKey={activeYKey} radius={[6, 6, 0, 0]} maxBarSize={56}>
+              <Bar dataKey={activeYKey} radius={[6, 6, 0, 0]} maxBarSize={56} isAnimationActive={!isExporting}>
                 {chartData.map((_: any, index: number) => (
                   <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                 ))}
@@ -391,7 +395,7 @@ export const AnalyticsPage: React.FC = () => {
                 tickLine={false}
               />
               <RechartsTooltip cursor={{ fill: 'var(--muted)', opacity: 0.3 }} contentStyle={tooltipStyle} />
-              <Bar dataKey={activeYKey} radius={[0, 6, 6, 0]} maxBarSize={36}>
+              <Bar dataKey={activeYKey} radius={[0, 6, 6, 0]} maxBarSize={36} isAnimationActive={!isExporting}>
                 {chartData.map((_: any, index: number) => (
                   <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                 ))}
@@ -416,6 +420,7 @@ export const AnalyticsPage: React.FC = () => {
                 paddingAngle={2}
                 label={({ label, percent }: any) => `${label} (${(percent * 100).toFixed(1)}%)`}
                 labelLine={{ stroke: 'var(--muted-foreground)', strokeWidth: 1 }}
+                isAnimationActive={!isExporting}
               >
                 {chartData.map((_: any, index: number) => (
                   <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
@@ -452,6 +457,7 @@ export const AnalyticsPage: React.FC = () => {
                 strokeWidth={2.5}
                 dot={{ fill: colors[0], stroke: 'var(--card)', strokeWidth: 2, r: 5 }}
                 activeDot={{ r: 7, stroke: colors[0], strokeWidth: 2, fill: 'var(--card)' }}
+                isAnimationActive={!isExporting}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -486,6 +492,7 @@ export const AnalyticsPage: React.FC = () => {
                 strokeWidth={2.5}
                 fill="url(#areaGradient)"
                 dot={{ fill: colors[0], stroke: 'var(--card)', strokeWidth: 2, r: 4 }}
+                isAnimationActive={!isExporting}
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -514,7 +521,7 @@ export const AnalyticsPage: React.FC = () => {
                 tickLine={false}
               />
               <RechartsTooltip contentStyle={tooltipStyle} cursor={{ strokeDasharray: '3 3' }} />
-              <Scatter data={chartData} fill={colors[0]}>
+              <Scatter data={chartData} fill={colors[0]} isAnimationActive={!isExporting}>
                 {chartData.map((_: any, index: number) => (
                   <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                 ))}
@@ -537,6 +544,7 @@ export const AnalyticsPage: React.FC = () => {
                 fill={colors[0]}
                 fillOpacity={0.25}
                 strokeWidth={2}
+                isAnimationActive={!isExporting}
               />
             </RadarChart>
           </ResponsiveContainer>
@@ -729,64 +737,30 @@ export const AnalyticsPage: React.FC = () => {
           <div className="space-y-4">
             {/* Chart */}
             <Card>
-              <div ref={plotRef}>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
+              <div ref={plotRef} className={isExporting ? "bg-card border border-border p-6 rounded-lg shadow-sm" : ""}>
+                <CardHeader className={isExporting ? "px-0 pt-0 pb-6" : "pb-2"}>
+                  <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-base">
+                      <CardTitle className={isExporting ? "text-xl font-medium text-foreground" : "text-base"}>
                         {selectedQuestion?.title || 'Select a question'}
                       </CardTitle>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {PLOT_OPTIONS.find((o) => o.value === plotType)?.label} · {activeYKey === 'percentage' ? 'Percentage' : 'Count'} · {colorPalette} palette
-                      </p>
+                      {!isExporting && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {PLOT_OPTIONS.find((o) => o.value === plotType)?.label} · {activeYKey === 'percentage' ? 'Percentage' : 'Count'} · {colorPalette} palette
+                        </p>
+                      )}
                     </div>
-                    {selectedQuestion && (
+                    {!isExporting && selectedQuestion && (
                       <span className="text-xs font-mono bg-muted px-2 py-1 rounded text-muted-foreground">
                         {selectedQuestion.type.replace('_', ' ')}
                       </span>
                     )}
                   </div>
                 </CardHeader>
-                <CardContent>{renderChart()}</CardContent>
+                <CardContent className={isExporting ? "p-0" : ""}>{renderChart()}</CardContent>
               </div>
             </Card>
 
-            {/* Summary Statistics */}
-            {summaryStats && summaryStats.count > 0 && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <button
-                    className="flex items-center justify-between w-full text-left"
-                    onClick={() => setShowStatsPanel(!showStatsPanel)}
-                  >
-                    <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                      Summary Statistics
-                    </CardTitle>
-                    {showStatsPanel ? (
-                      <ChevronUp className="w-4 h-4 text-muted-foreground" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                    )}
-                  </button>
-                </CardHeader>
-                {showStatsPanel && (
-                  <CardContent>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                      <StatBox label="Count" value={summaryStats.count} />
-                      {summaryStats.mean !== undefined && <StatBox label="Mean" value={summaryStats.mean} />}
-                      {summaryStats.median !== undefined && <StatBox label="Median" value={summaryStats.median} />}
-                      {summaryStats.min !== undefined && <StatBox label="Min" value={summaryStats.min} />}
-                      {summaryStats.max !== undefined && <StatBox label="Max" value={summaryStats.max} />}
-                      {summaryStats.stdDev !== undefined && <StatBox label="Std Dev" value={summaryStats.stdDev} />}
-                      {summaryStats.mode && <StatBox label="Mode" value={summaryStats.mode} />}
-                      {numericSummary && numericSummary.count !== undefined && (
-                        <StatBox label="Total Answers" value={numericSummary.count} />
-                      )}
-                    </div>
-                  </CardContent>
-                )}
-              </Card>
-            )}
 
             {/* Data Table Preview */}
             {chartData.length > 0 && (
@@ -802,10 +776,9 @@ export const AnalyticsPage: React.FC = () => {
                       <thead className="sticky top-0 bg-muted">
                         <tr>
                           <th className="text-left px-4 py-2.5 font-semibold text-foreground border-b border-border">Label</th>
-                          <th className="text-right px-4 py-2.5 font-semibold text-foreground border-b border-border">Count</th>
-                          {chartData[0]?.percentage !== undefined && (
-                            <th className="text-right px-4 py-2.5 font-semibold text-foreground border-b border-border">%</th>
-                          )}
+                          <th className="text-right px-4 py-2.5 font-semibold text-foreground border-b border-border">
+                            {activeYKey === 'percentage' ? '%' : activeYKey.charAt(0).toUpperCase() + activeYKey.slice(1)}
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -820,10 +793,10 @@ export const AnalyticsPage: React.FC = () => {
                                 {row.label}
                               </div>
                             </td>
-                            <td className="text-right px-4 py-2 font-mono text-foreground">{row.count}</td>
-                            {row.percentage !== undefined && (
-                              <td className="text-right px-4 py-2 font-mono text-muted-foreground">{row.percentage}%</td>
-                            )}
+                            <td className="text-right px-4 py-2 font-mono text-foreground">
+                              {row[activeYKey]}
+                              {activeYKey === 'percentage' && '%'}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -839,15 +812,4 @@ export const AnalyticsPage: React.FC = () => {
   );
 };
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StatBox({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="bg-muted/60 rounded-lg px-4 py-3 text-center border border-border/50">
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">{label}</div>
-      <div className="text-lg font-bold text-foreground truncate" title={String(value)}>
-        {value}
-      </div>
-    </div>
-  );
-}
