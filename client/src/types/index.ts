@@ -46,12 +46,9 @@ export interface LogicRule {
 export interface SurveyTheme {
   primaryColor: string;
   backgroundColor: string;
-  mode?: 'light' | 'dark';
   layout?: 'single_page' | 'one_at_a_time';
   lightPrimaryColor?: string;
   lightBackgroundColor?: string;
-  darkPrimaryColor?: string;
-  darkBackgroundColor?: string;
   fontFamily: string;
   customCSS: string;
 }

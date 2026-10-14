@@ -5,7 +5,7 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
-import { RefreshCcw, ArrowLeft } from 'lucide-react';
+import { RefreshCcw, ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { SurveyNexusLogo } from '../../components/common/SurveyNexusLogo';
 import { StarfieldBackground } from '../../components/ui/StarfieldBackground';
 
@@ -38,94 +38,101 @@ export const ForgotPasswordPage: React.FC = () => {
 
   if (success) {
     return (
-      <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4">
+      <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
         <StarfieldBackground />
         <div className="auth-layout relative z-10 w-full">
           <div className="auth-brand auth-brand-panel">
-            <SurveyNexusLogo size={48} showText={true} subtitle="Survey Builer Platform" interactive={true} />
+            <SurveyNexusLogo size={56} showText={true} subtitle="Survey Builder Platform" />
           </div>
-          <Card className="auth-panel auth-form-panel rounded-2xl border text-center shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-2xl text-green-600">Password Reset Successful</CardTitle>
-            <CardDescription>Your password has been changed.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 pb-8">
-            <p className="text-sm text-foreground">
-              A <strong>new</strong> recovery code has been generated. Please save this immediately as the old one is no longer valid:
-            </p>
-            <div className="bg-muted p-4 rounded-md font-mono text-2xl font-bold tracking-widest my-4">
-              {newCode}
-            </div>
-            <Button onClick={() => navigate('/login')} className="w-full mt-4">
-              Return to Login
-            </Button>
-          </CardContent>
-        </Card>
+          <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 text-center shadow-2xl backdrop-blur-2xl">
+            <CardHeader className="pb-2">
+              <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
+                <span>✓</span> Reset Successful
+              </div>
+              <CardTitle className="text-3xl font-extrabold text-slate-900">Password Changed</CardTitle>
+              <CardDescription className="text-sm text-slate-500">Your account credentials have been updated</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 pb-6 pt-2">
+              <p className="text-sm text-slate-600 leading-relaxed">
+                A <strong>new</strong> recovery code has been generated. Please save this immediately as the previous code is invalid:
+              </p>
+              <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl font-mono text-2xl font-bold tracking-widest my-4 text-slate-900">
+                {newCode}
+              </div>
+              <Button onClick={() => navigate('/login')} size="lg" className="w-full rounded-full mt-4">
+                Return to Login
+                <ArrowUpRight className="ml-2 h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4">
+    <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
       <StarfieldBackground />
       <div className="auth-layout relative z-10 w-full">
         <div className="auth-brand auth-brand-panel">
-          <SurveyNexusLogo size={144} showText={true} stacked subtitle="Survey Builer Platform" interactive={true} className="auth-logo" />
+          <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
+            <span>✦</span> Password Recovery
+          </div>
+          <SurveyNexusLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
         </div>
-        <Card className="auth-panel auth-form-panel rounded-2xl border shadow-xl">
-        <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl">Reset Password</CardTitle>
-          <CardDescription>Enter your email and recovery code to reset your password.</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            <Input
-              id="email"
-              type="email"
-              label="Account Email"
-              authStyle
-              placeholder="name@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-            <Input
-              id="code"
-              type="text"
-              label="Recovery Code"
-              placeholder="8-character code"
-              value={recoveryCode}
-              onChange={(e) => setRecoveryCode(e.target.value)}
-              required
-              disabled={isLoading}
-              className="font-mono uppercase"
-            />
-            <Input
-              id="new-password"
-              type="password"
-              label="New Password"
-              authStyle
-              placeholder="••••••••"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              disabled={isLoading}
-              minLength={8}
-            />
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4 pt-4">
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-              <RefreshCcw className="w-4 h-4 mr-2" />
-              Reset Password
-            </Button>
-            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center justify-center">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Back to login
-            </Link>
-          </CardFooter>
-        </form>
-      </Card>
+        <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
+          <CardHeader className="space-y-1.5 text-center pb-2">
+            <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Reset Password</CardTitle>
+            <CardDescription className="text-sm text-slate-500">Enter your email and 8-character recovery code</CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="space-y-4 pt-2">
+              <Input
+                id="email"
+                type="email"
+                label="Account Email"
+                authStyle
+                placeholder="name@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+              <Input
+                id="code"
+                type="text"
+                label="Recovery Code"
+                placeholder="8-character code"
+                value={recoveryCode}
+                onChange={(e) => setRecoveryCode(e.target.value)}
+                required
+                disabled={isLoading}
+                className="font-mono uppercase tracking-wider"
+              />
+              <Input
+                id="new-password"
+                type="password"
+                label="New Password"
+                authStyle
+                placeholder="••••••••"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                disabled={isLoading}
+                minLength={8}
+              />
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4 pt-4">
+              <Button type="submit" size="lg" className="w-full rounded-full" isLoading={isLoading}>
+                <RefreshCcw className="w-4 h-4 mr-2" />
+                Reset Password
+              </Button>
+              <Link to="/login" className="text-sm font-semibold text-slate-500 hover:text-slate-900 flex items-center justify-center">
+                <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to login
+              </Link>
+            </CardFooter>
+          </form>
+        </Card>
       </div>
     </div>
   );

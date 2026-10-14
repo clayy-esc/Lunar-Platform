@@ -43,8 +43,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <div className="space-y-4 pt-2">
         <div className="flex items-start gap-4">
           {isDestructive && (
-            <div className="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full shrink-0">
-              <AlertTriangle className="w-6 h-6" />
+            <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-600 rounded-2xl shrink-0">
+              <AlertTriangle className="w-5 h-5" />
             </div>
           )}
           <div className="space-y-3 flex-1">

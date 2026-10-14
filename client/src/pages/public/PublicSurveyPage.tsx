@@ -4,7 +4,7 @@ import { Survey, LogicRule, SurveyTheme } from '../../types';
 import api from '../../lib/api';
 import { Spinner } from '../../components/ui/Spinner';
 import { Button } from '../../components/ui/Button';
-import { ArrowLeft, ArrowRight, Check, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, CheckCircle2, Sparkles } from 'lucide-react';
 
 export const PublicSurveyPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -138,74 +138,57 @@ export const PublicSurveyPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="public-survey-loading flex min-h-screen items-center justify-center" style={{ backgroundColor: '#faf9ff' }}>
-        <div className="h-8 w-8 animate-spin rounded-full border-2" style={{ borderColor: '#e5ddf4', borderTopColor: '#5120a4' }} />
+      <div className="public-survey-loading flex min-h-screen items-center justify-center bg-[#f6f8fc]">
+        <div className="h-10 w-10 animate-spin rounded-full border-3 border-indigo-200 border-t-indigo-600" />
       </div>
     );
   }
 
   if (error || !survey) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center p-4" style={{ backgroundColor: '#faf9ff' }}>
-        <div className="w-full max-w-md rounded-2xl border p-8 text-center shadow-lg" style={{ backgroundColor: '#ffffff', borderColor: '#e5ddf4' }}>
-          <h2 className="mb-2 text-xl font-bold" style={{ color: '#171329' }}>Survey unavailable</h2>
-          <p style={{ color: '#665c83' }}>{error}</p>
+      <div className="public-survey-shell flex min-h-screen flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-3xl border border-white/90 bg-white/85 p-8 text-center shadow-xl backdrop-blur-2xl">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 border border-rose-100">
+            <span>!</span>
+          </div>
+          <h2 className="mb-2 text-xl font-extrabold text-slate-900">Survey Unavailable</h2>
+          <p className="text-sm text-slate-500 leading-relaxed">{error}</p>
         </div>
       </div>
     );
   }
 
   const configuredTheme: SurveyTheme = survey.theme || {
-    primaryColor: '#5120a4',
-    backgroundColor: '#faf9ff',
+    primaryColor: '#4f46e5',
+    backgroundColor: '#f6f8fc',
     fontFamily: 'Manrope',
     layout: 'single_page',
     customCSS: '',
   };
-  const isDarkTheme = configuredTheme.mode === 'dark';
-  const theme = {
-    ...configuredTheme,
-    primaryColor: isDarkTheme
-      ? configuredTheme.darkPrimaryColor || '#a78bfa'
-      : configuredTheme.lightPrimaryColor || configuredTheme.primaryColor,
-    backgroundColor: isDarkTheme
-      ? configuredTheme.darkBackgroundColor || '#09090b'
-      : configuredTheme.lightBackgroundColor || configuredTheme.backgroundColor,
-  };
 
-  // Premium Glassmorphism Palette
-  const surfaceColor = isDarkTheme ? 'rgba(24, 24, 27, 0.65)' : 'rgba(255, 255, 255, 0.85)';
-  const backdropBlur = 'blur(24px)';
-  const textColor = isDarkTheme ? '#f4f4f5' : '#18181b';
-  const mutedTextColor = isDarkTheme ? '#a1a1aa' : '#71717a';
-  const controlBorderColor = isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)';
-  const inputBgColor = isDarkTheme ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.6)';
-  const footerBgColor = isDarkTheme ? 'rgba(0, 0, 0, 0.2)' : 'rgba(244, 244, 245, 0.4)';
-  const scaleDefaultBg = isDarkTheme ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)';
-  const cardShadow = isDarkTheme ? '0 24px 48px -12px rgba(0, 0, 0, 0.5)' : '0 24px 48px -12px rgba(0, 0, 0, 0.05)';
-
+  const primaryColor = configuredTheme.lightPrimaryColor || configuredTheme.primaryColor || '#4f46e5';
+  const fontFamily = configuredTheme.fontFamily || 'Manrope';
   const currentQ = survey.questions[currentQuestionIndex];
-  const isSinglePage = theme.layout === 'single_page';
+  const isSinglePage = configuredTheme.layout === 'single_page';
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
   const progress = isSinglePage ? 100 : ((currentQuestionIndex + 1) / survey.questions.length) * 100;
-  const progressLabel = isSinglePage ? `${survey.questions.length} questions` : `${currentQuestionIndex + 1} of ${survey.questions.length}`;
+  const progressLabel = isSinglePage ? `${survey.questions.length} questions` : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
 
-  // Validation
+  // Validation for multi-step
   const currentAnswer = answers[currentQ?.id];
   const isAnswerValid = currentQ?.required 
     ? (currentAnswer !== undefined && currentAnswer !== null && currentAnswer !== '' && (Array.isArray(currentAnswer) ? currentAnswer.length > 0 : true))
     : true;
 
   const renderQuestionInputs = (question: Survey['questions'][number]) => (
-    <div className="public-survey-answer mt-8">
+    <div className="public-survey-answer mt-6">
       {['short_text', 'number', 'date'].includes(question.type) && (
         <input
           type={question.type === 'number' ? 'number' : question.type === 'date' ? 'date' : 'text'}
           value={answers[question.id] || ''}
           onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-          placeholder="Enter your answer"
-          className="public-survey-input w-full border-b-2 bg-transparent py-3 px-0 text-xl focus:border-b-2 focus:outline-none transition-colors"
-          style={{ '--tw-ring-color': theme.primaryColor, color: textColor, borderBottomColor: answers[question.id] ? theme.primaryColor : controlBorderColor } as any}
+          placeholder="Type your response here..."
+          className="public-survey-input h-14 w-full rounded-2xl px-5 text-base sm:text-lg text-slate-900 shadow-xs focus:outline-none"
         />
       )}
 
@@ -213,9 +196,9 @@ export const PublicSurveyPage: React.FC = () => {
         <textarea
           value={answers[question.id] || ''}
           onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-          placeholder="Enter your answer"
-          className="public-survey-input min-h-37.5 w-full resize-y rounded-2xl p-4 text-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 focus:border-transparent transition-all shadow-inner"
-          style={{ '--tw-ring-color': theme.primaryColor, color: textColor, backgroundColor: inputBgColor, border: `1px solid ${controlBorderColor}` } as any}
+          placeholder="Share your detailed response..."
+          rows={4}
+          className="public-survey-input min-h-36 w-full resize-y rounded-2xl p-5 text-base text-slate-900 shadow-xs focus:outline-none"
         />
       )}
 
@@ -230,20 +213,33 @@ export const PublicSurveyPage: React.FC = () => {
             return (
               <label
                 key={i}
-                className="public-survey-option group flex cursor-pointer items-center rounded-2xl border p-4 transition-all hover:shadow-md"
-                style={{ backgroundColor: isSelected ? `${theme.primaryColor}1a` : inputBgColor, borderColor: isSelected ? theme.primaryColor : controlBorderColor }}
+                className={`public-survey-option group flex cursor-pointer items-center justify-between rounded-2xl p-4 sm:p-5 transition-all ${
+                  isSelected
+                    ? 'border-indigo-500 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/15'
+                    : 'border-slate-200/80 bg-white/70 hover:bg-white hover:border-indigo-300'
+                }`}
               >
-                <div
-                  className={`w-6 h-6 mr-4 flex items-center justify-center transition-colors ${isMulti ? 'rounded-md' : 'rounded-full'}`}
-                  style={{
-                    border: `2px solid ${isSelected ? theme.primaryColor : controlBorderColor}`,
-                    backgroundColor: isSelected ? theme.primaryColor : 'transparent'
-                  }}
-                >
-                  {isSelected && <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />}
+                <div className="flex items-center min-w-0 pr-4">
+                  <div
+                    className={`mr-4 flex h-8 w-8 shrink-0 items-center justify-center transition-all ${
+                      isMulti ? 'rounded-xl' : 'rounded-full'
+                    } ${
+                      isSelected
+                        ? 'bg-indigo-600 text-white shadow-xs'
+                        : 'border border-slate-300 bg-white group-hover:border-indigo-400'
+                    }`}
+                  >
+                    {isSelected && <Check className="h-4 w-4" strokeWidth={3} />}
+                  </div>
+                  <span className={`text-base leading-snug ${isSelected ? 'font-bold text-slate-900' : 'font-medium text-slate-800'}`}>
+                    {opt}
+                  </span>
                 </div>
-                <span className={`text-base ${isSelected ? 'font-bold' : 'font-medium'}`} style={{ color: textColor }}>{opt}</span>
-                <span className="ml-auto text-xs font-bold opacity-0 transition-opacity group-hover:opacity-60" style={{ color: theme.primaryColor }}>Select</span>
+                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
+                  isSelected ? 'bg-indigo-100 text-indigo-700' : 'text-slate-400 opacity-0 group-hover:opacity-100 group-hover:bg-slate-100'
+                }`}>
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </div>
                 <input
                   type={isMulti ? "checkbox" : "radio"}
                   name={question.id}
@@ -270,10 +266,9 @@ export const PublicSurveyPage: React.FC = () => {
         <select
           value={answers[question.id] || ''}
           onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-          className="public-survey-input w-full appearance-none rounded-2xl p-4 pr-12 text-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all shadow-inner"
-          style={{ '--tw-ring-color': theme.primaryColor, color: textColor, backgroundColor: inputBgColor, border: `1px solid ${controlBorderColor}` } as any}
+          className="public-survey-input h-14 w-full rounded-2xl px-5 text-base text-slate-900 shadow-xs focus:outline-none"
         >
-          <option value="" disabled>Select an option</option>
+          <option value="" disabled>Select an option from list</option>
           {question.options.map((opt, i) => (
             <option key={i} value={opt}>{opt}</option>
           ))}
@@ -281,18 +276,22 @@ export const PublicSurveyPage: React.FC = () => {
       )}
 
       {question.type === 'linear_scale' && (
-        <div className="py-4">
-          <div className="flex justify-between text-sm font-medium mb-6 px-2" style={{ color: mutedTextColor }}>
+        <div className="py-2">
+          <div className="mb-4 flex justify-between px-2 text-xs font-bold uppercase tracking-wider text-slate-400">
             <span>{question.config?.minLabel || 'Min'}</span>
             <span>{question.config?.maxLabel || 'Max'}</span>
           </div>
-          <div className="flex justify-between items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
             {Array.from({ length: (question.config?.max || 5) - (question.config?.min || 1) + 1 }, (_, i) => i + (question.config?.min || 1)).map(val => (
               <button
                 key={val}
+                type="button"
                 onClick={() => setAnswers({...answers, [question.id]: val})}
-                className="public-survey-scale h-12 w-12 rounded-2xl text-lg font-bold transition-all transform hover:-translate-y-1 hover:shadow-lg focus:outline-none sm:h-14 sm:w-14"
-                style={{ backgroundColor: answers[question.id] === val ? theme.primaryColor : scaleDefaultBg, border: `1px solid ${controlBorderColor}`, color: answers[question.id] === val ? '#ffffff' : textColor, transform: answers[question.id] === val ? 'scale(1.1)' : undefined }}
+                className={`public-survey-scale h-13 w-13 rounded-2xl text-lg font-extrabold transition-all sm:h-14 sm:w-14 ${
+                  answers[question.id] === val
+                    ? 'border-indigo-600 bg-indigo-600 text-white shadow-md shadow-indigo-600/25 scale-105'
+                    : 'text-slate-800 hover:border-indigo-300'
+                }`}
               >
                 {val}
               </button>
@@ -302,18 +301,18 @@ export const PublicSurveyPage: React.FC = () => {
       )}
 
       {question.type === 'rating' && (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3 py-2">
           {Array.from({ length: question.config?.max || 5 }, (_, i) => i + 1).map(val => (
             <button
               key={val}
+              type="button"
               onClick={() => setAnswers({...answers, [question.id]: val})}
-              className="rounded-2xl p-2 transition-transform transform hover:-translate-y-1 focus:outline-none focus:ring-2"
-              style={{ '--tw-ring-color': theme.primaryColor } as any}
+              className="group rounded-2xl p-2.5 transition-all hover:scale-110 focus:outline-none"
             >
               <svg
-                className="w-10 h-10 sm:w-12 sm:h-12 transition-colors"
-                fill={(answers[question.id] || 0) >= val ? theme.primaryColor : 'none'}
-                stroke={(answers[question.id] || 0) >= val ? theme.primaryColor : controlBorderColor}
+                className="h-10 w-10 sm:h-12 sm:w-12 transition-colors"
+                fill={(answers[question.id] || 0) >= val ? primaryColor : '#f1f5f9'}
+                stroke={(answers[question.id] || 0) >= val ? primaryColor : '#cbd5e1'}
                 viewBox="0 0 24 24" strokeWidth={1.5}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.563.563 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
@@ -327,14 +326,19 @@ export const PublicSurveyPage: React.FC = () => {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 transition-colors duration-500" style={{ backgroundColor: theme.backgroundColor, fontFamily: theme.fontFamily, color: textColor }}>
-        <div className="max-w-lg w-full p-10 rounded-2xl shadow-xl text-center border-t-8 animate-in zoom-in-95 fade-in duration-700 ease-out fill-mode-forwards" style={{ backgroundColor: surfaceColor, backdropFilter: backdropBlur, WebkitBackdropFilter: backdropBlur, borderTopColor: theme.primaryColor, boxShadow: cardShadow }}>
-          <CheckCircle2 className="w-16 h-16 mx-auto mb-6 animate-in zoom-in-50 spin-in-12 fade-in delay-200 duration-500 ease-out fill-mode-both" style={{ color: theme.primaryColor }} />
-          <h2 className="text-2xl font-bold mb-2 animate-in slide-in-from-bottom-4 fade-in delay-300 duration-500 ease-out fill-mode-both" style={{ color: textColor }}>Thank you!</h2>
-          <p className="animate-in slide-in-from-bottom-2 fade-in delay-[400ms] duration-500 ease-out fill-mode-both" style={{ color: mutedTextColor }}>Your response has been recorded.</p>
+      <div className="public-survey-shell flex min-h-screen items-center justify-center p-4 sm:p-6" style={{ fontFamily }}>
+        <div className="public-survey-card w-full max-w-lg rounded-3xl p-8 sm:p-12 text-center">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-indigo-50 border border-indigo-100 text-indigo-600 shadow-md shadow-indigo-600/10">
+            <CheckCircle2 className="h-10 w-10" />
+          </div>
+          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
+            <span>✓</span> Response Completed
+          </div>
+          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">Thank you!</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-500">Your response has been securely verified and saved.</p>
           {isPreview && (
-            <div className="mt-8 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 animate-in fade-in delay-[500ms] duration-500 fill-mode-both">
-              Note: You are in Preview Mode. This submission was not saved to the database.
+            <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-xs font-semibold text-amber-800">
+              Preview Mode: Response was simulated and not saved to database.
             </div>
           )}
         </div>
@@ -343,108 +347,117 @@ export const PublicSurveyPage: React.FC = () => {
   }
 
   return (
-    <div className={`public-survey-shell flex flex-col transition-colors duration-500 ${isSinglePage || isPreview ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`} style={{ backgroundColor: theme.backgroundColor, fontFamily: theme.fontFamily, color: textColor }}>
-      {/* Progress Bar */}
-      <div className="public-survey-progress fixed top-0 left-0 right-0 z-50 h-1.5" style={{ backgroundColor: `${theme.primaryColor}22` }}>
-        <div className="h-full transition-all duration-500 ease-out" style={{ width: `${progress}%`, backgroundColor: theme.primaryColor }} />
+    <div className={`public-survey-shell flex flex-col ${isSinglePage || isPreview ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`} style={{ fontFamily }}>
+      {/* Top Progress Tracker */}
+      <div className="fixed top-0 left-0 right-0 z-50 h-1.5 bg-slate-200/50">
+        <div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className={`public-survey-content flex flex-1 flex-col items-center p-4 pt-12 sm:p-6 sm:pt-14 lg:p-8 lg:pt-16 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
+      <div className={`flex flex-1 flex-col items-center p-4 pt-12 sm:p-6 sm:pt-14 lg:p-8 lg:pt-16 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
         <div className="w-full max-w-3xl">
-          <div className="mb-10 flex items-end justify-between gap-6 border-b pb-6" style={{ borderColor: controlBorderColor }}>
-            <div className="min-w-0">
-              <h1 className="text-3xl font-extrabold leading-tight sm:text-4xl" style={{ color: textColor }}>{survey.title}</h1>
+          
+          {/* Header Banner */}
+          <div className="mb-8 flex items-end justify-between gap-6 pb-4">
+            <div>
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
+                <Sparkles className="h-3 w-3" />
+                Live Survey
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                {survey.title}
+              </h1>
               {survey.description && (
-                <p className="mt-3 max-w-2xl text-base leading-7 whitespace-pre-wrap" style={{ color: mutedTextColor }}>{survey.description}</p>
+                <p className="mt-2 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-500">{survey.description}</p>
               )}
             </div>
-            <p className="shrink-0 text-sm font-semibold" style={{ color: theme.primaryColor }}>{progressLabel}</p>
+            <div className="shrink-0 text-right">
+              <span className="rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-bold text-slate-600 shadow-xs">
+                {progressLabel}
+              </span>
+            </div>
           </div>
 
           {isSinglePage ? (
-            <div className="public-survey-card overflow-hidden rounded-2xl animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ backgroundColor: surfaceColor, backdropFilter: backdropBlur, WebkitBackdropFilter: backdropBlur, border: `1px solid ${controlBorderColor}`, boxShadow: cardShadow }}>
-              <div className="p-6 sm:p-10 lg:p-12">
+            <div className="public-survey-card rounded-3xl overflow-hidden">
+              <div className="p-6 sm:p-10 lg:p-12 space-y-12">
                 {survey.questions.map((question, index) => (
-                  <section key={question.id} className={index > 0 ? 'mt-12 border-t pt-10' : ''} style={index > 0 ? { borderColor: controlBorderColor } : undefined}>
-                    <div className="mb-8">
-                      <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl" style={{ color: textColor }}>
+                  <section key={question.id} className={index > 0 ? 'border-t border-slate-200/70 pt-10' : ''}>
+                    <div className="mb-4">
+                      <span className="mb-2 block text-xs font-extrabold uppercase tracking-wider text-indigo-600">
+                        Question {index + 1}
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
                         {question.title}
-                        {question.required && <span className="ml-1" style={{ color: theme.primaryColor }}>*</span>}
+                        {question.required && <span className="ml-1 text-indigo-600">*</span>}
                       </h3>
                       {question.description && (
-                        <p className="mt-2" style={{ color: mutedTextColor }}>{question.description}</p>
+                        <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">{question.description}</p>
                       )}
                     </div>
                     {renderQuestionInputs(question)}
                   </section>
                 ))}
               </div>
-              <div className="public-survey-footer flex items-center justify-end border-t px-6 py-5 sm:px-10" style={{ backgroundColor: footerBgColor, borderColor: controlBorderColor }}>
+              <div className="flex items-center justify-end border-t border-slate-200/70 bg-slate-50/60 px-6 py-5 sm:px-10">
                 <div className="flex items-center gap-4">
-                  {validationError && <p className="text-sm font-semibold" style={{ color: '#dc2626' }}>{validationError}</p>}
-                  <Button
+                  {validationError && <p className="text-xs font-bold text-rose-600">{validationError}</p>}
+                  <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    isLoading={isSubmitting}
-                    className="rounded-xl px-6 py-2.5 font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90"
-                    style={{ backgroundColor: theme.primaryColor }}
+                    className="btn-flagship px-8 py-3.5 text-sm"
                   >
-                    Submit
-                    <Check className="ml-2 h-4 w-4" />
-                  </Button>
+                    Submit Response
+                    <ArrowUpRight className="ml-2 h-4 w-4" />
+                  </button>
                 </div>
               </div>
             </div>
           ) : (
-          <div className="public-survey-card overflow-hidden rounded-2xl animate-in fade-in slide-in-from-right-8 duration-500" style={{ backgroundColor: surfaceColor, backdropFilter: backdropBlur, WebkitBackdropFilter: backdropBlur, border: `1px solid ${controlBorderColor}`, boxShadow: cardShadow }}>
-            <div className="p-6 sm:p-10 lg:p-12">
-              
-              <div className="mb-8">
-                <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl" style={{ color: textColor }}>
-                  {currentQ.title}
-                  {currentQ.required && <span className="ml-1" style={{ color: theme.primaryColor }}>*</span>}
-                </h3>
-                {currentQ.description && (
-                  <p className="mt-2" style={{ color: mutedTextColor }}>{currentQ.description}</p>
-                )}
+            <div className="public-survey-card rounded-3xl overflow-hidden">
+              <div className="p-6 sm:p-10 lg:p-12">
+                <div className="mb-4">
+                  <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
+                    Step {currentQuestionIndex + 1}
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
+                    {currentQ.title}
+                    {currentQ.required && <span className="ml-1 text-indigo-600">*</span>}
+                  </h3>
+                  {currentQ.description && (
+                    <p className="mt-2 text-sm text-slate-500 leading-relaxed">{currentQ.description}</p>
+                  )}
+                </div>
+
+                {renderQuestionInputs(currentQ)}
               </div>
 
-              {/* Question Inputs */}
-              {renderQuestionInputs(currentQ)}
-
+              <div className="flex items-center justify-between border-t border-slate-200/70 bg-slate-50/60 px-6 py-5 sm:px-10">
+                <Button 
+                  variant="secondary" 
+                  onClick={handlePrevious} 
+                  disabled={history.length === 0 || isSubmitting}
+                  className="rounded-full px-5 text-slate-700"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Previous
+                </Button>
+                
+                <button 
+                  onClick={handleNext} 
+                  disabled={!isAnswerValid || isSubmitting}
+                  className="btn-flagship px-8 py-3.5 text-sm"
+                >
+                  {isLastQuestion ? 'Submit Response' : 'Continue'}
+                  {isLastQuestion ? <Check className="ml-2 h-4 w-4" /> : <ArrowUpRight className="ml-2 h-4 w-4" />}
+                </button>
+              </div>
             </div>
-            
-            {/* Action Footer */}
-            <div className="public-survey-footer flex items-center justify-between border-t px-6 py-5 sm:px-10" style={{ backgroundColor: footerBgColor, borderColor: controlBorderColor }}>
-              <Button 
-                variant="ghost" 
-                onClick={handlePrevious} 
-                disabled={history.length === 0 || isSubmitting}
-                className="rounded-xl px-3 hover:opacity-80"
-                style={{ color: mutedTextColor }}
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Previous
-              </Button>
-              
-              <Button 
-                onClick={handleNext} 
-                disabled={!isAnswerValid || isSubmitting}
-                isLoading={isSubmitting}
-                className="rounded-xl px-6 py-2.5 font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:opacity-90"
-                style={{ backgroundColor: theme.primaryColor }}
-              >
-                {isLastQuestion ? 'Submit' : 'Next'}
-                {isLastQuestion ? <Check className="ml-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
-              </Button>
-            </div>
-          </div>
           )}
-          
-          <div className="mt-8 text-center pb-8 opacity-50 hover:opacity-100 transition-opacity">
-            <a href="https://surveynexus.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-xs font-semibold" style={{ color: mutedTextColor }}>
-              Powered by <img src="/favicon.svg" className="w-4 h-4 ml-1.5 mr-1" alt="SurveyNexus" /> <span className="tracking-tight">SurveyNexus</span>
-            </a>
+
+          <div className="mt-8 text-center pb-8 opacity-60 hover:opacity-100 transition-opacity">
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+              <span>✦</span> Powered by <strong className="text-slate-700">SurveyNexus</strong>
+            </span>
           </div>
 
         </div>

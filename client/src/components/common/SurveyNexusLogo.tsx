@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export interface SurveyNexusLogoProps {
   /** Logo mark size */
@@ -7,12 +7,8 @@ export interface SurveyNexusLogoProps {
   showText?: boolean;
   /** Stack the mark above the wordmark for hero-style brand lockups */
   stacked?: boolean;
-  /** Subtitle to show below brand name (e.g. 'Cosmic Intelligence') */
+  /** Subtitle to show below brand name (e.g. 'Survey Builder Platform') */
   subtitle?: string;
-  /** Whether to enable continuous ambient rotation and pulse */
-  animated?: boolean;
-  /** Whether hover triggers interactive speed-up and cosmic radiance */
-  interactive?: boolean;
   /** Custom class for root container */
   className?: string;
   /** Custom class for the SVG element */
@@ -37,22 +33,17 @@ export const SurveyNexusLogo: React.FC<SurveyNexusLogoProps> = ({
   showText = false,
   stacked = false,
   subtitle,
-  animated = true,
-  interactive = true,
   className = '',
   svgClassName = '',
   textClassName = '',
   onClick,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const pxSize = typeof size === 'number' ? size : sizeMap[size] || 36;
   const uniqueId = React.useId().replace(/:/g, '');
 
   return (
     <div
-      className={`inline-flex ${stacked ? 'flex-col items-center gap-4' : 'items-center gap-3'} select-none ${interactive ? 'cursor-pointer' : ''} ${className}`}
-      onMouseEnter={() => interactive && setIsHovered(true)}
-      onMouseLeave={() => interactive && setIsHovered(false)}
+      className={`inline-flex ${stacked ? 'flex-col items-center gap-4' : 'items-center gap-3'} select-none ${onClick ? 'cursor-pointer' : ''} ${className}`}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -60,21 +51,18 @@ export const SurveyNexusLogo: React.FC<SurveyNexusLogoProps> = ({
     >
       {/* Galactic Icon Container */}
       <div
-        className="relative flex items-center justify-center shrink-0 transition-transform duration-500 ease-out"
+        className="relative flex items-center justify-center shrink-0"
         style={{
           width: pxSize,
           height: pxSize,
-          transform: isHovered ? 'scale(1.08)' : 'scale(1)',
         }}
       >
-        {/* Interactive Atmospheric Glow Nebula on Hover */}
+        {/* Subtle Atmospheric Glow Nebula */}
         <div
-          className="absolute inset-0 rounded-full transition-opacity duration-700 pointer-events-none blur-md"
+          className="absolute inset-0 rounded-full pointer-events-none blur-md"
           style={{
-            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(139, 92, 246, 0.35) 50%, transparent 75%)',
-            opacity: isHovered ? 0.9 : animated ? 0.25 : 0,
-            transform: isHovered ? 'scale(1.4)' : 'scale(1)',
-            transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(139, 92, 246, 0.25) 50%, transparent 75%)',
+            opacity: 0.35,
           }}
         />
 
@@ -86,22 +74,15 @@ export const SurveyNexusLogo: React.FC<SurveyNexusLogoProps> = ({
           xmlns="http://www.w3.org/2000/svg"
           className={`relative z-10 ${svgClassName}`}
           style={{
-            filter: isHovered
-              ? 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.55)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.35))'
-              : 'drop-shadow(0 0 4px rgba(99, 102, 241, 0.25))',
-            transition: 'filter 0.5s ease',
+            filter: 'drop-shadow(0 0 6px rgba(99, 102, 241, 0.25))',
           }}
         >
           <style>{`
-            .cosmic-pulse { transform-origin: 300px 300px; animation: cosmic-pulse 2.5s ease-in-out infinite alternate; }
             .cosmic-track { fill: none; stroke: url(#galaxyGrad-${uniqueId}); stroke-width: 8; opacity: 0.4; }
             .cosmic-data-flow { fill: none; stroke: url(#galaxyGrad-${uniqueId}); filter: url(#soft-glow-${uniqueId}); }
-            .cosmic-flow-data-1 { stroke-dasharray: 10 15; animation: cosmic-flow-forward 5s linear infinite; }
-            .cosmic-flow-data-2 { stroke-dasharray: 20 30; animation: cosmic-flow-reverse 7s linear infinite; }
-            .cosmic-flow-data-3 { stroke-dasharray: 8 12; animation: cosmic-flow-forward 4s linear infinite; }
-            @keyframes cosmic-flow-forward { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
-            @keyframes cosmic-flow-reverse { from { stroke-dashoffset: -100; } to { stroke-dashoffset: 0; } }
-            @keyframes cosmic-pulse { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
+            .cosmic-flow-data-1 { stroke-dasharray: 10 15; }
+            .cosmic-flow-data-2 { stroke-dasharray: 20 30; }
+            .cosmic-flow-data-3 { stroke-dasharray: 8 12; }
           `}</style>
           <defs>
             <linearGradient id={`galaxyGrad-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -154,35 +135,30 @@ export const SurveyNexusLogo: React.FC<SurveyNexusLogoProps> = ({
               <g transform="rotate(-30 300 300)">
                 <use href={`#path-orbit-1-${uniqueId}`} className="cosmic-track" />
                 <use href={`#path-orbit-1-${uniqueId}`} className="cosmic-data-flow cosmic-flow-data-1" strokeWidth="16"/>
-                <g>
+                <g transform="translate(60, 300)">
                   <g transform="rotate(30)"><circle r="32" fill="#ff0844" filter={`url(#glow-${uniqueId})`}/><use href={`#docIcon-${uniqueId}`} transform="scale(2)"/></g>
-                  <animateMotion dur="16s" repeatCount="indefinite" begin="0s"><mpath href={`#path-orbit-1-${uniqueId}`}/></animateMotion>
                 </g>
-                <g>
+                <g transform="translate(540, 300)">
                   <g transform="rotate(30)"><circle r="32" fill="#00f2fe" filter={`url(#glow-${uniqueId})`}/><use href={`#checkIcon-${uniqueId}`} transform="scale(2.2)"/></g>
-                  <animateMotion dur="16s" repeatCount="indefinite" begin="-8s"><mpath href={`#path-orbit-1-${uniqueId}`}/></animateMotion>
                 </g>
               </g>
 
               <g transform="rotate(45 300 300)">
                 <use href={`#path-orbit-2-${uniqueId}`} className="cosmic-track" />
                 <use href={`#path-orbit-2-${uniqueId}`} className="cosmic-data-flow cosmic-flow-data-2" strokeWidth="12"/>
-                <g>
+                <g transform="translate(100, 300)">
                   <g transform="rotate(-45)"><circle r="26" fill="#4facfe" filter={`url(#glow-${uniqueId})`}/><use href={`#checkIcon-${uniqueId}`} transform="scale(1.8)"/></g>
-                  <animateMotion dur="12s" repeatCount="indefinite" begin="0s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href={`#path-orbit-2-${uniqueId}`}/></animateMotion>
                 </g>
-                <g>
+                <g transform="translate(500, 300)">
                   <g transform="rotate(-45)"><circle r="26" fill="#7f00ff" filter={`url(#glow-${uniqueId})`}/><use href={`#docIcon-${uniqueId}`} transform="scale(1.6)"/></g>
-                  <animateMotion dur="12s" repeatCount="indefinite" begin="-6s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href={`#path-orbit-2-${uniqueId}`}/></animateMotion>
                 </g>
               </g>
 
               <g transform="rotate(-15 300 300)">
                 <use href={`#path-orbit-3-${uniqueId}`} className="cosmic-track" />
                 <use href={`#path-orbit-3-${uniqueId}`} className="cosmic-data-flow cosmic-flow-data-3" strokeWidth="10"/>
-                <g>
+                <g transform="translate(160, 300)">
                   <circle r="18" fill="#fff" opacity="0.95" filter={`url(#glow-${uniqueId})`}/>
-                  <animateMotion dur="8s" repeatCount="indefinite" begin="0s"><mpath href={`#path-orbit-3-${uniqueId}`}/></animateMotion>
                 </g>
               </g>
             </g>
@@ -209,14 +185,12 @@ export const SurveyNexusLogo: React.FC<SurveyNexusLogoProps> = ({
       {/* Brand Typography Lockup */}
       {showText && (
         <div className={`flex flex-col leading-tight ${stacked ? 'items-center text-center' : ''} ${textClassName}`}>
-          <div className="flex items-baseline tracking-tight font-extrabold text-foreground transition-all duration-300">
+          <div className="flex items-baseline tracking-tight font-extrabold text-foreground">
             <span className="text-current">Survey</span>
             <span
-              className="ml-0.5 bg-clip-text text-transparent transition-all duration-300"
+              className="ml-0.5 bg-clip-text text-transparent"
               style={{
-                backgroundImage: isHovered
-                  ? 'linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #ec4899 100%)'
-                  : 'linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #a855f7 100%)',
+                backgroundImage: 'linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #a855f7 100%)',
               }}
             >
               Nexus
@@ -229,8 +203,6 @@ export const SurveyNexusLogo: React.FC<SurveyNexusLogoProps> = ({
           )}
         </div>
       )}
-
-
     </div>
   );
 };

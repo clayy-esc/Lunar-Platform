@@ -38,25 +38,25 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/30 backdrop-blur-md p-4 animate-in fade-in duration-200">
       <div className="absolute inset-0" onClick={onClose} />
       <div 
-        className={`relative z-10 w-full ${maxWidthClasses[maxWidth]} bg-card text-card-foreground rounded-xl shadow-xl flex flex-col modal-max-height border border-border animate-in zoom-in-95 duration-200`}
+        className={`relative z-10 w-full ${maxWidthClasses[maxWidth]} bg-white/90 text-slate-900 rounded-3xl shadow-2xl flex flex-col modal-max-height border border-white/90 backdrop-blur-2xl animate-in zoom-in-95 duration-200`}
         role="dialog"
         aria-modal="true"
       >
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-            <h2 className="text-lg font-semibold">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-200/80">
+            <h2 className="text-xl font-extrabold text-slate-900">{title}</h2>
             <button
               onClick={onClose}
-              className="text-muted-foreground hover:text-foreground transition-colors rounded-full p-1 hover:bg-muted"
+              className="text-slate-400 hover:text-slate-900 transition-colors rounded-full p-1.5 hover:bg-slate-100"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
         )}
-        <div className="px-6 py-4 overflow-y-auto flex-1">
+        <div className="px-6 py-5 overflow-y-auto flex-1">
           {children}
         </div>
       </div>

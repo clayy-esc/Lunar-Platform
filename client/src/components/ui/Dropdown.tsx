@@ -40,12 +40,12 @@ export const Dropdown: React.FC<DropdownProps> = ({ trigger, children, align = '
 
       {isOpen && (
         <div 
-          className={`absolute z-40 ${placementClass} ${width} ${alignmentClass} max-h-[calc(100vh-2rem)] overflow-y-auto rounded-md bg-card border border-border shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none animate-in fade-in zoom-in-95 duration-100`}
+          className={`absolute z-40 ${placementClass} ${width} ${alignmentClass} max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl bg-white/90 backdrop-blur-2xl border border-white/90 shadow-2xl shadow-slate-900/10 ring-1 ring-slate-900/5 focus:outline-none animate-in fade-in zoom-in-95 duration-100 p-1.5`}
           role="menu"
           aria-orientation="vertical"
           onClick={() => setIsOpen(false)} // Close on click inside
         >
-          <div className="py-1" role="none">
+          <div className="space-y-0.5" role="none">
             {children}
           </div>
         </div>
@@ -63,12 +63,12 @@ export const DropdownItem: React.FC<React.HTMLAttributes<HTMLDivElement> & { dis
 }) => {
   return (
     <div
-      className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
+      className={`block px-3.5 py-2 text-sm font-semibold rounded-xl cursor-pointer transition-colors ${
         disabled 
           ? 'opacity-50 cursor-not-allowed' 
           : destructive
-            ? 'text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
-            : 'text-foreground hover:bg-muted hover:text-foreground'
+            ? 'text-rose-600 hover:bg-rose-50'
+            : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900'
       } ${className}`}
       role="menuitem"
       {...props}

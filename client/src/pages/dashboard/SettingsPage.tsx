@@ -112,9 +112,9 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
             <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
-              health.status === 'critical' ? 'bg-red-100 text-red-700 dark:bg-red-900/30' :
-              health.status === 'warning' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30' :
-              'bg-green-100 text-green-700 dark:bg-green-900/30'
+              health.status === 'critical' ? 'bg-red-100 text-red-700' :
+              health.status === 'warning' ? 'bg-yellow-100 text-yellow-700' :
+              'bg-green-100 text-green-700'
             }`}>
               {health.status}
             </div>
@@ -152,7 +152,7 @@ export const SettingsPage: React.FC = () => {
             </div>
 
             {health.status !== 'healthy' && (
-              <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400 rounded-md flex items-start border border-yellow-200 dark:border-yellow-900/50">
+              <div className="mt-6 p-4 bg-yellow-50 text-yellow-800 rounded-md flex items-start border border-yellow-200">
                 <AlertTriangle className="w-5 h-5 mr-3 shrink-0 mt-0.5" />
                 <div className="text-sm">
                   <strong>Storage limit approaching.</strong> If you hit 512MB, new responses will be rejected. 

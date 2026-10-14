@@ -9,46 +9,50 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 import api from '../../lib/api';
-import { ArrowRight, Layers3, Layout, MoonStar, Palette, SunMedium, Type, WandSparkles } from 'lucide-react';
+import { ArrowUpRight, Layers3, Layout, Palette, Sparkles, Type } from 'lucide-react';
 
 type ThemeDraft = {
   primaryColor: string;
   backgroundColor: string;
-  lightPrimaryColor: string;
-  lightBackgroundColor: string;
-  darkPrimaryColor: string;
-  darkBackgroundColor: string;
   fontFamily: string;
   layout: string;
 };
 
-const themeTemplates: Array<{
-  id: string;
-  name: string;
-  description: string;
-  swatches: string[];
-  values: Pick<ThemeDraft, 'lightPrimaryColor' | 'lightBackgroundColor' | 'darkPrimaryColor' | 'darkBackgroundColor' | 'fontFamily'>;
-}> = [
+const curatedPalettes = [
   {
-    id: 'signal',
-    name: 'Signal Studio',
-    description: 'Teal, warm paper, and a focused editorial rhythm.',
-    swatches: ['#0f766e', '#f4f7f5', '#f2b84b'],
-    values: { lightPrimaryColor: '#0f766e', lightBackgroundColor: '#f4f7f5', darkPrimaryColor: '#f2b84b', darkBackgroundColor: '#101817', fontFamily: 'Manrope' },
+    id: 'ethereal-indigo',
+    name: 'Ethereal Indigo',
+    description: 'Crisp indigo and frosted pearlescent glass matching our flagship design.',
+    swatches: ['#4f46e5', '#818cf8', '#f6f8fc'],
+    values: { primaryColor: '#4f46e5', backgroundColor: '#f6f8fc', fontFamily: 'Manrope' },
   },
   {
-    id: 'citrus',
-    name: 'Citrus Field',
-    description: 'Fresh green energy with a bright, optimistic surface.',
-    swatches: ['#3f6212', '#f7fee7', '#bef264'],
-    values: { lightPrimaryColor: '#3f6212', lightBackgroundColor: '#f7fee7', darkPrimaryColor: '#bef264', darkBackgroundColor: '#17200f', fontFamily: 'Manrope' },
+    id: 'orchid-violet',
+    name: 'Orchid Violet',
+    description: 'Radiant cosmic violet with luminous light-tech surfaces.',
+    swatches: ['#7c3aed', '#c084fc', '#faf5ff'],
+    values: { primaryColor: '#7c3aed', backgroundColor: '#faf5ff', fontFamily: 'Inter' },
   },
   {
-    id: 'ink',
-    name: 'Ink & Bloom',
-    description: 'Cobalt accents, soft blush, and a confident editorial feel.',
-    swatches: ['#4338ca', '#fff7f5', '#fda4af'],
-    values: { lightPrimaryColor: '#4338ca', lightBackgroundColor: '#fff7f5', darkPrimaryColor: '#fda4af', darkBackgroundColor: '#1d1720', fontFamily: 'Merriweather' },
+    id: 'oceanic-cyan',
+    name: 'Oceanic Ice',
+    description: 'Electric cyan accent with crystalline glass styling.',
+    swatches: ['#0284c7', '#38bdf8', '#f0f9ff'],
+    values: { primaryColor: '#0284c7', backgroundColor: '#f0f9ff', fontFamily: 'Manrope' },
+  },
+  {
+    id: 'emerald-mint',
+    name: 'Emerald Mint',
+    description: 'High-clarity mint green accent with clean editorial white.',
+    swatches: ['#059669', '#34d399', '#f0fdf4'],
+    values: { primaryColor: '#059669', backgroundColor: '#f0fdf4', fontFamily: 'Manrope' },
+  },
+  {
+    id: 'obsidian-slate',
+    name: 'Obsidian Slate',
+    description: 'Minimalist luxury monochrome with stark typography.',
+    swatches: ['#09090b', '#64748b', '#f8fafc'],
+    values: { primaryColor: '#09090b', backgroundColor: '#f8fafc', fontFamily: 'Inter' },
   },
 ];
 
@@ -62,17 +66,12 @@ export const ThemePage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   
   const [theme, setTheme] = useState<ThemeDraft>({
-    primaryColor: '#6366f1',
-    backgroundColor: '#ffffff',
-    lightPrimaryColor: '#6366f1',
-    lightBackgroundColor: '#ffffff',
-    darkPrimaryColor: '#818cf8',
-    darkBackgroundColor: '#0f172a',
-    fontFamily: 'Inter',
+    primaryColor: '#4f46e5',
+    backgroundColor: '#f6f8fc',
+    fontFamily: 'Manrope',
     layout: 'single_page'
   });
-  const [previewMode, setPreviewMode] = useState<'light' | 'dark'>('light');
-  const [selectedTemplate, setSelectedTemplate] = useState('custom');
+  const [selectedPalette, setSelectedPalette] = useState('ethereal-indigo');
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -80,16 +79,11 @@ export const ThemePage: React.FC = () => {
         const res = await api.get(`/surveys/${surveyId}`);
         const s = res.data.survey;
         setSurvey(s);
-        setPreviewMode(s.theme?.mode || 'light');
         if (s.theme) {
           setTheme({
-            primaryColor: s.theme.primaryColor || '#6366f1',
-            backgroundColor: s.theme.backgroundColor || '#ffffff',
-            lightPrimaryColor: s.theme.lightPrimaryColor || s.theme.primaryColor || '#6366f1',
-            lightBackgroundColor: s.theme.lightBackgroundColor || s.theme.backgroundColor || '#ffffff',
-            darkPrimaryColor: s.theme.darkPrimaryColor || '#818cf8',
-            darkBackgroundColor: s.theme.darkBackgroundColor || '#0f172a',
-            fontFamily: s.theme.fontFamily || 'Inter',
+            primaryColor: s.theme.lightPrimaryColor || s.theme.primaryColor || '#4f46e5',
+            backgroundColor: s.theme.lightBackgroundColor || s.theme.backgroundColor || '#f6f8fc',
+            fontFamily: s.theme.fontFamily || 'Manrope',
             layout: s.theme.layout || 'single_page'
           });
         }
@@ -103,25 +97,20 @@ export const ThemePage: React.FC = () => {
     fetchSurvey();
   }, [surveyId, navigate, addToast]);
 
-  const previewPrimaryColor = previewMode === 'light' ? theme.lightPrimaryColor : theme.darkPrimaryColor;
-  const previewBackgroundColor = previewMode === 'light' ? theme.lightBackgroundColor : theme.darkBackgroundColor;
-  const previewSurfaceColor = previewMode === 'light' ? '#ffffff' : '#1e293b';
-  const previewTextColor = previewMode === 'light' ? '#0f172a' : '#f8fafc';
-  const previewMutedTextColor = previewMode === 'light' ? '#64748b' : '#cbd5e1';
-
   const handleSave = async () => {
     if (!survey) return;
     setIsSaving(true);
     try {
       const themeToSave = {
-        ...theme,
-        mode: previewMode,
-        primaryColor: theme.lightPrimaryColor,
-        backgroundColor: theme.lightBackgroundColor,
+        primaryColor: theme.primaryColor,
+        backgroundColor: theme.backgroundColor,
+        lightPrimaryColor: theme.primaryColor,
+        lightBackgroundColor: theme.backgroundColor,
+        fontFamily: theme.fontFamily,
+        layout: theme.layout,
       };
       const res = await api.put(`/surveys/${survey._id}`, { theme: themeToSave });
       setSurvey(res.data.survey);
-      setTheme(themeToSave);
       addToast('Theme saved successfully', 'success');
     } catch {
       addToast('Failed to save theme', 'error');
@@ -130,192 +119,202 @@ export const ThemePage: React.FC = () => {
     }
   };
 
-  const applyTemplate = (template: typeof themeTemplates[number]) => {
-    setTheme({ ...theme, ...template.values, primaryColor: template.values.lightPrimaryColor, backgroundColor: template.values.lightBackgroundColor });
-    setSelectedTemplate(template.id);
-    setPreviewMode('light');
+  const applyPalette = (palette: typeof curatedPalettes[number]) => {
+    setTheme({ ...theme, ...palette.values });
+    setSelectedPalette(palette.id);
   };
 
   if (isLoading || !survey) {
-    return <AppShell><div className="flex h-full items-center justify-center"><Spinner size="lg" /></div></AppShell>;
+    return <AppShell><div className="flex h-full items-center justify-center py-20"><Spinner size="lg" /></div></AppShell>;
   }
 
   return (
     <AppShell survey={survey}>
       <div className="flex h-full gap-8">
-        {/* Editor */}
-        <div className="w-96 shrink-0 space-y-5 overflow-y-auto pb-8 pr-2">
+        {/* Editor Controls */}
+        <div className="w-96 shrink-0 space-y-6 overflow-y-auto pb-8 pr-2">
           <div>
-            <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary"><WandSparkles className="h-3.5 w-3.5" /> Visual direction</div>
-            <h2 className="text-3xl font-extrabold tracking-tight">Make it yours</h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">Choose a starting point, then tune the details. The preview mirrors the published respondent view.</p>
+            <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
+              <Sparkles className="h-3 w-3" />
+              Theme & Styling
+            </div>
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">Visual Direction</h2>
+            <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
+              Customize the accent colors, typography, and page layout. Live preview updates instantly.
+            </p>
           </div>
 
-          <Card className="overflow-hidden rounded-2xl">
-            <CardHeader className="border-b border-border/70 pb-4">
-              <CardTitle className="flex items-center text-base"><Layers3 className="mr-2 h-4 w-4 text-primary" /> Templates</CardTitle>
+          <Card className="rounded-3xl border-slate-200/80 bg-white/80 shadow-md">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-base font-extrabold text-slate-900">
+                <Layers3 className="mr-2 h-4 w-4 text-indigo-600" /> Curated Palettes
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2 p-3">
-              {themeTemplates.map((template) => (
+            <CardContent className="space-y-2.5 p-4 pt-0">
+              {curatedPalettes.map((palette) => (
                 <button
-                  key={template.id}
+                  key={palette.id}
                   type="button"
-                  onClick={() => applyTemplate(template)}
-                  className={`w-full rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 ${selectedTemplate === template.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-border hover:bg-muted/60'}`}
+                  onClick={() => applyPalette(palette)}
+                  className={`w-full rounded-2xl border p-3.5 text-left transition-all ${
+                    selectedPalette === palette.id
+                      ? 'border-indigo-500 bg-indigo-50/60 shadow-xs ring-1 ring-indigo-500/20'
+                      : 'border-slate-200/80 bg-white/70 hover:bg-white hover:border-slate-300'
+                  }`}
                 >
-                  <span className="mb-2 flex items-center gap-1.5">
-                    {template.swatches.map((swatch) => <span key={swatch} className="h-3.5 w-3.5 rounded-full border border-black/10" style={{ backgroundColor: swatch }} />)}
-                  </span>
-                  <span className="block text-sm font-bold">{template.name}</span>
-                  <span className="mt-1 block text-xs leading-5 text-muted-foreground">{template.description}</span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      {palette.swatches.map((swatch) => (
+                        <span key={swatch} className="h-3.5 w-3.5 rounded-full border border-black/10 shadow-xs" style={{ backgroundColor: swatch }} />
+                      ))}
+                    </span>
+                    <span className="text-xs font-bold text-slate-800">{palette.name}</span>
+                  </div>
+                  <span className="block text-[11px] leading-relaxed text-slate-500">{palette.description}</span>
                 </button>
               ))}
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
-                <Palette className="w-5 h-5 mr-2" /> Colors
+          <Card className="rounded-3xl border-slate-200/80 bg-white/80 shadow-md">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-base font-extrabold text-slate-900">
+                <Palette className="w-4 h-4 mr-2 text-indigo-600" /> Color Accent
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2 rounded-md bg-muted p-1" role="tablist" aria-label="Theme mode">
-                {(['light', 'dark'] as const).map((mode) => (
-                  <button
-                    key={mode}
-                    type="button"
-                    role="tab"
-                    aria-selected={previewMode === mode}
-                    onClick={() => setPreviewMode(mode)}
-                    className={`flex-1 rounded px-3 py-2 text-sm font-medium capitalize transition-colors ${previewMode === mode ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                  >
-                    {mode === 'light' ? <SunMedium className="mr-1.5 h-4 w-4 text-amber-500" /> : <MoonStar className="mr-1.5 h-4 w-4 text-primary" />}
-                    {mode}
-                  </button>
-                ))}
-              </div>
+            <CardContent className="space-y-4 p-4 pt-0">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">{previewMode === 'light' ? 'Light' : 'Dark'} Primary Color</label>
-                <div className="flex gap-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Primary Accent Color</label>
+                <div className="flex gap-2.5">
                   <Input 
                     type="color" 
-                    value={previewPrimaryColor} 
-                    onChange={(e) => setTheme({ ...theme, [previewMode === 'light' ? 'lightPrimaryColor' : 'darkPrimaryColor']: e.target.value })} 
-                    className="w-12 h-10 p-1 cursor-pointer"
+                    value={theme.primaryColor} 
+                    onChange={(e) => setTheme({ ...theme, primaryColor: e.target.value })} 
+                    className="w-12 h-11 p-1 cursor-pointer rounded-xl"
                   />
                   <Input 
                     type="text" 
-                    value={previewPrimaryColor} 
-                    onChange={(e) => setTheme({ ...theme, [previewMode === 'light' ? 'lightPrimaryColor' : 'darkPrimaryColor']: e.target.value })}
-                    className="uppercase font-mono"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">{previewMode === 'light' ? 'Light' : 'Dark'} Background Color</label>
-                <div className="flex gap-3">
-                  <Input 
-                    type="color" 
-                    value={previewBackgroundColor} 
-                    onChange={(e) => setTheme({ ...theme, [previewMode === 'light' ? 'lightBackgroundColor' : 'darkBackgroundColor']: e.target.value })} 
-                    className="w-12 h-10 p-1 cursor-pointer"
-                  />
-                  <Input 
-                    type="text" 
-                    value={previewBackgroundColor} 
-                    onChange={(e) => setTheme({ ...theme, [previewMode === 'light' ? 'lightBackgroundColor' : 'darkBackgroundColor']: e.target.value })}
-                    className="uppercase font-mono"
+                    value={theme.primaryColor} 
+                    onChange={(e) => setTheme({ ...theme, primaryColor: e.target.value })}
+                    className="uppercase font-mono text-xs rounded-xl"
                   />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
-                <Type className="w-5 h-5 mr-2" /> Typography
+          <Card className="rounded-3xl border-slate-200/80 bg-white/80 shadow-md">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-base font-extrabold text-slate-900">
+                <Type className="w-4 h-4 mr-2 text-indigo-600" /> Typography
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0">
               <Select 
                 label="Font Family"
                 value={theme.fontFamily}
                 onChange={(e) => setTheme({...theme, fontFamily: e.target.value})}
                 options={[
-                  { label: 'Inter (Default)', value: 'Inter' },
-                  { label: 'Roboto', value: 'Roboto' },
-                  { label: 'Merriweather (Serif)', value: 'Merriweather' },
-                  { label: 'Courier New (Mono)', value: 'Courier New' },
+                  { label: 'Manrope (Modern & Clean)', value: 'Manrope' },
+                  { label: 'Inter (High Legibility)', value: 'Inter' },
+                  { label: 'Roboto (Geometric)', value: 'Roboto' },
+                  { label: 'Merriweather (Editorial Serif)', value: 'Merriweather' },
+                  { label: 'DM Mono (Technical)', value: 'DM Mono' },
                 ]}
               />
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
-                <Layout className="w-5 h-5 mr-2" /> Layout
+          <Card className="rounded-3xl border-slate-200/80 bg-white/80 shadow-md">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-base font-extrabold text-slate-900">
+                <Layout className="w-4 h-4 mr-2 text-indigo-600" /> Survey Layout
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0">
               <Select 
-                label="Form Layout"
+                label="Question Presentation"
                 value={theme.layout}
                 onChange={(e) => setTheme({...theme, layout: e.target.value})}
                 options={[
-                  { label: 'Single Page (Scroll)', value: 'single_page' },
-                  { label: 'One Question at a Time (No Scroll)', value: 'one_at_a_time' },
+                  { label: 'Single Page (Seamless Flow)', value: 'single_page' },
+                  { label: 'Step by Step (One Question at a Time)', value: 'one_at_a_time' },
                 ]}
               />
             </CardContent>
           </Card>
 
-          <Button onClick={handleSave} isLoading={isSaving} className="w-full">Save Theme</Button>
+          <Button onClick={handleSave} isLoading={isSaving} size="lg" className="w-full rounded-full">
+            Save Theme Settings
+          </Button>
         </div>
 
         {/* Live Preview Pane */}
-        <div className="hidden flex-1 overflow-y-auto rounded-2xl border border-border bg-muted/30 p-5 lg:block lg:p-8">
-          <div className="mb-4 flex items-center justify-between">
+        <div className="hidden flex-1 overflow-y-auto rounded-3xl border border-slate-200/80 bg-slate-100/50 p-6 lg:block lg:p-8 backdrop-blur-xl">
+          <div className="mb-5 flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Respondent view</p>
-              <p className="mt-1 text-xs text-muted-foreground">Live preview · {previewMode} palette</p>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">Respondent Preview</span>
+              <p className="mt-0.5 text-xs font-semibold text-slate-500">Live simulation of the respondent experience</p>
             </div>
-            <div className="flex gap-1 rounded-xl bg-background p-1">
-              {(['light', 'dark'] as const).map((mode) => (
-                <button key={mode} type="button" onClick={() => setPreviewMode(mode)} className={`rounded-lg px-3 py-1.5 text-xs font-bold capitalize ${previewMode === mode ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground'}`}>{mode}</button>
-              ))}
-            </div>
+            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600 shadow-xs">
+              {theme.layout === 'single_page' ? 'Single Page' : 'Step-by-Step'}
+            </span>
           </div>
-          <div className="public-survey-card mx-auto max-w-3xl overflow-hidden rounded-[1.75rem] transition-all duration-300" style={{ backgroundColor: previewBackgroundColor, color: previewTextColor, fontFamily: theme.fontFamily }}>
-            <div className="h-1.5" style={{ backgroundColor: previewPrimaryColor }} />
-            <div className="p-6 sm:p-10">
-              <div className="mb-7 flex items-center justify-between">
-                <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ backgroundColor: `${previewPrimaryColor}18`, color: previewPrimaryColor }}><WandSparkles className="h-4 w-4" /></div><div><p className="text-sm font-extrabold">{survey.title}</p><p className="text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: previewMutedTextColor }}>Response workspace</p></div></div>
-                <div className="text-right"><p className="text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: previewMutedTextColor }}>Progress</p><p className="font-mono text-xs font-bold" style={{ color: previewPrimaryColor }}>1 of 4</p></div>
+
+          <div className="public-survey-card mx-auto max-w-2xl rounded-3xl p-8 sm:p-10 shadow-2xl transition-all duration-300" style={{ fontFamily: theme.fontFamily }}>
+            <div className="mb-6 flex items-center justify-between border-b border-slate-200/70 pb-4">
+              <div>
+                <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-indigo-600">
+                  <span>✦</span> Survey Preview
+                </span>
+                <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">{survey.title}</h1>
               </div>
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: previewPrimaryColor }}>A few considered questions</p>
-              <h1 className="text-3xl font-extrabold leading-tight">{survey.title}</h1>
-              <p className="mt-3 mb-7 max-w-xl text-sm leading-6" style={{ color: previewMutedTextColor }}>{survey.description || 'Survey description goes here.'}</p>
-              <div className="overflow-hidden rounded-3xl border" style={{ backgroundColor: previewSurfaceColor, borderColor: previewMode === 'light' ? '#e5e7eb' : '#334155' }}>
-                <div className="p-6 sm:p-8">
-                  <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: previewPrimaryColor }}>Question 1 of 4</p>
-                  <h3 className="text-xl font-extrabold">{survey.questions[0]?.title || 'How would you describe your experience?'}</h3>
-                  <div className="mt-6 space-y-2.5">
-                    {['Option A', 'Option B', 'Option C'].map((opt, i) => <div key={opt} className="flex items-center rounded-2xl border-2 p-3" style={{ backgroundColor: i === 0 ? `${previewPrimaryColor}14` : previewSurfaceColor, borderColor: i === 0 ? previewPrimaryColor : previewMode === 'light' ? '#e5e7eb' : '#475569' }}><span className="mr-3 flex h-5 w-5 items-center justify-center rounded-full border-2" style={{ borderColor: i === 0 ? previewPrimaryColor : previewMode === 'light' ? '#d1d5db' : '#64748b' }}>{i === 0 && <span className="h-2 w-2 rounded-full" style={{ backgroundColor: previewPrimaryColor }} />}</span><span className="text-sm font-semibold">{opt}</span></div>)}
-                  </div>
+              <span className="text-xs font-bold text-slate-400">1 of 3</span>
+            </div>
+
+            <p className="mb-6 text-xs text-slate-500 leading-relaxed">
+              {survey.description || 'Survey description and respondent guidance will appear here.'}
+            </p>
+
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4">
+                <span className="block text-xs font-bold uppercase tracking-wider text-indigo-600 mb-1">Question 1</span>
+                <h3 className="text-base font-extrabold text-slate-900 mb-3">
+                  {survey.questions[0]?.title || 'How would you rate our new interface?'}
+                </h3>
+                <div className="space-y-2">
+                  {['Very Satisfied', 'Satisfied', 'Neutral'].map((opt, i) => (
+                    <div 
+                      key={opt} 
+                      className={`flex items-center justify-between rounded-xl border p-3 text-xs font-semibold transition-all ${
+                        i === 0 
+                          ? 'border-indigo-500 bg-indigo-50/50 text-slate-900 shadow-xs' 
+                          : 'border-slate-200/80 bg-white text-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <span className={`mr-2.5 flex h-4 w-4 items-center justify-center rounded-full border ${
+                          i === 0 ? 'border-indigo-600 bg-indigo-600' : 'border-slate-300'
+                        }`}>
+                          {i === 0 && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
+                        </span>
+                        {opt}
+                      </div>
+                      <ArrowUpRight className="h-3 w-3 text-slate-400" />
+                    </div>
+                  ))}
                 </div>
-                {theme.layout === 'single_page' && (
-                  <div className="border-t p-6 sm:p-8" style={{ borderColor: previewMode === 'light' ? '#e5e7eb' : '#334155' }}>
-                    <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: previewPrimaryColor }}>Question 2 of 4</p>
-                    <h3 className="text-xl font-extrabold">A second question appears below</h3>
-                    <input type="text" className="mt-5 h-11 w-full rounded-xl px-4" style={{ backgroundColor: previewMode === 'light' ? '#ffffff' : '#0f172a', border: `1px solid ${previewMode === 'light' ? '#d1d5db' : '#475569'}`, color: previewTextColor }} placeholder="Your answer" />
-                  </div>
-                )}
-                <div className="flex justify-end border-t px-6 py-4" style={{ backgroundColor: previewMode === 'light' ? '#f9fafb' : '#0f172a', borderColor: previewMode === 'light' ? '#e5e7eb' : '#334155' }}><button className="flex items-center rounded-xl px-5 py-2 text-sm font-bold text-white" style={{ backgroundColor: previewPrimaryColor }}>Next <ArrowRight className="ml-2 h-4 w-4" /></button></div>
               </div>
-              <p className="mt-6 text-center text-[10px] font-semibold" style={{ color: previewMutedTextColor }}>Powered by SurveyNexus</p>
+            </div>
+
+            <div className="mt-8 flex justify-end">
+              <button 
+                type="button"
+                className="btn-flagship px-6 py-2.5 text-xs font-bold"
+              >
+                Continue
+                <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
         </div>

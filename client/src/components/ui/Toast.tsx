@@ -23,10 +23,10 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-start p-4 rounded-md shadow-lg border min-w-75 animate-in slide-in-from-bottom-5 fade-in duration-300 ${
-              toast.type === 'success' ? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-900 dark:text-green-400' :
-              toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-900 dark:text-red-400' :
-              'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-900 dark:text-blue-400'
+            className={`flex items-start p-4 rounded-2xl shadow-xl border min-w-75 backdrop-blur-xl animate-in slide-in-from-bottom-5 fade-in duration-300 ${
+              toast.type === 'success' ? 'bg-emerald-50/95 border-emerald-200 text-emerald-900 shadow-emerald-500/10' :
+              toast.type === 'error' ? 'bg-rose-50/95 border-rose-200 text-rose-900 shadow-rose-500/10' :
+              'bg-indigo-50/95 border-indigo-200 text-indigo-900 shadow-indigo-500/10'
             }`}
           >
             <div className="mr-3 mt-0.5">

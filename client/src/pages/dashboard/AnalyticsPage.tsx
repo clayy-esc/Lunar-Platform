@@ -166,8 +166,8 @@ export const AnalyticsPage: React.FC = () => {
     return analytics.questions.find((q) => q.id === xAxisQuestion) || null;
   }, [analytics, xAxisQuestion]);
 
-  const chartData = useMemo(() => {
-    if (!selectedQuestion) return [] as { label: string; count: number; percentage?: number; mean?: number; median?: number; min?: number; max?: number }[];
+  const chartData = useMemo<any[]>(() => {
+    if (!selectedQuestion) return [];
 
     if (isCategoricalQuestion(selectedQuestion.type) && Array.isArray(selectedQuestion.data)) {
       return selectedQuestion.data.map((d: any) => ({
@@ -292,7 +292,7 @@ export const AnalyticsPage: React.FC = () => {
       const dataUrl = await toPng(plotRef.current, {
         quality: 1,
         pixelRatio: 2,
-        backgroundColor: document.documentElement.classList.contains('dark') ? '#0b0914' : '#ffffff',
+        backgroundColor: '#ffffff',
         style: {
           margin: '0',
         },
