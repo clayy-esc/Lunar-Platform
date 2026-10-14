@@ -166,13 +166,20 @@ export const PublicSurveyPage: React.FC = () => {
     customCSS: '',
   };
 
-  const primaryColor = configuredTheme.lightPrimaryColor || configuredTheme.primaryColor || '#4f46e5';
+  const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4f46e5';
+  const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#f6f8fc';
   const fontFamily = configuredTheme.fontFamily || 'Manrope';
   const currentQ = survey.questions[currentQuestionIndex];
   const isSinglePage = configuredTheme.layout === 'single_page';
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
   const progress = isSinglePage ? 100 : ((currentQuestionIndex + 1) / survey.questions.length) * 100;
   const progressLabel = isSinglePage ? `${survey.questions.length} questions` : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
+
+  const themeStyle: React.CSSProperties = {
+    fontFamily,
+    ['--survey-primary' as any]: primaryColor,
+    ['--survey-bg' as any]: backgroundColor,
+  };
 
   // Validation for multi-step
   const currentAnswer = answers[currentQ?.id];
@@ -214,9 +221,7 @@ export const PublicSurveyPage: React.FC = () => {
               <label
                 key={i}
                 className={`public-survey-option group flex cursor-pointer items-center justify-between rounded-2xl p-4 sm:p-5 transition-all ${
-                  isSelected
-                    ? 'border-indigo-500 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/15'
-                    : 'border-slate-200/80 bg-white/70 hover:bg-white hover:border-indigo-300'
+                  isSelected ? 'is-selected' : 'border-slate-200/80 bg-white/70 hover:bg-white'
                 }`}
               >
                 <div className="flex items-center min-w-0 pr-4">
@@ -225,9 +230,10 @@ export const PublicSurveyPage: React.FC = () => {
                       isMulti ? 'rounded-xl' : 'rounded-full'
                     } ${
                       isSelected
-                        ? 'bg-indigo-600 text-white shadow-xs'
-                        : 'border border-slate-300 bg-white group-hover:border-indigo-400'
+                        ? 'text-white shadow-xs'
+                        : 'border border-slate-300 bg-white'
                     }`}
+                    style={isSelected ? { backgroundColor: 'var(--survey-primary)' } : undefined}
                   >
                     {isSelected && <Check className="h-4 w-4" strokeWidth={3} />}
                   </div>
@@ -235,9 +241,15 @@ export const PublicSurveyPage: React.FC = () => {
                     {opt}
                   </span>
                 </div>
-                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
-                  isSelected ? 'bg-indigo-100 text-indigo-700' : 'text-slate-400 opacity-0 group-hover:opacity-100 group-hover:bg-slate-100'
-                }`}>
+                <div
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
+                    isSelected ? 'opacity-100' : 'text-slate-400 opacity-0 group-hover:opacity-100 group-hover:bg-slate-100'
+                  }`}
+                  style={isSelected ? {
+                    backgroundColor: 'color-mix(in srgb, var(--survey-primary) 14%, transparent)',
+                    color: 'var(--survey-primary)'
+                  } : undefined}
+                >
                   <ArrowUpRight className="h-3.5 w-3.5" />
                 </div>
                 <input
@@ -289,8 +301,8 @@ export const PublicSurveyPage: React.FC = () => {
                 onClick={() => setAnswers({...answers, [question.id]: val})}
                 className={`public-survey-scale h-13 w-13 rounded-2xl text-lg font-extrabold transition-all sm:h-14 sm:w-14 ${
                   answers[question.id] === val
-                    ? 'border-indigo-600 bg-indigo-600 text-white shadow-md shadow-indigo-600/25 scale-105'
-                    : 'text-slate-800 hover:border-indigo-300'
+                    ? 'is-selected'
+                    : 'text-slate-800'
                 }`}
               >
                 {val}
@@ -311,8 +323,8 @@ export const PublicSurveyPage: React.FC = () => {
             >
               <svg
                 className="h-10 w-10 sm:h-12 sm:w-12 transition-colors"
-                fill={(answers[question.id] || 0) >= val ? primaryColor : '#f1f5f9'}
-                stroke={(answers[question.id] || 0) >= val ? primaryColor : '#cbd5e1'}
+                fill={(answers[question.id] || 0) >= val ? 'var(--survey-primary)' : '#f1f5f9'}
+                stroke={(answers[question.id] || 0) >= val ? 'var(--survey-primary)' : '#cbd5e1'}
                 viewBox="0 0 24 24" strokeWidth={1.5}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.563.563 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
@@ -326,12 +338,21 @@ export const PublicSurveyPage: React.FC = () => {
 
   if (isSubmitted) {
     return (
-      <div className="public-survey-shell flex min-h-screen items-center justify-center p-4 sm:p-6" style={{ fontFamily }}>
+      <div className="public-survey-shell flex min-h-screen items-center justify-center p-4 sm:p-6" style={themeStyle}>
+        {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
         <div className="public-survey-card w-full max-w-lg rounded-3xl p-8 sm:p-12 text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-indigo-50 border border-indigo-100 text-indigo-600 shadow-md shadow-indigo-600/10">
+          <div
+            className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-md"
+            style={{
+              backgroundColor: 'color-mix(in srgb, var(--survey-primary) 12%, white)',
+              borderColor: 'color-mix(in srgb, var(--survey-primary) 25%, transparent)',
+              color: 'var(--survey-primary)',
+              borderWidth: 1,
+            }}
+          >
             <CheckCircle2 className="h-10 w-10" />
           </div>
-          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
+          <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold uppercase tracking-wider">
             <span>✓</span> Response Completed
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">Thank you!</h2>
@@ -347,10 +368,11 @@ export const PublicSurveyPage: React.FC = () => {
   }
 
   return (
-    <div className={`public-survey-shell flex flex-col ${isSinglePage || isPreview ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`} style={{ fontFamily }}>
+    <div className={`public-survey-shell flex flex-col ${isSinglePage || isPreview ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`} style={themeStyle}>
+      {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
       {/* Top Progress Tracker */}
       <div className="fixed top-0 left-0 right-0 z-50 h-1.5 bg-slate-200/50">
-        <div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+        <div className="public-survey-progress h-full transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
       </div>
 
       <div className={`flex flex-1 flex-col items-center p-4 pt-12 sm:p-6 sm:pt-14 lg:p-8 lg:pt-16 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
@@ -359,7 +381,7 @@ export const PublicSurveyPage: React.FC = () => {
           {/* Header Banner */}
           <div className="mb-8 flex items-end justify-between gap-6 pb-4">
             <div>
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
+              <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-xs">
                 <Sparkles className="h-3 w-3" />
                 Live Survey
               </div>
@@ -383,12 +405,12 @@ export const PublicSurveyPage: React.FC = () => {
                 {survey.questions.map((question, index) => (
                   <section key={question.id} className={index > 0 ? 'border-t border-slate-200/70 pt-10' : ''}>
                     <div className="mb-4">
-                      <span className="mb-2 block text-xs font-extrabold uppercase tracking-wider text-indigo-600">
+                      <span className="mb-2 block text-xs font-extrabold uppercase tracking-wider" style={{ color: 'var(--survey-primary)' }}>
                         Question {index + 1}
                       </span>
                       <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
                         {question.title}
-                        {question.required && <span className="ml-1 text-indigo-600">*</span>}
+                        {question.required && <span className="ml-1" style={{ color: 'var(--survey-primary)' }}>*</span>}
                       </h3>
                       {question.description && (
                         <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">{question.description}</p>
@@ -404,7 +426,7 @@ export const PublicSurveyPage: React.FC = () => {
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="btn-flagship px-8 py-3.5 text-sm"
+                    className="public-survey-btn-primary px-8 py-3.5 text-sm"
                   >
                     Submit Response
                     <ArrowUpRight className="ml-2 h-4 w-4" />
@@ -416,12 +438,12 @@ export const PublicSurveyPage: React.FC = () => {
             <div className="public-survey-card rounded-3xl overflow-hidden">
               <div className="p-6 sm:p-10 lg:p-12">
                 <div className="mb-4">
-                  <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
+                  <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider">
                     Step {currentQuestionIndex + 1}
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
                     {currentQ.title}
-                    {currentQ.required && <span className="ml-1 text-indigo-600">*</span>}
+                    {currentQ.required && <span className="ml-1" style={{ color: 'var(--survey-primary)' }}>*</span>}
                   </h3>
                   {currentQ.description && (
                     <p className="mt-2 text-sm text-slate-500 leading-relaxed">{currentQ.description}</p>
@@ -445,7 +467,7 @@ export const PublicSurveyPage: React.FC = () => {
                 <button 
                   onClick={handleNext} 
                   disabled={!isAnswerValid || isSubmitting}
-                  className="btn-flagship px-8 py-3.5 text-sm"
+                  className="public-survey-btn-primary px-8 py-3.5 text-sm"
                 >
                   {isLastQuestion ? 'Submit Response' : 'Continue'}
                   {isLastQuestion ? <Check className="ml-2 h-4 w-4" /> : <ArrowUpRight className="ml-2 h-4 w-4" />}
