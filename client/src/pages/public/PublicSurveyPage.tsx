@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Survey, LogicRule, SurveyTheme } from '../../types';
 import api from '../../lib/api';
@@ -47,20 +47,126 @@ export const PublicSurveyPage: React.FC = () => {
     fetchSurvey();
   }, [slug, isPreview]);
 
+  const evaluateRule = (rule: LogicRule, answer: any): boolean => {
+    if (answer === undefined || answer === null || answer === '') return false;
+
+    const valStr = String(rule.value ?? '').trim().toLowerCase();
+
+    if (Array.isArray(answer)) {
+      if (answer.length === 0) return false;
+      const lowerAnswers = answer.map((a) => String(a ?? '').trim().toLowerCase());
+      switch (rule.condition) {
+        case 'equals':
+          return lowerAnswers.includes(valStr);
+        case 'not_equals':
+          return !lowerAnswers.includes(valStr);
+        case 'contains':
+          return lowerAnswers.some((a) => a.includes(valStr));
+        default:
+          return false;
+      }
+    }
+
+    const ansStr = String(answer ?? '').trim().toLowerCase();
+
+    switch (rule.condition) {
+      case 'equals':
+        return ansStr === valStr;
+      case 'not_equals':
+        return ansStr !== valStr;
+      case 'contains':
+        return ansStr.includes(valStr);
+      case 'greater_than': {
+        const numAns = Number(answer);
+        const numVal = Number(rule.value);
+        return !isNaN(numAns) && !isNaN(numVal) && numAns > numVal;
+      }
+      case 'less_than': {
+        const numAns = Number(answer);
+        const numVal = Number(rule.value);
+        return !isNaN(numAns) && !isNaN(numVal) && numAns < numVal;
+      }
+      default:
+        return false;
+    }
+  };
+
+  const getVisibleQuestions = (
+    questions: Survey['questions'],
+    logicRules: LogicRule[],
+    currentAnswers: Record<string, any>
+  ): Survey['questions'] => {
+    if (!questions || questions.length === 0) return [];
+    
+    const visible: Survey['questions'] = [];
+    const visited = new Set<string>();
+    let currentIdx = 0;
+
+    while (currentIdx < questions.length) {
+      const q = questions[currentIdx];
+      if (visited.has(q.id)) break;
+      visited.add(q.id);
+      visible.push(q);
+
+      const answer = currentAnswers[q.id];
+      const isAnswered =
+        answer !== undefined &&
+        answer !== null &&
+        answer !== '' &&
+        (!Array.isArray(answer) || answer.length > 0);
+
+      // Check if this question has matching logic rule
+      const rules = logicRules?.filter((r) => r.sourceQuestionId === q.id) || [];
+      let nextTarget: string | null = null;
+
+      if (isAnswered) {
+        for (const rule of rules) {
+          if (evaluateRule(rule, answer)) {
+            nextTarget = rule.targetQuestionId;
+            break;
+          }
+        }
+      }
+
+      if (nextTarget === 'end') {
+        // Jumped to end: stop adding downstream questions
+        break;
+      } else if (nextTarget) {
+        const targetIndex = questions.findIndex((item) => item.id === nextTarget);
+        if (targetIndex > currentIdx) {
+          currentIdx = targetIndex;
+          continue;
+        }
+      }
+
+      currentIdx += 1;
+    }
+
+    return visible;
+  };
+
+  const isSinglePage = survey?.theme?.layout !== 'one_at_a_time';
+
+  const visibleQuestions = useMemo(() => {
+    if (!survey?.questions) return [];
+    if (!isSinglePage) return survey.questions;
+    return getVisibleQuestions(survey.questions, survey.logic || [], answers);
+  }, [survey?.questions, survey?.logic, isSinglePage, answers]);
+
   const getNextQuestionIndex = (currentIndex: number): number | 'end' => {
     if (!survey) return 'end';
 
     const currentQ = survey.questions[currentIndex];
     if (!currentQ) return 'end';
 
-    const rulesForQuestion = survey.logic?.filter(r => r.sourceQuestionId === currentQ.id) || [];
+    const rulesForQuestion = survey.logic?.filter((r) => r.sourceQuestionId === currentQ.id) || [];
     const answer = answers[currentQ.id];
 
     for (const rule of rulesForQuestion) {
       const match = evaluateRule(rule, answer);
       if (match) {
         if (rule.targetQuestionId === 'end') return 'end';
-        const targetIndex = survey.questions.findIndex(q => q.id === rule.targetQuestionId);
+        const targetIndex = survey.questions.findIndex((q) => q.id === rule.targetQuestionId);
         return targetIndex !== -1 ? targetIndex : 'end';
       }
     }
@@ -69,19 +175,44 @@ export const PublicSurveyPage: React.FC = () => {
     return 'end';
   };
 
-  const evaluateRule = (rule: LogicRule, answer: any): boolean => {
-    if (answer === undefined || answer === null) return false;
+  const handleSubmit = async () => {
+    if (isSinglePage) {
+      const missingRequired = visibleQuestions.find((question) => {
+        const answer = answers[question.id];
+        return (
+          question.required &&
+          (answer === undefined ||
+            answer === null ||
+            answer === '' ||
+            (Array.isArray(answer) && answer.length === 0))
+        );
+      });
 
-    const ansStr = String(answer).toLowerCase();
-    const valStr = String(rule.value).toLowerCase();
+      if (missingRequired) {
+        setValidationError(`Please answer required question: "${missingRequired.title}" before submitting.`);
+        return;
+      }
+    }
 
-    switch (rule.condition) {
-      case 'equals': return ansStr === valStr;
-      case 'not_equals': return ansStr !== valStr;
-      case 'contains': return ansStr.includes(valStr);
-      case 'greater_than': return Number(answer) > Number(rule.value);
-      case 'less_than': return Number(answer) < Number(rule.value);
-      default: return false;
+    setValidationError(null);
+    if (isPreview) {
+      setIsSubmitted(true);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const activeQuestionIds = new Set((isSinglePage ? visibleQuestions : survey.questions).map((q) => q.id));
+      const formattedAnswers = Object.entries(answers)
+        .filter(([questionId]) => activeQuestionIds.has(questionId))
+        .map(([questionId, value]) => ({ questionId, value }));
+
+      await api.post(`/public/survey/${slug}/submit`, { answers: formattedAnswers });
+      setIsSubmitted(true);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to submit response. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -101,38 +232,6 @@ export const PublicSurveyPage: React.FC = () => {
       const prevIdx = newHistory.pop()!;
       setHistory(newHistory);
       setCurrentQuestionIndex(prevIdx);
-    }
-  };
-
-  const handleSubmit = async () => {
-    const isSinglePage = survey?.theme?.layout === 'single_page';
-    if (isSinglePage) {
-      const missingRequired = survey?.questions.find((question) => {
-        const answer = answers[question.id];
-        return question.required && (answer === undefined || answer === null || answer === '' || (Array.isArray(answer) && answer.length === 0));
-      });
-
-      if (missingRequired) {
-        setValidationError('Please answer all required questions before submitting.');
-        return;
-      }
-    }
-
-    setValidationError(null);
-    if (isPreview) {
-      setIsSubmitted(true);
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const formattedAnswers = Object.entries(answers).map(([questionId, value]) => ({ questionId, value }));
-      await api.post(`/public/survey/${slug}/submit`, { answers: formattedAnswers });
-      setIsSubmitted(true);
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to submit response. Please try again.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -170,10 +269,17 @@ export const PublicSurveyPage: React.FC = () => {
   const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#f6f8fc';
   const fontFamily = configuredTheme.fontFamily || 'Manrope';
   const currentQ = survey.questions[currentQuestionIndex];
-  const isSinglePage = configuredTheme.layout === 'single_page';
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
-  const progress = isSinglePage ? 100 : ((currentQuestionIndex + 1) / survey.questions.length) * 100;
-  const progressLabel = isSinglePage ? `${survey.questions.length} questions` : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
+  const answeredCount = visibleQuestions.filter((q) => {
+    const a = answers[q.id];
+    return a !== undefined && a !== null && a !== '' && (!Array.isArray(a) || a.length > 0);
+  }).length;
+  const progress = isSinglePage
+    ? (visibleQuestions.length > 0 ? (answeredCount / visibleQuestions.length) * 100 : 100)
+    : ((currentQuestionIndex + 1) / survey.questions.length) * 100;
+  const progressLabel = isSinglePage
+    ? `${answeredCount} of ${visibleQuestions.length} answered`
+    : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
 
   const themeStyle: React.CSSProperties = {
     fontFamily,
@@ -402,7 +508,7 @@ export const PublicSurveyPage: React.FC = () => {
           {isSinglePage ? (
             <div className="public-survey-card rounded-3xl overflow-hidden">
               <div className="p-6 sm:p-10 lg:p-12 space-y-12">
-                {survey.questions.map((question, index) => (
+                {visibleQuestions.map((question, index) => (
                   <section key={question.id} className={index > 0 ? 'border-t border-slate-200/70 pt-10' : ''}>
                     <div className="mb-4">
                       <span className="mb-2 block text-xs font-extrabold uppercase tracking-wider" style={{ color: 'var(--survey-primary)' }}>
