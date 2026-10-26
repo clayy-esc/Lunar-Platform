@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/useAuth';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
 import { ArrowUpRight } from 'lucide-react';
-import { SurveyNexusLogo } from '../../components/common/SurveyNexusLogo';
+import { LunarLogo } from '../../components/common/LunarLogo';
 import { StarfieldBackground } from '../../components/ui/StarfieldBackground';
 
 export const LoginPage: React.FC = () => {
@@ -40,9 +40,9 @@ export const LoginPage: React.FC = () => {
       <div className="auth-layout relative z-10 w-full">
         <div className="auth-brand auth-brand-panel">
           <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
-            <span>✦</span> Welcome to SurveyNexus
+            <span>✦</span> Welcome to Lunar
           </div>
-          <SurveyNexusLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
+          <LunarLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
         </div>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
           <CardHeader className="space-y-1.5 text-center pb-2">

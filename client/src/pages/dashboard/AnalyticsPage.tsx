@@ -18,8 +18,6 @@ import {
   AreaChart as AreaIcon,
   Info,
   RotateCcw,
-  ChevronDown,
-  ChevronUp,
 } from 'lucide-react';
 import {
   BarChart,
@@ -92,15 +90,7 @@ function isPlottableQuestion(type: QuestionType) {
   return isNumericQuestion(type) || isCategoricalQuestion(type);
 }
 
-interface QuestionAnalytics {
-  id: string;
-  title: string;
-  type: QuestionType;
-  totalAnswers?: number;
-  data?: any;
-  samples?: string[];
-  distribution?: { label: string; count: number }[];
-}
+
 
 
 

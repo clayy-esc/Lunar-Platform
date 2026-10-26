@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Survey, LogicRule, SurveyTheme } from '../../types';
 import api from '../../lib/api';
-import { Spinner } from '../../components/ui/Spinner';
 import { Button } from '../../components/ui/Button';
 import { ArrowLeft, ArrowUpRight, Check, CheckCircle2, Sparkles } from 'lucide-react';
 
@@ -584,7 +583,7 @@ export const PublicSurveyPage: React.FC = () => {
 
           <div className="mt-8 text-center pb-8 opacity-60 hover:opacity-100 transition-opacity">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400">
-              <span>✦</span> Powered by <strong className="text-slate-700">SurveyNexus</strong>
+              <span>✦</span> Powered by <strong className="text-slate-700">Lunar</strong>
             </span>
           </div>
 

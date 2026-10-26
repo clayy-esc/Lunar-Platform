@@ -6,7 +6,7 @@ const start = async () => {
   await connectDB();
 
   const server = app.listen(PORT, () => {
-    console.log(`✓ SurveyNexus API running on port ${PORT}`);
+    console.log(`✓ Lunar API running on port ${PORT}`);
   });
 
   server.on('error', (err) => {

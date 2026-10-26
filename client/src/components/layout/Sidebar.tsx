@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { PanelsTopLeft, GitBranch, MonitorPlay, ChartNoAxesCombined, ListChecks, Palette, Settings2, LogOut, X } from 'lucide-react';
-import { SurveyNexusLogo } from '../common/SurveyNexusLogo';
+import { LunarLogo } from '../common/LunarLogo';
 
 interface SidebarProps {
   surveyId?: string;
@@ -57,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
       )}
       <aside id="survey-navigation" aria-label="Survey navigation" className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 shrink-0 -translate-x-full flex-col border-r border-slate-200/70 bg-white/80 shadow-lg backdrop-blur-2xl transition-transform duration-200 ease-out md:static md:w-64 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
         <div className="h-20 flex items-center px-5 border-b border-slate-200/70">
-          <SurveyNexusLogo size={36} showText={true} subtitle="Survey Builder Platform" />
+          <LunarLogo size={36} showText={true} subtitle="Survey Builder Platform" />
           <button
             type="button"
             onClick={closeOnMobile}
