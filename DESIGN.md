@@ -1,21 +1,23 @@
 ---
-name: SurveyNexus
-description: Fast, open, and conversational survey creation with visual logic routing and rich analytics.
+name: Lunar
+description: Fast, open, and conversational survey creation with visual logic routing and rich analytics, guided by the Lunar surveyor mascot.
 colors:
-  primary: "#6b21a8"
-  primary-dark: "#c084fc"
-  neutral-bg: "#f8f7ff"
-  neutral-bg-dark: "#0b0914"
+  primary: "#2563eb"
+  primary-dark: "#60a5fa"
+  accent-amber: "#f59e0b"
+  accent-amber-dark: "#fbbf24"
+  neutral-bg: "#f8fafc"
+  neutral-bg-dark: "#0b0f19"
   card: "#ffffff"
-  card-dark: "#131022"
-  foreground: "#181124"
-  foreground-dark: "#f1ecf8"
-  border: "#e6e0f8"
-  border-dark: "#272144"
-  muted: "#f0ebfa"
-  muted-dark: "#1d1832"
-  muted-foreground: "#6d5f8a"
-  muted-foreground-dark: "#8b7ca6"
+  card-dark: "#111827"
+  foreground: "#0f172a"
+  foreground-dark: "#f8fafc"
+  border: "#e2e8f0"
+  border-dark: "#1e293b"
+  muted: "#f1f5f9"
+  muted-dark: "#1e293b"
+  muted-foreground: "#5a6b85"
+  muted-foreground-dark: "#94a3b8"
 typography:
   display:
     fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
@@ -61,15 +63,15 @@ spacing:
   xl: "32px"
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: "{colors.foreground}"
     textColor: "#ffffff"
-    rounded: "{rounded.md}"
-    padding: "8px 16px"
+    rounded: "{rounded.full}"
+    padding: "10px 20px"
   button-secondary:
     backgroundColor: "{colors.muted}"
     textColor: "{colors.foreground}"
-    rounded: "{rounded.md}"
-    padding: "8px 16px"
+    rounded: "{rounded.full}"
+    padding: "10px 20px"
   card:
     backgroundColor: "{colors.card}"
     textColor: "{colors.foreground}"
@@ -78,36 +80,39 @@ components:
   input:
     backgroundColor: "{colors.neutral-bg}"
     textColor: "{colors.foreground}"
-    rounded: "{rounded.md}"
-    padding: "8px 12px"
+    rounded: "{rounded.xl}"
+    padding: "12px 16px"
 ---
 
-# Design System: SurveyNexus
+# Design System: Lunar
 
 ## Overview
 
-**Creative North Star: "Milky Way"**
+**Creative North Star: "Nocturnal Surveyor"**
 
-SurveyNexus pairs ethereal nebulous backgrounds with sharp starlight interactions. Instead of generic SaaS cards floating on cold grayish white, SurveyNexus treats the screen as an intelligent cosmic workspace: deep space gradients, starlight highlights, and deep void surfaces. Interactions feel purposeful and grounded, allowing survey creators to wire complex conditional pathways with ease and respondents to answer questions without distraction.
+Lunar takes its design DNA directly from the Lunar owl mascot: intelligent nocturnal slate plumage (`#0f172a`), active surveyor cobalt (`#2563eb`), warm golden amber gaze (`#f59e0b`), and clean warm ivory/slate surfaces (`#f8fafc`). Instead of generic SaaS styling, Lunar balances sharp precision with warm, approachable clarity. Interactions feel purposeful and grounded, allowing survey creators to wire complex conditional pathways with ease and respondents to answer questions with effortless focus.
 
-The system relies on high-contrast semantic typography, calm tinted purples/blues, and selective bright focal accents. Light mode is rooted in cosmic violet (`#6b21a8`) over soft milky-white space (`#f8f7ff`), while dark mode transitions to bright nebula purple (`#c084fc`) against deep space void (`#0b0914`). Every surface feels alive through deliberate micro-interactions, responsive hover lifts, and frosted glass overlays.
+The system relies on high-contrast semantic typography, calm tinted neutrals, and selective bright focal accents. Every surface feels alive through deliberate micro-interactions, responsive hover lifts, and frosted glass overlays.
 
 **Key Characteristics:**
-- **Cosmic Atmosphere:** Ethereal lighting combined with sharp starlight accents.
-- **Deep Void Canvas:** 24px dot-matrix background that anchors node logic flows against a deep space background.
-- **Tinted Indigo Neutrals:** Rejection of cold dead grays in favor of indigo- and violet-tinted tones.
-- **Glassmorphic Depth:** Subtle frosted glass panels (`backdrop-filter: blur(16px)`) with state-driven elevation that evoke atmospheric scattering.
+- **Mascot Palette Alignment:** Nocturnal slate structure accented by surveyor cobalt and warm golden amber signals.
+- **Deep Void Canvas:** 24px dot-matrix background that anchors node logic flows.
+- **Tinted Slate Neutrals:** Rejection of cold dead grays in favor of slate-tinted tones derived from owl plumage.
+- **State-Driven Elevation:** Subtle frosted glass panels (`backdrop-filter: blur(16px)`) with crisp 1px borders and diffuse drop-shadows.
 
 ## Colors
 
-The SurveyNexus palette balances deep space voids with decisive, high-legibility starlight tones.
+The Lunar palette balances deep nocturnal plumage with decisive, high-legibility action tones.
 
 ### Primary
-- **Cosmic Violet** (`#6b21a8` in light mode): Deep, rich purple used for focal CTA buttons, active tab indicators, and confirmed states. Communicates depth and energy.
-- **Nebula Purple** (`#c084fc` in dark mode): Bright, luminous purple utilized as the primary interactive accent in dark mode, glowing like a nebula in deep space.
+- **Surveyor Cobalt** (`#2563eb`): Clean, vibrant blue inspired by the mascot's pen and survey clipboard. Used for active focus, interactive controls, and links.
+- **Nocturnal Slate** (`#0f172a`): Deep navy-slate feather tone used for flagship buttons, titles, and structural anchors.
+
+### Accents
+- **Mascot Golden Amber** (`#f59e0b`): High-energy golden yellow inspired by the owl's eyes and feet. Used for milestones, completion badges, and progress bar highlights.
 
 ### Neutral
-- **Milky White Space** (`#f8f7ff` light background): Soft, low-fatigue background reminiscent of a pale sky or Milky Way band.
+- **Clean Ivory Slate** (`#f8fafc` light background): Soft, low-fatigue background reminiscent of the owl's warm chest feathers.
 - **Deep Void** (`#0b0914` dark background): Very dark space-tinted slate for rich contrast without OLED harshness.
 - **Starlight Card** (`#ffffff` light card): Crisp foreground surface for forms, cards, and inspector panels.
 - **Midnight Nebula** (`#131022` dark card): Subtle indigo-tinted container background.

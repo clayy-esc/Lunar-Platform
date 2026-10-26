@@ -7,7 +7,7 @@ import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
 import { RefreshCcw, ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { LunarLogo } from '../../components/common/LunarLogo';
-import { StarfieldBackground } from '../../components/ui/StarfieldBackground';
+import { AmbientBackground } from '../../components/ui/AmbientBackground';
 
 export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -39,7 +39,7 @@ export const ForgotPasswordPage: React.FC = () => {
   if (success) {
     return (
       <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
-        <StarfieldBackground />
+        <AmbientBackground />
         <div className="auth-layout relative z-10 w-full">
           <div className="auth-brand auth-brand-panel">
             <LunarLogo size={56} showText={true} subtitle="Survey Builder Platform" />
@@ -72,12 +72,9 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
-      <StarfieldBackground />
+      <AmbientBackground />
       <div className="auth-layout relative z-10 w-full">
         <div className="auth-brand auth-brand-panel">
-          <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
-            <span>✦</span> Password Recovery
-          </div>
           <LunarLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
         </div>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">

@@ -64,13 +64,9 @@ export const DashboardRoot: React.FC = () => {
       <div className="flex h-full flex-col space-y-8">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-indigo-600 shadow-xs">
-              <Sparkles className="h-3 w-3" />
-              Workspace Overview
-            </div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              Survey <span className="text-gradient-brand">Nexus</span>
-            </h2>
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+              Lunar Workspace
+            </h1>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500">
               Design intelligent surveys, monitor engagement, and analyze verified data in one considered workspace.
             </p>
@@ -99,10 +95,10 @@ export const DashboardRoot: React.FC = () => {
 
             <div className="workspace-panel rounded-3xl border border-white/90 bg-white/80 p-5 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-600 shadow-xs">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-blue-600 shadow-xs">
                   <Radio className="h-5 w-5" />
                 </div>
-                <span className="rounded-full border border-indigo-200/80 bg-indigo-50 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-indigo-600">
+                <span className="rounded-full border border-blue-200/80 bg-blue-50 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-blue-600">
                   Active
                 </span>
               </div>
@@ -148,19 +144,19 @@ export const DashboardRoot: React.FC = () => {
             {surveys.map((survey) => (
               <Card 
                 key={survey._id} 
-                className="dashboard-card group relative flex cursor-pointer flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-lg shadow-slate-900/3 hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-300 transition-all duration-300" 
+                className="dashboard-card group relative flex cursor-pointer flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-lg shadow-slate-900/3 hover:shadow-2xl hover:shadow-blue-500/8 hover:border-blue-300 transition-all duration-300" 
                 onClick={() => navigate(`/dashboard/${survey._id}/builder`)}
               >
-                <div className={`h-1.5 w-full ${survey.status === 'published' ? 'bg-gradient-to-r from-indigo-500 to-purple-600' : 'bg-slate-300'}`} />
+                <div className={`h-1.5 w-full ${survey.status === 'published' ? 'bg-gradient-to-r from-blue-600 to-amber-500' : 'bg-slate-200'}`} />
                 <CardHeader className="pb-4">
                   <div className="flex justify-between items-start">
-                    <CardTitle className="line-clamp-1 flex-1 pr-4 text-xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors" title={survey.title}>
+                    <CardTitle className="line-clamp-1 flex-1 pr-4 text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors" title={survey.title}>
                       {survey.title}
                     </CardTitle>
                     <button 
                       aria-label={`Delete ${survey.title}`}
                       title="Delete survey"
-                      className="rounded-full p-2 text-slate-400 opacity-0 transition-all hover:bg-rose-50 hover:text-rose-600 group-hover:opacity-100"
+                      className="rounded-full p-2 text-slate-500 opacity-0 transition-all hover:bg-slate-100 hover:text-rose-600 group-hover:opacity-100"
                       onClick={(e) => { e.stopPropagation(); setDeleteId(survey._id); }}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -184,7 +180,7 @@ export const DashboardRoot: React.FC = () => {
                       <span className="h-1.5 w-1.5 rounded-full bg-current" />
                       {survey.status}
                     </span>
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-all group-hover:bg-indigo-600 group-hover:text-white">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-all group-hover:bg-slate-900 group-hover:text-white">
                       <ArrowUpRight className="h-3.5 w-3.5" />
                     </div>
                   </div>

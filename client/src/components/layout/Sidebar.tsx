@@ -79,8 +79,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
                   className={({ isActive }) =>
                     `group flex min-h-11 items-center rounded-2xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
                       isActive
-                        ? 'bg-indigo-50/90 text-indigo-700 shadow-xs border border-indigo-100/80 font-bold'
-                        : 'text-slate-600 hover:bg-white/80 hover:text-slate-900 hover:shadow-xs border border-transparent'
+                        ? 'bg-blue-50/90 text-blue-700 shadow-xs border border-blue-100/90 font-bold'
+                        : 'text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 hover:shadow-xs border border-transparent'
                     }`
                   }
                 >
@@ -100,7 +100,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
           <button
             onClick={onLogout}
             type="button"
-            className="flex min-h-11 w-full items-center rounded-2xl px-3.5 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-rose-50 hover:text-rose-600"
+            className="flex min-h-11 w-full items-center rounded-2xl px-3.5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-rose-700"
           >
             <LogOut className="mr-3 h-5 w-5 opacity-75" />
             Log out

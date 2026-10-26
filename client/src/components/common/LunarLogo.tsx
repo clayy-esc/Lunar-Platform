@@ -58,12 +58,12 @@ export const LunarLogo: React.FC<LunarLogoProps> = ({
           height: pxSize,
         }}
       >
-        {/* Subtle Atmospheric Glow Nebula */}
+        {/* Subtle Mascot Ambient Aura */}
         <div
           className="absolute inset-0 rounded-full pointer-events-none blur-md"
           style={{
-            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(168, 85, 247, 0.22) 50%, transparent 75%)',
-            opacity: 0.45,
+            background: 'radial-gradient(circle, rgba(245, 158, 11, 0.24) 0%, rgba(37, 99, 235, 0.12) 55%, transparent 75%)',
+            opacity: 0.5,
           }}
         />
 
@@ -71,7 +71,7 @@ export const LunarLogo: React.FC<LunarLogoProps> = ({
         <img
           src="/favicon.png"
           alt="Lunar Mascot"
-          className={`relative z-10 w-full h-full object-contain filter drop-shadow-[0_4px_12px_rgba(79,70,229,0.22)] transition-transform duration-300 hover:scale-105 ${imageClassName || svgClassName}`}
+          className={`relative z-10 w-full h-full object-contain filter drop-shadow-[0_6px_16px_rgba(15,23,42,0.16)] transition-transform duration-300 hover:scale-105 ${imageClassName || svgClassName}`}
           draggable={false}
         />
       </div>
@@ -80,17 +80,12 @@ export const LunarLogo: React.FC<LunarLogoProps> = ({
       {showText && (
         <div className={`flex flex-col leading-tight ${stacked ? 'items-center text-center' : ''} ${textClassName}`}>
           <div className="flex items-baseline tracking-tight font-extrabold text-foreground">
-            <span
-              className="bg-clip-text text-transparent font-extrabold tracking-tight"
-              style={{
-                backgroundImage: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%)',
-              }}
-            >
+            <span className="font-extrabold tracking-tight text-slate-900">
               Lunar
             </span>
           </div>
           {subtitle && (
-            <span className="text-[10px] font-semibold tracking-wider uppercase text-muted-foreground">
+            <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-500">
               {subtitle}
             </span>
           )}
