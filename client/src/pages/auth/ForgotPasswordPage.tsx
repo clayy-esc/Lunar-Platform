@@ -6,8 +6,7 @@ import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
 import { RefreshCcw, ArrowLeft, ArrowUpRight } from 'lucide-react';
-import { LunarLogo } from '../../components/common/LunarLogo';
-import { AmbientBackground } from '../../components/ui/AmbientBackground';
+import { AuthLayout } from '../../components/layout/AuthLayout';
 
 export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -38,12 +37,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
   if (success) {
     return (
-      <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
-        <AmbientBackground />
-        <div className="auth-layout relative z-10 w-full">
-          <div className="auth-brand auth-brand-panel">
-            <LunarLogo size={56} showText={true} subtitle="Survey Builder Platform" />
-          </div>
+      <AuthLayout>
           <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 text-center shadow-2xl backdrop-blur-2xl">
             <CardHeader className="pb-2">
               <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
@@ -65,18 +59,12 @@ export const ForgotPasswordPage: React.FC = () => {
               </Button>
             </CardContent>
           </Card>
-        </div>
-      </div>
+      </AuthLayout>
     );
   }
 
   return (
-    <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
-      <AmbientBackground />
-      <div className="auth-layout relative z-10 w-full">
-        <div className="auth-brand auth-brand-panel">
-          <LunarLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
-        </div>
+    <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
           <CardHeader className="space-y-1.5 text-center pb-2">
             <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Reset Password</CardTitle>
@@ -130,7 +118,6 @@ export const ForgotPasswordPage: React.FC = () => {
             </CardFooter>
           </form>
         </Card>
-      </div>
-    </div>
+    </AuthLayout>
   );
 };

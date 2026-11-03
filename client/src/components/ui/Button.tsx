@@ -9,14 +9,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', size = 'md', isLoading = false, children, disabled, ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center rounded-full text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background active:scale-[0.98]';
+    const baseStyles = 'glass-button inline-flex items-center justify-center rounded-full text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background active:scale-[0.98]';
     
     const variants = {
-      primary: 'bg-slate-950 text-white hover:bg-slate-800 shadow-md shadow-slate-950/15 border border-slate-900',
-      secondary: 'bg-white/90 text-slate-800 hover:bg-white border border-slate-200/80 shadow-xs hover:border-slate-300',
-      ghost: 'hover:bg-slate-100/80 hover:text-slate-900 text-slate-600',
-      danger: 'bg-rose-600 text-white hover:bg-rose-700 shadow-xs',
-      outline: 'border border-slate-200/90 bg-white/70 backdrop-blur-md hover:bg-white hover:border-slate-300 text-slate-800 shadow-xs'
+      primary: 'bg-[#0077b6] text-white hover:bg-[#023e8a] shadow-md shadow-[#0077b6]/25 border border-[#0077b6]',
+      secondary: 'bg-white/65 text-slate-800 hover:bg-white border border-white/80 shadow-xs hover:border-blue-200',
+      ghost: 'hover:bg-white/60 hover:text-slate-900 text-slate-600',
+      danger: 'bg-[#023e8a] text-white hover:bg-[#03045e] shadow-xs',
+      outline: 'border border-white/80 bg-white/55 backdrop-blur-md hover:bg-white/85 hover:border-blue-200 text-slate-800 shadow-xs'
     };
 
     const sizes = {

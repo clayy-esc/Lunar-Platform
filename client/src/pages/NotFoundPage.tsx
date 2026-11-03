@@ -4,9 +4,10 @@ import { Button } from '../components/ui/Button';
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-muted/30">
-      <div className="max-w-md w-full text-center space-y-6">
-        <h1 className="text-9xl font-black text-primary/20">404</h1>
+    <div className="not-found-page min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="not-found-card max-w-md w-full text-center space-y-6 rounded-3xl p-10">
+        <p className="mb-1 text-xs font-extrabold uppercase tracking-[0.2em] text-blue-600">Lunar workspace</p>
+        <h1 className="text-9xl font-black text-blue-600/20">404</h1>
         <h2 className="text-2xl font-bold tracking-tight">Page Not Found</h2>
         <p className="text-muted-foreground">
           The page you are looking for doesn't exist or has been moved.

@@ -37,7 +37,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
-            className={`flex w-full border bg-white/75 backdrop-blur-md text-slate-900 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:bg-white focus-visible:border-blue-600 focus-visible:ring-4 focus-visible:ring-blue-600/15 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-xs ${
+            className={`glass-input flex w-full border bg-white/55 backdrop-blur-md text-slate-900 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:bg-white focus-visible:border-blue-600 focus-visible:ring-4 focus-visible:ring-blue-600/15 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-xs ${
               authStyle
                 ? 'h-16 rounded-2xl border-slate-200/90 px-5 pb-1.5 pt-6 text-base placeholder:text-transparent'
                 : 'h-11 rounded-2xl border-slate-200/90 px-4 py-2 text-sm'

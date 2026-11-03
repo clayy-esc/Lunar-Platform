@@ -55,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
           className="fixed inset-0 z-30 bg-slate-900/20 backdrop-blur-xs md:hidden"
         />
       )}
-      <aside id="survey-navigation" aria-label="Survey navigation" className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 shrink-0 -translate-x-full flex-col border-r border-slate-200/70 bg-white/80 shadow-lg backdrop-blur-2xl transition-transform duration-200 ease-out md:static md:w-64 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
+      <aside id="survey-navigation" aria-label="Survey navigation" className={`app-sidebar fixed inset-y-0 left-0 z-40 flex h-full w-72 shrink-0 -translate-x-full flex-col border-r border-slate-200/70 bg-white/80 shadow-lg backdrop-blur-2xl transition-transform duration-200 ease-out md:static md:w-64 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
         <div className="h-20 flex items-center px-5 border-b border-slate-200/70">
           <LunarLogo size={36} showText={true} subtitle="Survey Builder Platform" />
           <button
@@ -77,9 +77,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
                   to={link.to}
                   onClick={closeOnMobile}
                   className={({ isActive }) =>
-                    `group flex min-h-11 items-center rounded-2xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
+                    `glass-nav-item group flex min-h-11 items-center rounded-2xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
                       isActive
-                        ? 'bg-blue-50/90 text-blue-700 shadow-xs border border-blue-100/90 font-bold'
+                        ? 'bg-blue-50/90 text-blue-700 shadow-sm border border-blue-100/90 font-bold'
                         : 'text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 hover:shadow-xs border border-transparent'
                     }`
                   }

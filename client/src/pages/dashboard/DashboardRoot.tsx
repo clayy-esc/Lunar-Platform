@@ -80,12 +80,12 @@ export const DashboardRoot: React.FC = () => {
 
         {!isLoading && surveys.length > 0 && (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
-            <div className="workspace-panel rounded-3xl border border-white/90 bg-white/80 p-5 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
+            <div className="workspace-panel glass-stat rounded-3xl border border-white/90 bg-white/80 p-5 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50 text-slate-600 shadow-xs">
+                <div className="glass-icon glass-icon-neutral flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50 text-slate-600 shadow-xs">
                   <FileText className="h-5 w-5" />
                 </div>
-                <span className="rounded-full border border-slate-200/80 bg-white px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                <span className="glass-chip rounded-full border border-slate-200/80 bg-white px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500">
                   Total
                 </span>
               </div>
@@ -93,12 +93,12 @@ export const DashboardRoot: React.FC = () => {
               <p className="mt-1 text-xs font-semibold text-slate-500">surveys in workspace</p>
             </div>
 
-            <div className="workspace-panel rounded-3xl border border-white/90 bg-white/80 p-5 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
+            <div className="workspace-panel glass-stat rounded-3xl border border-white/90 bg-white/80 p-5 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-blue-600 shadow-xs">
+                <div className="glass-icon glass-icon-blue flex h-10 w-10 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-blue-600 shadow-xs">
                   <Radio className="h-5 w-5" />
                 </div>
-                <span className="rounded-full border border-blue-200/80 bg-blue-50 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-blue-600">
+                <span className="glass-chip glass-chip-blue rounded-full border border-blue-200/80 bg-blue-50 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-blue-600">
                   Active
                 </span>
               </div>
@@ -108,12 +108,12 @@ export const DashboardRoot: React.FC = () => {
               <p className="mt-1 text-xs font-semibold text-slate-500">published & collecting</p>
             </div>
 
-            <div className="workspace-panel col-span-2 rounded-3xl border border-white/90 bg-white/80 p-5 sm:col-span-1 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
+            <div className="workspace-panel glass-stat col-span-2 rounded-3xl border border-white/90 bg-white/80 p-5 sm:col-span-1 sm:p-6 shadow-xl shadow-slate-900/3 backdrop-blur-2xl">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 text-amber-700 shadow-xs">
+                <div className="glass-icon glass-icon-amber flex h-10 w-10 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 text-amber-700 shadow-xs">
                   <Clock className="h-5 w-5" />
                 </div>
-                <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800">
+                <span className="glass-chip glass-chip-amber rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800">
                   Recent
                 </span>
               </div>

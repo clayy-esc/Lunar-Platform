@@ -8,8 +8,7 @@ import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
 import { ArrowUpRight, KeyRound } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
-import { LunarLogo } from '../../components/common/LunarLogo';
-import { AmbientBackground } from '../../components/ui/AmbientBackground';
+import { AuthLayout } from '../../components/layout/AuthLayout';
 
 export const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -48,12 +47,7 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
-      <AmbientBackground />
-      <div className="auth-layout relative z-10 w-full">
-        <div className="auth-brand auth-brand-panel">
-          <LunarLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
-        </div>
+    <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
           <CardHeader className="space-y-1.5 text-center pb-2">
             <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Create an account</CardTitle>
@@ -111,8 +105,6 @@ export const RegisterPage: React.FC = () => {
             </CardFooter>
           </form>
         </Card>
-      </div>
-
       <Modal isOpen={!!recoveryCode} onClose={handleCloseRecovery} title="Save Your Recovery Code">
         <div className="space-y-4 py-4 text-center">
           <div className="mx-auto w-12 h-12 bg-amber-50 border border-amber-200 text-amber-600 rounded-full flex items-center justify-center mb-4">
@@ -130,6 +122,6 @@ export const RegisterPage: React.FC = () => {
           </Button>
         </div>
       </Modal>
-    </div>
+    </AuthLayout>
   );
 };

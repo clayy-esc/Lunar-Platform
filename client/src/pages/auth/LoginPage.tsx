@@ -7,8 +7,7 @@ import { useAuth } from '../../contexts/useAuth';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
 import { ArrowUpRight } from 'lucide-react';
-import { LunarLogo } from '../../components/common/LunarLogo';
-import { AmbientBackground } from '../../components/ui/AmbientBackground';
+import { AuthLayout } from '../../components/layout/AuthLayout';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -35,12 +34,7 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="auth-page relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6 lg:p-8">
-      <AmbientBackground />
-      <div className="auth-layout relative z-10 w-full">
-        <div className="auth-brand auth-brand-panel">
-          <LunarLogo size={144} showText={true} stacked subtitle="Survey Builder Platform" className="auth-logo" />
-        </div>
+    <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
           <CardHeader className="space-y-1.5 text-center pb-2">
             <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Welcome back</CardTitle>
@@ -92,7 +86,6 @@ export const LoginPage: React.FC = () => {
             </CardFooter>
           </form>
         </Card>
-      </div>
-    </div>
+    </AuthLayout>
   );
 };
