@@ -19,7 +19,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && !authStyle && (
-          <label htmlFor={inputId} className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+          <label htmlFor={inputId} className="mb-2 block text-sm font-bold text-[#14214a]">
             {label}
           </label>
         )}
@@ -30,7 +30,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
           {label && authStyle && (
-            <label htmlFor={inputId} className="absolute left-5 top-3 z-10 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <label htmlFor={inputId} className="absolute left-5 top-3 z-10 text-xs font-bold text-slate-500">
               {label}
             </label>
           )}

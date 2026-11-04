@@ -67,7 +67,7 @@ export function DataTable<T>({
 
       <div className="rounded-md border border-border overflow-x-auto bg-card">
         <table className="w-full text-sm text-left">
-          <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
+          <thead className="text-[13px] font-semibold text-muted-foreground bg-muted/50 border-b border-border">
             <tr>
               {onToggleSelectAll && (
                 <th className="px-4 py-3 w-10">

@@ -29,11 +29,11 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
         {survey ? (
           <>
             <div className="flex min-w-0 flex-col items-start gap-1">
-            <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#5d6985]">Survey workspace</div>
+            <div className="text-xs font-semibold text-[#5d6985]">Survey workspace</div>
             <h1 className="survey-title-clamp min-w-0 truncate text-base font-extrabold leading-tight text-[#172342] sm:text-lg">{survey.title}</h1>
             </div>
             <div className="topbar-survey-meta flex min-w-0 shrink-0 items-center gap-2">
-              <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold tracking-[0.04em] border ${
                 survey.status === 'published' ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80' :
                 survey.status === 'closed' ? 'bg-rose-50 text-rose-700 border-rose-200/80' :
                 'bg-amber-50 text-amber-800 border-amber-200/80'
@@ -68,7 +68,7 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#ffb928]" />
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Lunar</div>
+              <div className="text-xs font-semibold text-[#66718a]">Lunar</div>
               <h1 className="text-base font-bold text-[#172342]">Survey workspace</h1>
             </div>
           </div>

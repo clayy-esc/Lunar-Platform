@@ -18,6 +18,9 @@ type ThemeDraft = {
   layout: string;
 };
 
+const respondentFonts = ['Plus Jakarta Sans', 'Inter', 'Lora'] as const;
+type RespondentFont = typeof respondentFonts[number];
+
 const curatedPalettes = [
   {
     id: 'lunar-navy',
@@ -83,7 +86,9 @@ export const ThemePage: React.FC = () => {
           setTheme({
             primaryColor: s.theme.primaryColor || s.theme.lightPrimaryColor || '#4169b2',
             backgroundColor: s.theme.backgroundColor || s.theme.lightBackgroundColor || '#fff9f0',
-            fontFamily: s.theme.fontFamily || 'Plus Jakarta Sans',
+            fontFamily: respondentFonts.includes(s.theme.fontFamily as RespondentFont)
+              ? s.theme.fontFamily
+              : 'Plus Jakarta Sans',
             layout: s.theme.layout || 'single_page'
           });
         }
@@ -106,7 +111,11 @@ export const ThemePage: React.FC = () => {
         backgroundColor: theme.backgroundColor,
         lightPrimaryColor: theme.primaryColor,
         lightBackgroundColor: theme.backgroundColor,
-        fontFamily: theme.fontFamily,
+        fontFamily: theme.fontFamily === 'Lora'
+          ? "'Lora', Georgia, serif"
+          : theme.fontFamily === 'Inter'
+            ? "'Inter', system-ui, sans-serif"
+            : "'Plus Jakarta Sans', system-ui, sans-serif",
         layout: theme.layout,
       };
       const res = await api.put(`/surveys/${survey._id}`, { theme: themeToSave });
@@ -134,9 +143,9 @@ export const ThemePage: React.FC = () => {
         {/* Editor Controls */}
         <div className="w-96 shrink-0 space-y-6 overflow-y-auto pb-8 pr-2">
           <div>
-            <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full border border-[#dce3f2] bg-[#eaf0ff] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#4169b2] shadow-xs">
+            <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full border border-[#dce3f2] bg-[#eaf0ff] px-3 py-1 text-xs font-bold text-[#4169b2] shadow-xs">
               <Sparkles className="h-3 w-3" />
-              Theme & Styling
+              Theme and styling
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-[#172342]">Visual direction</h2>
             <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
@@ -184,7 +193,7 @@ export const ThemePage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4 p-4 pt-0">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Primary Accent Color</label>
+                <label className="mb-1.5 block text-sm font-bold text-slate-600">Primary accent color</label>
                 <div className="flex gap-2.5">
                   <Input 
                     type="color" 
@@ -202,13 +211,13 @@ export const ThemePage: React.FC = () => {
                       setTheme({ ...theme, primaryColor: e.target.value });
                       setSelectedPalette('');
                     }}
-                    className="uppercase font-mono text-xs rounded-xl"
+                    className="text-xs rounded-xl"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Page Background Color</label>
+                <label className="mb-1.5 block text-sm font-bold text-slate-600">Page background color</label>
                 <div className="flex gap-2.5">
                   <Input 
                     type="color" 
@@ -226,7 +235,7 @@ export const ThemePage: React.FC = () => {
                       setTheme({ ...theme, backgroundColor: e.target.value });
                       setSelectedPalette('');
                     }}
-                    className="uppercase font-mono text-xs rounded-xl"
+                    className="text-xs rounded-xl"
                   />
                 </div>
               </div>
@@ -241,15 +250,13 @@ export const ThemePage: React.FC = () => {
             </CardHeader>
             <CardContent className="p-4 pt-0">
               <Select 
-                label="Font Family"
+                label="Font"
                 value={theme.fontFamily}
                 onChange={(e) => setTheme({...theme, fontFamily: e.target.value})}
                 options={[
-                  { label: 'Manrope (Modern & Clean)', value: 'Manrope' },
-                  { label: 'Inter (High Legibility)', value: 'Inter' },
-                  { label: 'Roboto (Geometric)', value: 'Roboto' },
-                  { label: 'Merriweather (Editorial Serif)', value: 'Merriweather' },
-                  { label: 'DM Mono (Technical)', value: 'DM Mono' },
+                  { label: 'Plus Jakarta Sans', value: 'Plus Jakarta Sans' },
+                  { label: 'Inter', value: 'Inter' },
+                  { label: 'Lora (editorial)', value: 'Lora' },
                 ]}
               />
             </CardContent>
@@ -263,19 +270,19 @@ export const ThemePage: React.FC = () => {
             </CardHeader>
             <CardContent className="p-4 pt-0">
               <Select 
-                label="Question Presentation"
+                label="Question presentation"
                 value={theme.layout}
                 onChange={(e) => setTheme({...theme, layout: e.target.value})}
                 options={[
-                  { label: 'Single Page (Seamless Flow)', value: 'single_page' },
-                  { label: 'Step by Step (One Question at a Time)', value: 'one_at_a_time' },
+                  { label: 'Single page (seamless flow)', value: 'single_page' },
+                  { label: 'Step by step (one question at a time)', value: 'one_at_a_time' },
                 ]}
               />
             </CardContent>
           </Card>
 
           <Button onClick={handleSave} isLoading={isSaving} size="lg" className="w-full rounded-full">
-            Save Theme Settings
+            Save theme settings
           </Button>
         </div>
 
@@ -290,7 +297,7 @@ export const ThemePage: React.FC = () => {
         >
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--survey-primary)' }}>Respondent Preview</span>
+              <span className="text-[10px] font-bold" style={{ color: 'var(--survey-primary)' }}>Respondent preview</span>
               <p className="mt-0.5 text-xs font-semibold text-slate-500">Live simulation of the respondent experience</p>
             </div>
             <span className="rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-bold text-slate-600 shadow-xs">
@@ -301,8 +308,8 @@ export const ThemePage: React.FC = () => {
           <div className="public-survey-card mx-auto max-w-2xl rounded-3xl p-8 sm:p-10 shadow-2xl transition-all duration-300">
             <div className="mb-6 flex items-center justify-between border-b border-slate-200/70 pb-4">
               <div>
-                <span className="public-survey-badge mb-1 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
-                  <span>✦</span> Survey Preview
+                <span className="public-survey-badge mb-1 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold">
+                  <span>✦</span> Survey preview
                 </span>
                 <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">{survey.title}</h1>
               </div>
@@ -315,7 +322,7 @@ export const ThemePage: React.FC = () => {
 
             <div className="space-y-4">
               <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4">
-                <span className="block text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--survey-primary)' }}>Question 1</span>
+                <span className="mb-1 block text-xs font-semibold" style={{ color: 'var(--survey-primary)' }}>Question 1</span>
                 <h3 className="text-base font-extrabold text-slate-900 mb-3">
                   {survey.questions[0]?.title || 'How would you rate our new interface?'}
                 </h3>

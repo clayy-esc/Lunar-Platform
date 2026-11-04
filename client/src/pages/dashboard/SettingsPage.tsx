@@ -97,7 +97,7 @@ export const SettingsPage: React.FC = () => {
     <AppShell survey={survey}>
       <div className="max-w-4xl mx-auto space-y-8">
         <div>
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Workspace settings</p>
+          <p className="mb-1 text-xs font-semibold text-[#66718a]">Workspace settings</p>
           <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Protect your data</h2>
           <p className="mt-1 text-sm text-[#66718a]">Manage storage health, backups, and response retention.</p>
         </div>
@@ -112,7 +112,7 @@ export const SettingsPage: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Monitor database storage usage and limits.</p>
               </div>
             </div>
-            <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
+            <div className={`rounded-full px-3 py-1 text-xs font-bold tracking-[0.04em] ${
               health.status === 'critical' ? 'bg-red-100 text-red-700' :
               health.status === 'warning' ? 'bg-yellow-100 text-yellow-700' :
               'bg-green-100 text-green-700'

@@ -110,7 +110,7 @@ export const RegisterPage: React.FC = () => {
             This is your one-time recovery code. If you forget your password, you will need this code to reset it.
             <strong className="block text-slate-900 mt-1">Please copy it and store it in a secure place.</strong>
           </p>
-          <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl font-mono text-2xl font-bold tracking-widest my-6 text-slate-800">
+          <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-2xl font-bold tracking-widest my-6 text-slate-800">
             {recoveryCode}
           </div>
           <Button onClick={handleCloseRecovery} size="lg" className="w-full rounded-full">

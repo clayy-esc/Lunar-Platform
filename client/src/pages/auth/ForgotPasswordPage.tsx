@@ -40,8 +40,8 @@ export const ForgotPasswordPage: React.FC = () => {
       <AuthLayout>
           <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 text-center shadow-2xl backdrop-blur-2xl">
             <CardHeader className="pb-2">
-              <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
-                <span>✓</span> Reset Successful
+              <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                <span>✓</span> Reset successful
               </div>
               <CardTitle className="text-3xl font-extrabold text-[#172342]">Password changed</CardTitle>
               <CardDescription className="text-sm text-[#66718a]">Your account credentials have been updated.</CardDescription>
@@ -50,7 +50,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <p className="text-sm text-slate-600 leading-relaxed">
                 A <strong>new</strong> recovery code has been generated. Please save this immediately as the previous code is invalid:
               </p>
-              <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl font-mono text-2xl font-bold tracking-widest my-4 text-slate-900">
+              <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-2xl font-bold tracking-widest my-4 text-slate-900">
                 {newCode}
               </div>
               <Button onClick={() => navigate('/login')} size="lg" className="mt-4 w-full rounded-full">
@@ -90,7 +90,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 onChange={(e) => setRecoveryCode(e.target.value)}
                 required
                 disabled={isLoading}
-                className="font-mono uppercase tracking-wider"
+                className="tracking-normal"
               />
               <Input
                 id="new-password"

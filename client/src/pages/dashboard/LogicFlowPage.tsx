@@ -30,7 +30,7 @@ const QuestionNode = ({ data }: { data: { title: string, isEnd: boolean, order: 
     <div className={`logic-question-node px-4 py-3 shadow-md rounded-xl bg-white border-2 ${data.isEnd ? 'border-[#27804d]' : 'border-[#4169b2]'}`}>
       <Handle type="target" position={Position.Top} className="h-2 w-2" />
       <div className="flex flex-col">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#66718a]">
+        <span className="text-xs font-semibold text-[#66718a]">
           {data.isEnd ? 'END' : `Q${data.order + 1}`}
         </span>
         <span className="max-w-37.5 truncate text-sm font-bold text-[#172342]">
@@ -196,7 +196,7 @@ export const LogicFlowPage: React.FC = () => {
       <div className="flex min-h-full flex-col gap-5">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Logic flow</p>
+            <p className="mb-1 text-xs font-semibold text-[#66718a]">Logic flow</p>
             <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Guide every response</h2>
             <p className="mt-1 text-sm text-[#66718a]">Create rules that send respondents to the right next question.</p>
           </div>
@@ -227,7 +227,7 @@ export const LogicFlowPage: React.FC = () => {
                 <Card key={rule.id} className="logic-rule-card border-[#e4e9f3] bg-[#f8faff] p-4 shadow-none">
                   <div className="space-y-3">
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#66718a]">If answer to</label>
+                      <label className="text-xs font-semibold text-[#66718a]">If answer to</label>
                       <Select 
                         value={rule.sourceQuestionId}
                         onChange={(e) => updateRule(rule.id, { sourceQuestionId: e.target.value })}
@@ -260,7 +260,7 @@ export const LogicFlowPage: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#66718a]">Then skip to</label>
+                      <label className="text-xs font-semibold text-[#66718a]">Then skip to</label>
                       <Select 
                         value={rule.targetQuestionId}
                         onChange={(e) => updateRule(rule.id, { targetQuestionId: e.target.value })}

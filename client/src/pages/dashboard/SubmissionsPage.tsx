@@ -140,7 +140,7 @@ export const SubmissionsPage: React.FC = () => {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Responses</p>
+            <p className="mb-1 text-xs font-semibold text-[#66718a]">Responses</p>
             <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Submission inbox</h2>
             <p className="mt-1 text-sm text-[#66718a]">{total} total responses collected</p>
           </div>
@@ -196,7 +196,7 @@ export const SubmissionsPage: React.FC = () => {
         {viewResponse && survey && (
           <div className="space-y-6 pb-6">
             <div className="flex items-center gap-4 text-sm text-muted-foreground bg-muted p-4 rounded-md">
-              <div><strong>ID:</strong> <span className="font-mono text-xs">{viewResponse._id}</span></div>
+              <div><strong>ID:</strong> <span className="text-xs">{viewResponse._id}</span></div>
               <div><strong>Submitted:</strong> {new Date(viewResponse.metadata.submittedAt).toLocaleString()}</div>
               {viewResponse.metadata.completionTime && <div><strong>Time:</strong> {viewResponse.metadata.completionTime}s</div>}
             </div>

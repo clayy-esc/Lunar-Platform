@@ -266,7 +266,11 @@ export const PublicSurveyPage: React.FC = () => {
 
   const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4169b2';
   const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#fff9f0';
-  const fontFamily = configuredTheme.fontFamily || 'Plus Jakarta Sans';
+  const fontFamily = configuredTheme.fontFamily === 'Lora'
+    ? "'Lora', Georgia, serif"
+    : configuredTheme.fontFamily === 'Inter'
+      ? "'Inter', system-ui, sans-serif"
+      : "'Plus Jakarta Sans', system-ui, sans-serif";
   const currentQ = survey.questions[currentQuestionIndex];
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
   const answeredCount = visibleQuestions.filter((q) => {
@@ -394,7 +398,7 @@ export const PublicSurveyPage: React.FC = () => {
 
       {question.type === 'linear_scale' && (
         <div className="py-2">
-          <div className="mb-4 flex justify-between px-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+          <div className="mb-4 flex justify-between px-2 text-[13px] font-semibold text-slate-400">
             <span>{question.config?.minLabel || 'Min'}</span>
             <span>{question.config?.maxLabel || 'Max'}</span>
           </div>
@@ -458,8 +462,8 @@ export const PublicSurveyPage: React.FC = () => {
           >
             <CheckCircle2 className="h-10 w-10" />
           </div>
-          <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold uppercase tracking-wider">
-            <span>✓</span> Response Completed
+          <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold">
+            <span>✓</span> Response completed
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-[#172342]">Thank you!</h2>
           <p className="mt-2 text-sm leading-relaxed text-[#66718a]">Your response has been securely verified and saved.</p>
@@ -488,7 +492,7 @@ export const PublicSurveyPage: React.FC = () => {
               <img src="/favicon.png" alt="Lunar mascot" className="h-9 w-9 object-contain drop-shadow-sm" />
               <span className="text-sm font-extrabold tracking-tight text-[#172342]">Lunar</span>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Secure response</span>
+            <span className="text-[13px] font-semibold text-[#66718a]">Secure response</span>
           </div>
           
           {/* Header Banner */}
@@ -514,13 +518,13 @@ export const PublicSurveyPage: React.FC = () => {
                 {visibleQuestions.map((question, index) => (
                   <section key={question.id} className={index > 0 ? 'border-t border-slate-200/70 pt-10' : ''}>
                     <div className="mb-4">
-                      <span className="mb-2 block text-xs font-extrabold uppercase tracking-wider" style={{ color: 'var(--survey-primary)' }}>
+                      <span className="mb-2 block text-[13px] font-semibold" style={{ color: 'var(--survey-primary)' }}>
                         Question {index + 1}
                       </span>
-                      <h3 className="text-xl font-extrabold leading-snug text-[#172342] sm:text-2xl">
+                      <h2 className="text-xl font-extrabold leading-snug text-[#172342] sm:text-2xl">
                         {question.title}
                         {question.required && <span className="ml-1" style={{ color: 'var(--survey-primary)' }}>*</span>}
-                      </h3>
+                      </h2>
                       {question.description && (
                         <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">{question.description}</p>
                       )}
@@ -547,13 +551,13 @@ export const PublicSurveyPage: React.FC = () => {
             <div className="public-survey-card rounded-3xl overflow-hidden">
               <div className="p-6 sm:p-10 lg:p-12">
                 <div className="mb-4">
-                  <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider">
+                  <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-[11px] font-bold">
                     Step {currentQuestionIndex + 1}
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
                     {currentQ.title}
                     {currentQ.required && <span className="ml-1" style={{ color: 'var(--survey-primary)' }}>*</span>}
-                  </h3>
+                  </h2>
                   {currentQ.description && (
                     <p className="mt-2 text-sm text-slate-500 leading-relaxed">{currentQ.description}</p>
                   )}

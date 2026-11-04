@@ -78,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
         </div>
 
         <div className="flex-1 overflow-y-auto px-3 py-6">
-          <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+          <div className="mb-3 px-3 text-xs font-semibold text-slate-400">
             Workspace
           </div>
           <nav className="space-y-1.5">

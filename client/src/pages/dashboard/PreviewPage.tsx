@@ -69,7 +69,7 @@ export const PreviewPage: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-end justify-between">
             <div>
-              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Preview</p>
+              <p className="mb-1 text-xs font-semibold text-[#66718a]">Preview</p>
               <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">See the respondent experience</h2>
               <p className="mt-1 text-sm text-[#66718a]">Review your survey before sharing it with your audience.</p>
             </div>

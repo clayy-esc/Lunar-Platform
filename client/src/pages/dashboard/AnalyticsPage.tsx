@@ -603,7 +603,7 @@ export const AnalyticsPage: React.FC = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Analytics</p>
+            <p className="mb-1 text-xs font-semibold text-[#66718a]">Analytics</p>
             <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Understand every answer</h2>
             <p className="mt-1 text-sm text-[#66718a]">
               Configure and export individual charts — {analytics.totalResponses} responses collected
@@ -622,7 +622,7 @@ export const AnalyticsPage: React.FC = () => {
             {/* Plot Type */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                <CardTitle className="text-sm font-semibold text-muted-foreground">
                   Plot Type
                 </CardTitle>
               </CardHeader>
@@ -650,7 +650,7 @@ export const AnalyticsPage: React.FC = () => {
             {/* Axis Configuration */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                <CardTitle className="text-sm font-semibold text-muted-foreground">
                   Axes
                 </CardTitle>
               </CardHeader>
@@ -676,7 +676,7 @@ export const AnalyticsPage: React.FC = () => {
             {/* Color Palette */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                <CardTitle className="text-sm font-semibold text-muted-foreground">
                   Color Palette
                 </CardTitle>
               </CardHeader>
@@ -742,7 +742,7 @@ export const AnalyticsPage: React.FC = () => {
                       )}
                     </div>
                     {!isExporting && selectedQuestion && (
-                      <span className="text-xs font-mono bg-muted px-2 py-1 rounded text-muted-foreground">
+                      <span className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
                         {selectedQuestion.type.replace('_', ' ')}
                       </span>
                     )}
@@ -757,7 +757,7 @@ export const AnalyticsPage: React.FC = () => {
             {chartData.length > 0 && (
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  <CardTitle className="text-sm font-semibold text-muted-foreground">
                     Data Table
                   </CardTitle>
                 </CardHeader>
@@ -784,7 +784,7 @@ export const AnalyticsPage: React.FC = () => {
                                 {row.label}
                               </div>
                             </td>
-                            <td className="text-right px-4 py-2 font-mono text-foreground">
+                            <td className="text-right px-4 py-2 text-foreground">
                               {row[activeYKey]}
                               {activeYKey === 'percentage' && '%'}
                             </td>
@@ -802,4 +802,3 @@ export const AnalyticsPage: React.FC = () => {
     </AppShell>
   );
 };
-

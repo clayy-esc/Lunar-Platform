@@ -182,7 +182,7 @@ export const DashboardRoot: React.FC = () => {
                     {new Date(survey.updatedAt).toLocaleDateString()}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold tracking-[0.04em] ${
                       survey.status === 'published' ? 'bg-[#edf8f1] text-[#27804d]' :
                       survey.status === 'closed' ? 'bg-[#fff0ef] text-[#b42318]' : 'bg-[#eef2fa] text-[#66718a]'
                     }`}>{survey.status}</span>

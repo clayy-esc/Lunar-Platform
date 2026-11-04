@@ -53,13 +53,13 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             {requiredTypedConfirmation && (
               <div className="mt-4">
                 <p className="text-sm font-medium mb-2">
-                  To confirm, type <span className="font-mono bg-muted px-1 py-0.5 rounded text-foreground font-bold">{requiredTypedConfirmation}</span> below:
+                  To confirm, type <span className="bg-muted px-1 py-0.5 rounded text-foreground font-bold">{requiredTypedConfirmation}</span> below:
                 </p>
                 <Input
                   value={typed}
                   onChange={(e) => setTyped(e.target.value)}
                   placeholder={requiredTypedConfirmation}
-                  className="font-mono"
+                  
                 />
               </div>
             )}

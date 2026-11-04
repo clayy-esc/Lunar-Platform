@@ -85,7 +85,7 @@ export const LunarLogo: React.FC<LunarLogoProps> = ({
             </span>
           </div>
           {subtitle && (
-            <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-500">
+            <span className="text-xs font-semibold text-slate-500">
               {subtitle}
             </span>
           )}

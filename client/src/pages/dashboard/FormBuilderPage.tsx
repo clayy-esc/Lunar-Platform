@@ -191,7 +191,7 @@ export const FormBuilderPage: React.FC = () => {
         {/* Survey Header */}
         <div className="mb-2 flex items-end justify-between gap-4">
           <div>
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Form builder</p>
+            <p className="mb-1 text-xs font-semibold text-[#66718a]">Form builder</p>
             <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Shape your questions</h2>
             <p className="mt-1 text-sm text-[#66718a]">Keep the flow focused and make every answer count.</p>
           </div>
@@ -442,7 +442,7 @@ export const FormBuilderPage: React.FC = () => {
               </Button>
             }
           >
-            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground">
               Question Types
             </div>
             {questionTypes.map((t) => (
