@@ -2124,19 +2124,6 @@
     min-height: 40px;
   }
 
-  .topbar-avatar {
-    display: inline-flex;
-    height: 36px;
-    width: 36px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    background: #3b62c4;
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 800;
-  }
-
   .dashboard-list-tools input,
   .dashboard-list-tools select {
     font-family: inherit;

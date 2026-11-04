@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '../ui/Button';
 import { Menu, Share, ExternalLink, EyeOff, Plus } from 'lucide-react';
 import { Survey } from '../../types';
-import { useAuth } from '../../contexts/useAuth';
 
 interface TopbarProps {
   survey?: Survey | null;
@@ -16,7 +15,6 @@ interface TopbarProps {
 }
 
 export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing, onUnpublish, isUnpublishing, onMenuOpen, onCreateSurvey, isCreatingSurvey }) => {
-  const { user } = useAuth();
   return (
     <header className="app-topbar relative z-10 flex h-auto min-h-20 shrink-0 items-center justify-between border-b px-4 py-3 sm:px-6 lg:px-8">
       <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -93,11 +91,6 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
             <EyeOff className="w-4 h-4 mr-2" />
             <span className="topbar-action-label">Unpublish</span>
           </Button>
-        )}
-        {!survey && user && (
-          <div className="topbar-avatar" aria-label={`Signed in as ${user.email}`} title={user.email}>
-            {(user.email[0] || 'L').toUpperCase()}
-          </div>
         )}
       </div>
     </header>
