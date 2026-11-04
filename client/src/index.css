@@ -677,6 +677,31 @@
       color: #3b62c4;
     }
 
+    .survey-description {
+      max-width: 68ch;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #5a6585;
+      text-align: var(--description-align, justify);
+      text-justify: inter-word;
+      text-align-last: left;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      overflow-wrap: break-word;
+      word-spacing: normal;
+      text-wrap: pretty;
+      white-space: pre-line;
+    }
+
+    @media (max-width: 640px) {
+      .survey-description {
+        text-align: left !important;
+        hyphens: manual;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+    }
+
     .public-survey-option {
       min-height: 3rem;
       border-radius: 0.875rem;

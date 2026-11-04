@@ -46,6 +46,15 @@ export const PublicSurveyPage: React.FC = () => {
     fetchSurvey();
   }, [slug, isPreview]);
 
+  useEffect(() => {
+    if (survey?.title) {
+      document.title = `${survey.title} - Lunar`;
+    }
+    return () => {
+      document.title = 'Lunar';
+    };
+  }, [survey?.title]);
+
   const evaluateRule = (rule: LogicRule, answer: any): boolean => {
     if (answer === undefined || answer === null || answer === '') return false;
 
@@ -309,10 +318,14 @@ export const PublicSurveyPage: React.FC = () => {
     ? `${answeredCount} of ${visibleQuestions.length} answered`
     : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
 
+  const isShortDesc = (survey.description || '').trim().length < 120;
+  const descAlign = configuredTheme.descriptionAlignment || (isShortDesc ? 'left' : 'justify');
+
   const themeStyle: React.CSSProperties = {
     fontFamily,
     ['--survey-primary' as any]: primaryColor,
     ['--survey-bg' as any]: backgroundColor,
+    ['--description-align' as any]: descAlign,
   };
 
   // Validation for multi-step
@@ -638,37 +651,52 @@ export const PublicSurveyPage: React.FC = () => {
   return (
     <div className={`public-survey-shell flex flex-col ${isSinglePage || isPreview ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`} style={themeStyle}>
       {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
-      {/* Top Progress Tracker */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1.5 bg-slate-200/50">
-        <div className="public-survey-progress h-full transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
-      </div>
 
-      <div className={`flex flex-1 flex-col items-center p-4 pt-12 sm:p-6 sm:pt-14 lg:p-8 lg:pt-16 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
+      <div className={`flex flex-1 flex-col items-center p-4 pt-10 sm:p-6 sm:pt-12 lg:p-8 lg:pt-14 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
         <div className="w-full max-w-[620px]">
+          {/* Brand Row */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <img src="/favicon.png" alt="Lunar mascot" className="h-9 w-9 object-contain drop-shadow-sm" />
-              <span className="max-w-[13rem] truncate text-sm font-extrabold tracking-tight text-[#14214a]">{survey.title}</span>
+              <span className="text-[16px] font-bold tracking-tight text-[#14214a]">Lunar</span>
             </div>
             <span className="public-survey-secure-badge"><span aria-hidden="true">✓</span> Secure response</span>
           </div>
           
-          {/* Header Banner */}
-          <div className="mb-8 flex items-end justify-between gap-6 pb-4">
-            <div>
-              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#14214a] sm:text-4xl">
-                {survey.title}
-              </h1>
-              {survey.description && (
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#66718a] sm:text-base">{survey.description}</p>
-              )}
-            </div>
-            <div className="shrink-0 text-right">
-              <span className="public-survey-question-count">
-                {progressLabel}
-              </span>
-            </div>
+          {/* Title and Description Block */}
+          <div className="mb-6">
+            <h1 className="text-[28px] sm:text-[32px] md:text-[40px] font-extrabold leading-[1.15] tracking-[-0.02em] text-[#14214a] mb-4 [text-wrap:balance]">
+              {survey.title}
+            </h1>
+            {survey.description && (
+              <p lang="en" className="survey-description">
+                {survey.description}
+              </p>
+            )}
           </div>
+
+          {/* Progress Tracker */}
+          {survey.settings?.showProgressBar !== false && (
+            <div className="mb-8 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#dce3f2] bg-white px-3 py-1 text-[13px] font-semibold text-[#3b62c4] shadow-xs">
+                  {progressLabel}
+                </span>
+              </div>
+              <div
+                role="progressbar"
+                aria-valuenow={Math.round(progress)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                className="h-2 w-full overflow-hidden rounded-full bg-[#e3e8f6]"
+              >
+                <div
+                  className="h-full rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${progress}%`, backgroundColor: 'var(--survey-primary, #3b62c4)' }}
+                />
+              </div>
+            </div>
+          )}
 
           {isSinglePage ? (
             <div className="public-survey-card rounded-3xl overflow-hidden">

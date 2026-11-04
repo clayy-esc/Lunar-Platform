@@ -90,6 +90,7 @@ export interface SurveyTheme {
   lightBackgroundColor?: string;
   fontFamily: string;
   customCSS: string;
+  descriptionAlignment?: 'left' | 'justified';
 }
 
 export interface SurveySettings {

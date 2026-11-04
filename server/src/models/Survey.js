@@ -105,6 +105,11 @@ const surveySchema = new Schema({
       enum: ['single_page', 'one_at_a_time'],
       default: 'single_page',
     },
+    descriptionAlignment: {
+      type: String,
+      enum: ['left', 'justified'],
+      default: 'left',
+    },
     customCSS: { type: String, default: '' },
   },
   settings: {

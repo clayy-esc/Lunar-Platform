@@ -13,6 +13,7 @@ type ThemeDraft = {
   fontFamily: string;
   layout: 'single_page' | 'one_at_a_time';
   roundness: 'sharp' | 'rounded' | 'pill';
+  descriptionAlignment?: 'left' | 'justified';
 };
 
 const palettes = [
@@ -40,7 +41,14 @@ export const ThemePage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [selectedPalette, setSelectedPalette] = useState('lunar-navy');
-  const [theme, setTheme] = useState<ThemeDraft>({ primaryColor: '#3B62C4', backgroundColor: '#F4F6FD', fontFamily: 'Plus Jakarta Sans', layout: 'single_page', roundness: 'rounded' });
+  const [theme, setTheme] = useState<ThemeDraft>({
+    primaryColor: '#3B62C4',
+    backgroundColor: '#F4F6FD',
+    fontFamily: 'Plus Jakarta Sans',
+    layout: 'single_page',
+    roundness: 'rounded',
+    descriptionAlignment: 'left',
+  });
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -55,6 +63,7 @@ export const ThemePage: React.FC = () => {
             backgroundColor: current.theme.backgroundColor || '#F4F6FD',
             fontFamily: current.theme.fontFamily?.includes('Inter') ? 'Inter' : 'Plus Jakarta Sans',
             layout: current.theme.layout || 'single_page',
+            descriptionAlignment: current.theme.descriptionAlignment || 'left',
           }));
         }
       } catch {
@@ -82,14 +91,28 @@ export const ThemePage: React.FC = () => {
 
   const resetTheme = () => {
     setSelectedPalette('lunar-navy');
-    setTheme({ primaryColor: '#3B62C4', backgroundColor: '#F4F6FD', fontFamily: 'Plus Jakarta Sans', layout: 'single_page', roundness: 'rounded' });
+    setTheme({
+      primaryColor: '#3B62C4',
+      backgroundColor: '#F4F6FD',
+      fontFamily: 'Plus Jakarta Sans',
+      layout: 'single_page',
+      roundness: 'rounded',
+      descriptionAlignment: 'left',
+    });
   };
 
   const handleSave = async () => {
     if (!survey) return;
     setIsSaving(true);
     try {
-      const res = await api.put(`/surveys/${survey._id}`, { theme: { ...theme, lightPrimaryColor: theme.primaryColor, lightBackgroundColor: theme.backgroundColor } });
+      const res = await api.put(`/surveys/${survey._id}`, {
+        theme: {
+          ...theme,
+          lightPrimaryColor: theme.primaryColor,
+          lightBackgroundColor: theme.backgroundColor,
+          descriptionAlignment: theme.descriptionAlignment || 'left',
+        },
+      });
       setSurvey(res.data.survey);
       addToast('Theme saved successfully', 'success');
     } catch {
@@ -99,10 +122,23 @@ export const ThemePage: React.FC = () => {
     }
   };
 
-  if (isLoading || !survey) return <AppShell><div className="flex h-full items-center justify-center py-20"><Spinner size="lg" /></div></AppShell>;
+  if (isLoading || !survey) {
+    return (
+      <AppShell>
+        <div className="flex h-full items-center justify-center py-20">
+          <Spinner size="lg" />
+        </div>
+      </AppShell>
+    );
+  }
 
   const previewRadius = theme.roundness === 'sharp' ? '4px' : theme.roundness === 'pill' ? '28px' : '16px';
-  const previewStyle = { fontFamily: theme.fontFamily, backgroundColor: theme.backgroundColor, ['--theme-accent' as string]: theme.primaryColor, ['--theme-radius' as string]: previewRadius } as React.CSSProperties;
+  const previewStyle = {
+    fontFamily: theme.fontFamily,
+    backgroundColor: theme.backgroundColor,
+    ['--theme-accent' as string]: theme.primaryColor,
+    ['--theme-radius' as string]: previewRadius,
+  } as React.CSSProperties;
 
   return (
     <AppShell survey={survey}>
@@ -124,8 +160,17 @@ export const ThemePage: React.FC = () => {
               <h2>Color palette</h2>
               <div className="theme-palette-grid">
                 {palettes.map((palette) => (
-                  <button type="button" key={palette.id} onClick={() => applyPalette(palette)} className={`theme-palette-card ${selectedPalette === palette.id ? 'is-selected' : ''}`}>
-                    <span className="theme-swatch-row">{palette.swatches.map((swatch) => <span key={swatch} style={{ backgroundColor: swatch }} />)}</span>
+                  <button
+                    type="button"
+                    key={palette.id}
+                    onClick={() => applyPalette(palette)}
+                    className={`theme-palette-card ${selectedPalette === palette.id ? 'is-selected' : ''}`}
+                  >
+                    <span className="theme-swatch-row">
+                      {palette.swatches.map((swatch) => (
+                        <span key={swatch} style={{ backgroundColor: swatch }} />
+                      ))}
+                    </span>
                     <strong>{palette.name}</strong>
                     <small>{palette.description}</small>
                   </button>
@@ -136,37 +181,127 @@ export const ThemePage: React.FC = () => {
             <div className="theme-section">
               <h2>Custom colors</h2>
               <div className="theme-color-fields">
-                <label>Accent <input type="color" value={theme.primaryColor} onChange={(event) => updateTheme({ primaryColor: event.target.value })} /></label>
-                <label>Background <input type="color" value={theme.backgroundColor} onChange={(event) => updateTheme({ backgroundColor: event.target.value })} /></label>
+                <label>
+                  Accent <input type="color" value={theme.primaryColor} onChange={(event) => updateTheme({ primaryColor: event.target.value })} />
+                </label>
+                <label>
+                  Background <input type="color" value={theme.backgroundColor} onChange={(event) => updateTheme({ backgroundColor: event.target.value })} />
+                </label>
               </div>
-              {contrastWarning && <p className="theme-contrast-warning" role="status">This accent may not meet the 4.5:1 contrast recommendation on white. Try a darker color.</p>}
+              {contrastWarning && (
+                <p className="theme-contrast-warning" role="status">
+                  This accent may not meet the 4.5:1 contrast recommendation on white. Try a darker color.
+                </p>
+              )}
             </div>
 
             <div className="theme-section">
               <h2>Font</h2>
-              <div className="theme-choice-row">{['Plus Jakarta Sans', 'Inter', 'System'].map((font) => <button type="button" key={font} onClick={() => updateTheme({ fontFamily: font === 'System' ? 'system-ui' : font })} className={theme.fontFamily === (font === 'System' ? 'system-ui' : font) ? 'is-active' : ''}>{font}</button>)}</div>
+              <div className="theme-choice-row">
+                {['Plus Jakarta Sans', 'Inter', 'System'].map((font) => (
+                  <button
+                    type="button"
+                    key={font}
+                    onClick={() => updateTheme({ fontFamily: font === 'System' ? 'system-ui' : font })}
+                    className={theme.fontFamily === (font === 'System' ? 'system-ui' : font) ? 'is-active' : ''}
+                  >
+                    {font}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="theme-section">
               <h2>Corner roundness</h2>
-              <div className="theme-choice-row">{[['sharp', 'Sharp'], ['rounded', 'Rounded'], ['pill', 'Pill']].map(([value, label]) => <button type="button" key={value} onClick={() => updateTheme({ roundness: value as ThemeDraft['roundness'] })} className={theme.roundness === value ? 'is-active' : ''}>{label}</button>)}</div>
+              <div className="theme-choice-row">
+                {[['sharp', 'Sharp'], ['rounded', 'Rounded'], ['pill', 'Pill']].map(([value, label]) => (
+                  <button
+                    type="button"
+                    key={value}
+                    onClick={() => updateTheme({ roundness: value as ThemeDraft['roundness'] })}
+                    className={theme.roundness === value ? 'is-active' : ''}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="theme-section">
+              <h2>Description alignment</h2>
+              <div className="theme-choice-row">
+                <button
+                  type="button"
+                  onClick={() => updateTheme({ descriptionAlignment: 'left' })}
+                  className={theme.descriptionAlignment === 'left' ? 'is-active' : ''}
+                >
+                  Left
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateTheme({ descriptionAlignment: 'justified' })}
+                  className={theme.descriptionAlignment === 'justified' ? 'is-active' : ''}
+                >
+                  Justified
+                </button>
+              </div>
             </div>
 
             <div className="theme-section">
               <h2>Layout</h2>
-              <div className="theme-choice-row">{[['single_page', 'Single page'], ['one_at_a_time', 'One question at a time']].map(([value, label]) => <button type="button" key={value} onClick={() => updateTheme({ layout: value as ThemeDraft['layout'] })} className={theme.layout === value ? 'is-active' : ''}>{label}</button>)}</div>
+              <div className="theme-choice-row">
+                {[['single_page', 'Single page'], ['one_at_a_time', 'One question at a time']].map(([value, label]) => (
+                  <button
+                    type="button"
+                    key={value}
+                    onClick={() => updateTheme({ layout: value as ThemeDraft['layout'] })}
+                    className={theme.layout === value ? 'is-active' : ''}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           </section>
 
           <aside className="theme-preview-panel">
-            <div className="theme-preview-toolbar"><div><h2>Live preview</h2><p>Respondent view</p></div><div className="theme-device-toggle"><button type="button" className={previewMode === 'desktop' ? 'is-active' : ''} onClick={() => setPreviewMode('desktop')}>Desktop</button><button type="button" className={previewMode === 'mobile' ? 'is-active' : ''} onClick={() => setPreviewMode('mobile')}>Mobile</button></div></div>
+            <div className="theme-preview-toolbar">
+              <div>
+                <h2>Live preview</h2>
+                <p>Respondent view</p>
+              </div>
+              <div className="theme-device-toggle">
+                <button
+                  type="button"
+                  className={previewMode === 'desktop' ? 'is-active' : ''}
+                  onClick={() => setPreviewMode('desktop')}
+                >
+                  Desktop
+                </button>
+                <button
+                  type="button"
+                  className={previewMode === 'mobile' ? 'is-active' : ''}
+                  onClick={() => setPreviewMode('mobile')}
+                >
+                  Mobile
+                </button>
+              </div>
+            </div>
             <div className={`theme-preview-canvas ${previewMode}`} style={previewStyle}>
               <div className="theme-preview-survey" style={{ borderRadius: previewRadius }}>
-                <div className="theme-preview-brand"><img src="/favicon.png" alt="" /><strong>{survey.title}</strong><span>✓ Secure response</span></div>
-                <div className="theme-preview-progress"><span style={{ width: '42%', backgroundColor: theme.primaryColor }} /></div>
+                <div className="theme-preview-brand">
+                  <img src="/favicon.png" alt="Lunar" />
+                  <strong>Lunar</strong>
+                  <span>✓ Secure response</span>
+                </div>
+                <div className="theme-preview-progress">
+                  <span style={{ width: '42%', backgroundColor: theme.primaryColor }} />
+                </div>
                 <small style={{ color: theme.primaryColor }}>Question 1 of {Math.max(survey.questions.length, 1)}</small>
                 <h3>{survey.questions[0]?.title || 'How did you hear about us?'}</h3>
-                <div className="theme-preview-option is-selected" style={{ borderColor: theme.primaryColor, backgroundColor: `${theme.primaryColor}14` }}>Very satisfied <span style={{ backgroundColor: theme.primaryColor }}>✓</span></div>
+                <div className="theme-preview-option is-selected" style={{ borderColor: theme.primaryColor, backgroundColor: `${theme.primaryColor}14` }}>
+                  Very satisfied <span style={{ backgroundColor: theme.primaryColor }}>✓</span>
+                </div>
                 <div className="theme-preview-option">Satisfied <span>○</span></div>
                 <button type="button" className="theme-preview-next">Next</button>
               </div>
