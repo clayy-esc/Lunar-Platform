@@ -37,6 +37,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish,
 
       <Sidebar
         surveyId={survey?._id}
+        surveyTitle={survey?.title}
         onLogout={logout}
         isMobileOpen={isMobileNavOpen}
         onMobileClose={() => setIsMobileNavOpen(false)}

@@ -32,7 +32,7 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
             <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#5d6985]">Survey workspace</div>
             <h1 className="survey-title-clamp min-w-0 truncate text-base font-extrabold leading-tight text-[#172342] sm:text-lg">{survey.title}</h1>
             </div>
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="topbar-survey-meta flex min-w-0 shrink-0 items-center gap-2">
               <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
                 survey.status === 'published' ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80' :
                 survey.status === 'closed' ? 'bg-rose-50 text-rose-700 border-rose-200/80' :
@@ -47,14 +47,14 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
                     href={`/s/${survey.publicSlug}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center text-[11px] font-semibold text-[#4169b2] transition-colors hover:text-[#293b65] hover:underline"
+                    className="topbar-live-link flex items-center text-[11px] font-semibold text-[#4169b2] transition-colors hover:text-[#293b65] hover:underline"
                   >
                     <ExternalLink className="w-3 h-3 mr-1" />
                     View live survey
                   </a>
                 ) : (
                   <span
-                    className="flex items-center text-[11px] font-medium text-slate-400 cursor-help"
+                    className="topbar-live-link flex items-center text-[11px] font-medium text-slate-400 cursor-help"
                     title="Publish the survey to activate this public link"
                   >
                     <ExternalLink className="w-3 h-3 mr-1 opacity-40" />
@@ -75,17 +75,17 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
         )}
       </div>
 
-      <div className="ml-3 flex shrink-0 items-center gap-2 sm:gap-3">
+      <div className="topbar-actions ml-3 flex shrink-0 items-center gap-2 sm:gap-3">
         {survey && survey.status === 'draft' && onPublish && (
-          <Button size="sm" onClick={onPublish} isLoading={isPublishing} className="shadow-md shadow-[#ffb928]/20">
+          <Button size="sm" aria-label="Publish survey" title="Publish survey" onClick={onPublish} isLoading={isPublishing} className="topbar-action shadow-md shadow-[#ffb928]/20">
             <Share className="w-4 h-4 mr-2" />
-            Publish
+            <span className="topbar-action-label">Publish</span>
           </Button>
         )}
         {survey && survey.status === 'published' && onUnpublish && (
-          <Button size="sm" variant="outline" onClick={onUnpublish} isLoading={isUnpublishing} className="rounded-full">
+          <Button size="sm" variant="outline" aria-label="Unpublish survey" title="Unpublish survey" onClick={onUnpublish} isLoading={isUnpublishing} className="topbar-action rounded-full">
             <EyeOff className="w-4 h-4 mr-2" />
-            Unpublish
+            <span className="topbar-action-label">Unpublish</span>
           </Button>
         )}
       </div>

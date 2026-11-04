@@ -155,7 +155,7 @@
   }
 
   .survey-title-clamp {
-    max-width: 45vw;
+    max-width: min(45vw, 32rem);
   }
 
   .modal-full-width {
@@ -1035,6 +1035,18 @@
     box-shadow: 0 8px 18px rgba(59, 98, 196, 0.25);
   }
 
+  .sidebar-survey-title {
+    overflow: hidden;
+    margin: 0.6rem 0 0.35rem;
+    padding: 0 0.75rem;
+    color: #9db8ff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .preview-frame {
     border-color: #dce3f2;
     background: #ffffff;
@@ -1073,9 +1085,39 @@
 
   @media (max-width: 767px) {
     .app-topbar {
-      min-height: 72px;
+      min-height: 68px;
       padding-top: 0.75rem;
       padding-bottom: 0.75rem;
+    }
+
+    .app-topbar > .flex-1 {
+      gap: 0.5rem;
+    }
+
+    .app-topbar .survey-title-clamp {
+      max-width: 38vw;
+    }
+
+    .app-topbar .topbar-survey-meta {
+      gap: 0;
+    }
+
+    .app-topbar .topbar-live-link {
+      display: none !important;
+    }
+
+    .app-topbar .topbar-action {
+      width: 2.5rem;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .app-topbar .topbar-action svg {
+      margin-right: 0;
+    }
+
+    .app-topbar .topbar-action-label {
+      display: none;
     }
 
     .app-shell main {

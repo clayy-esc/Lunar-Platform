@@ -6,12 +6,13 @@ import { useAuth } from '../../contexts/useAuth';
 
 interface SidebarProps {
   surveyId?: string;
+  surveyTitle?: string;
   onLogout: () => void;
   isMobileOpen?: boolean;
   onMobileClose?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOpen = false, onMobileClose }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogout, isMobileOpen = false, onMobileClose }) => {
   const { user } = useAuth();
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -81,9 +82,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
             Workspace
           </div>
           <nav className="space-y-1.5">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.to}
+              {navLinks.map((link, index) => (
+                <React.Fragment key={link.to}>
+                  <NavLink
                   to={link.to}
                   end={link.to === '/dashboard'}
                   onClick={closeOnMobile}
@@ -98,19 +99,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
                   <link.icon className="mr-3 h-4.5 w-4.5 opacity-80 transition-transform group-hover:scale-105" />
                   {link.label}
                 </NavLink>
+                {index === 0 && surveyId && (
+                  <div className="sidebar-survey-title" title={surveyTitle || 'Survey workspace'}>
+                    {surveyTitle || 'Survey workspace'}
+                  </div>
+                )}
+              </React.Fragment>
               ))}
             </nav>
-            {surveyId && (
-            <div className="mt-7 border-t border-white/10 pt-6">
-              <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-                Current survey
-              </div>
-              <div className="mx-2 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-semibold text-slate-300">
-                <span className="h-2 w-2 shrink-0 rounded-full bg-[#ffb928]" />
-                <span className="truncate">Survey workspace</span>
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="border-t border-white/10 p-3">
