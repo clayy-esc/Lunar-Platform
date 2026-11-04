@@ -23,11 +23,11 @@ import {
   useEdgesState
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Save, Trash2, Plus, GitMerge } from 'lucide-react';
+import { Save, Trash2, Plus, GitMerge, AlertTriangle } from 'lucide-react';
 
-const QuestionNode = ({ data }: { data: { title: string, isEnd: boolean, order: number } }) => {
+const QuestionNode = ({ data }: { data: { title: string, isEnd: boolean, order: number, selected?: boolean } }) => {
   return (
-    <div className={`logic-question-node px-4 py-3 shadow-md rounded-xl bg-white border-2 ${data.isEnd ? 'border-[#27804d]' : 'border-[#4169b2]'}`}>
+    <div className={`logic-question-node ${data.selected ? 'is-selected' : ''} ${data.isEnd ? 'is-end' : ''}`}>
       <Handle type="target" position={Position.Top} className="h-2 w-2" />
       <div className="flex flex-col">
         <span className="text-xs font-semibold text-[#66718a]">
@@ -52,6 +52,7 @@ export const LogicFlowPage: React.FC = () => {
   const [survey, setSurvey] = useState<Survey | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -79,7 +80,7 @@ export const LogicFlowPage: React.FC = () => {
       id: q.id,
       type: 'question',
       position: { x: 250, y: i * 150 + 50 },
-      data: { title: q.title, isEnd: false, order: i },
+      data: { title: q.title, isEnd: false, order: i, selected: false },
     }));
 
     // Add End node
@@ -87,7 +88,7 @@ export const LogicFlowPage: React.FC = () => {
       id: 'end',
       type: 'question',
       position: { x: 250, y: survey.questions.length * 150 + 50 },
-      data: { title: 'Submit Survey', isEnd: true, order: -1 },
+      data: { title: 'Submit survey', isEnd: true, order: -1, selected: false },
     });
 
     // Generate edges
@@ -107,8 +108,8 @@ export const LogicFlowPage: React.FC = () => {
         target: targetId,
         type: 'smoothstep',
         animated: !hasRule,
-        style: { stroke: hasRule ? 'var(--muted-foreground)' : 'var(--primary)', strokeWidth: hasRule ? 1 : 2, strokeDasharray: hasRule ? '5 5' : 'none' },
-        markerEnd: { type: MarkerType.ArrowClosed, color: hasRule ? 'var(--muted-foreground)' : 'var(--primary)' },
+        style: { stroke: hasRule ? '#b9c3d8' : '#fdb92b', strokeWidth: hasRule ? 1 : 2, strokeDasharray: hasRule ? '5 5' : 'none' },
+        markerEnd: { type: MarkerType.ArrowClosed, color: hasRule ? '#b9c3d8' : '#fdb92b' },
       });
     }
 
@@ -119,19 +120,26 @@ export const LogicFlowPage: React.FC = () => {
         source: rule.sourceQuestionId,
         target: rule.targetQuestionId,
         type: 'smoothstep',
-        label: `${rule.condition} ${rule.value}`,
-        labelStyle: { fill: 'var(--primary)', fontWeight: 700 },
-        labelBgStyle: { fill: 'var(--card)', fillOpacity: 0.94 },
+        label: `${rule.condition.replace('_', ' ')} ${rule.value || '…'}`,
+        labelStyle: { fill: '#8a5a00', fontWeight: 700, fontSize: 11 },
+        labelBgStyle: { fill: '#fff3d1', fillOpacity: 0.96 },
         animated: true,
-        style: { stroke: 'var(--primary)', strokeWidth: 2 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: 'var(--primary)' },
+        style: { stroke: '#fdb92b', strokeWidth: selectedRuleId === rule.id ? 3 : 2 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#fdb92b' },
       });
     });
 
     setNodes(generatedNodes);
     setEdges(generatedEdges);
 
-  }, [survey, setNodes, setEdges]);
+  }, [survey, selectedRuleId, setNodes, setEdges]);
+
+  useEffect(() => {
+    setNodes((currentNodes) => currentNodes.map((node) => ({
+      ...node,
+      data: { ...node.data, selected: Boolean(selectedRuleId && survey?.logic?.some((rule) => rule.id === selectedRuleId && (rule.sourceQuestionId === node.id || rule.targetQuestionId === node.id))) },
+    })));
+  }, [selectedRuleId, survey?.logic, setNodes]);
 
   const handleSave = async () => {
     if (!survey) return;
@@ -194,7 +202,7 @@ export const LogicFlowPage: React.FC = () => {
   return (
     <AppShell survey={survey}>
       <div className="flex min-h-full flex-col gap-5">
-        <div className="flex items-end justify-between gap-4">
+        <div className="logic-page-heading">
           <div>
             <p className="mb-1 text-xs font-semibold text-[#66718a]">Logic flow</p>
             <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Guide every response</h2>
@@ -206,11 +214,11 @@ export const LogicFlowPage: React.FC = () => {
         </div>
       <div className="logic-flow-height flex min-h-0 gap-6">
         {/* Logic Rules Sidebar */}
-        <div className="flex h-full w-96 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#e4e9f3] bg-white shadow-sm">
+        <div className="logic-rule-sidebar flex h-full w-96 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#e4e9f3] bg-white shadow-sm">
           <div className="flex items-center justify-between border-b border-[#e4e9f3] bg-[#f8faff] p-4">
             <h3 className="flex items-center font-extrabold text-[#172342]">
               <GitMerge className="mr-2 h-4 w-4 text-[#4169b2]" />
-              Branching Logic
+              Branching rules
             </h3>
             <Button size="sm" onClick={handleSave} isLoading={isSaving}>
               <Save className="w-4 h-4 mr-2" /> Save
@@ -220,14 +228,19 @@ export const LogicFlowPage: React.FC = () => {
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {!survey.logic || survey.logic.length === 0 ? (
               <div className="rounded-xl border border-dashed border-[#dce3f2] bg-[#f8faff] px-4 py-8 text-center text-sm text-[#66718a]">
-                No logic rules defined.<br/>Survey will follow sequential order.
+                Add a rule to personalize the path respondents take through your survey.
               </div>
             ) : (
               survey.logic.map((rule) => (
-                <Card key={rule.id} className="logic-rule-card border-[#e4e9f3] bg-[#f8faff] p-4 shadow-none">
+                <Card key={rule.id} onMouseEnter={() => setSelectedRuleId(rule.id)} onMouseLeave={() => setSelectedRuleId(null)} className={`logic-rule-card border-[#e4e9f3] bg-[#f8faff] p-4 shadow-none ${selectedRuleId === rule.id ? 'is-selected' : ''}`}>
                   <div className="space-y-3">
+                    {(() => {
+                      const sourceIndex = survey.questions.findIndex((question) => question.id === rule.sourceQuestionId);
+                      const targetIndex = survey.questions.findIndex((question) => question.id === rule.targetQuestionId);
+                      return targetIndex >= 0 && targetIndex <= sourceIndex ? <div className="logic-loop-warning"><AlertTriangle className="h-3.5 w-3.5" />This rule points to an earlier question.</div> : null;
+                    })()}
                     <div>
-                      <label className="text-xs font-semibold text-[#66718a]">If answer to</label>
+                      <label className="text-xs font-semibold text-[#66718a]">If</label>
                       <Select 
                         value={rule.sourceQuestionId}
                         onChange={(e) => updateRule(rule.id, { sourceQuestionId: e.target.value })}
@@ -241,11 +254,11 @@ export const LogicFlowPage: React.FC = () => {
                           value={rule.condition}
                           onChange={(e) => updateRule(rule.id, { condition: e.target.value as any })}
                           options={[
-                            { label: 'Equals', value: 'equals' },
-                            { label: 'Not Equals', value: 'not_equals' },
-                            { label: 'Contains', value: 'contains' },
-                            { label: 'Greater Than', value: 'greater_than' },
-                            { label: 'Less Than', value: 'less_than' },
+                            { label: 'is', value: 'equals' },
+                            { label: 'is not', value: 'not_equals' },
+                            { label: 'contains', value: 'contains' },
+                            { label: 'greater than', value: 'greater_than' },
+                            { label: 'less than', value: 'less_than' },
                           ]}
                           className="h-8 text-sm"
                         />
@@ -260,7 +273,7 @@ export const LogicFlowPage: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs font-semibold text-[#66718a]">Then skip to</label>
+                      <label className="text-xs font-semibold text-[#66718a]">Then go to</label>
                       <Select 
                         value={rule.targetQuestionId}
                         onChange={(e) => updateRule(rule.id, { targetQuestionId: e.target.value })}
@@ -279,7 +292,7 @@ export const LogicFlowPage: React.FC = () => {
             )}
             
             <Button variant="outline" className="w-full border-dashed" onClick={addRule}>
-              <Plus className="w-4 h-4 mr-2" /> Add Logic Rule
+              <Plus className="w-4 h-4 mr-2" /> Add rule
             </Button>
           </div>
         </div>
@@ -295,8 +308,8 @@ export const LogicFlowPage: React.FC = () => {
             fitView
             attributionPosition="bottom-right"
           >
-            <Background color="var(--border)" gap={16} />
-            <Controls />
+            <Background color="#dfe6f5" gap={18} />
+            <Controls position="bottom-left" showInteractive={false} />
           </ReactFlow>
         </div>
       </div>
