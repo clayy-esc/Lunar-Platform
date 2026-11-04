@@ -1934,3 +1934,48 @@
   @media (max-width: 899px) { .auth-page { padding: 20px; } .auth-layout { min-height: 100dvh; border: 0; border-radius: 0; box-shadow: none; } .auth-visual-panel { display: none; } .auth-form-area { min-height: 100dvh; padding: 20px; } .auth-mobile-header { display: block; align-self: stretch; margin-bottom: 36px; } }
   @media (max-width: 480px) { .auth-page { padding: 0; } .auth-form-area { padding: 20px; } .auth-heading h1 { font-size: 24px; } }
 }
+
+@layer components {
+  .dashboard-hero-refined {
+    min-height: 220px;
+    background: #14214a;
+  }
+
+  .dashboard-hero-owl {
+    filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.2));
+  }
+
+  .topbar-create-survey {
+    min-height: 40px;
+  }
+
+  .topbar-avatar {
+    display: inline-flex;
+    height: 36px;
+    width: 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #3b62c4;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .dashboard-list-tools input,
+  .dashboard-list-tools select {
+    font-family: inherit;
+  }
+
+  @media (max-width: 639px) {
+    .dashboard-hero-refined {
+      min-height: 250px;
+    }
+
+    .dashboard-hero-owl {
+      right: -0.75rem;
+      bottom: 0;
+      opacity: 0.78;
+    }
+  }
+}
