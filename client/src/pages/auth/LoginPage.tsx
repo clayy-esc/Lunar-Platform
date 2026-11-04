@@ -36,9 +36,10 @@ export const LoginPage: React.FC = () => {
   return (
     <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
-          <CardHeader className="space-y-1.5 text-center pb-2">
-            <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Welcome back</CardTitle>
-            <CardDescription className="text-sm text-slate-500">Enter your credentials to access your workspace</CardDescription>
+          <CardHeader className="space-y-2 pb-3 text-left">
+            <div className="auth-form-kicker">Sign in to your workspace</div>
+            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#172342]">Welcome back</CardTitle>
+            <CardDescription className="text-sm text-[#66718a]">Enter your details to continue building better surveys.</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 pt-2">
@@ -55,7 +56,7 @@ export const LoginPage: React.FC = () => {
               />
               <div className="space-y-2">
                 <div className="flex justify-end px-1">
-                  <Link to="/forgot-password" className="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline">
+                  <Link to="/forgot-password" className="text-xs font-bold text-[#4169b2] hover:text-[#293b65] hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -77,9 +78,9 @@ export const LoginPage: React.FC = () => {
                 Sign in
                 <ArrowUpRight className="ml-2 h-4 w-4" />
               </Button>
-              <div className="text-center text-sm font-medium text-slate-500">
+              <div className="text-center text-sm font-medium text-[#66718a]">
                 Don't have an account?{' '}
-                <Link to="/register" className="font-bold text-indigo-600 hover:text-indigo-800 hover:underline">
+                <Link to="/register" className="font-bold text-[#4169b2] hover:text-[#293b65] hover:underline">
                   Sign up
                 </Link>
               </div>

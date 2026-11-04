@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { Survey, LogicRule, SurveyTheme } from '../../types';
 import api from '../../lib/api';
 import { Button } from '../../components/ui/Button';
-import { ArrowLeft, ArrowUpRight, Check, CheckCircle2, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, CheckCircle2 } from 'lucide-react';
 
 export const PublicSurveyPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -237,7 +237,7 @@ export const PublicSurveyPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="public-survey-loading public-survey-shell flex min-h-screen items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-3 border-indigo-200 border-t-indigo-600" />
+        <div className="h-10 w-10 animate-spin rounded-full border-3 border-[#dce3f2] border-t-[#4169b2]" />
       </div>
     );
   }
@@ -246,27 +246,27 @@ export const PublicSurveyPage: React.FC = () => {
     return (
       <div className="public-survey-shell flex min-h-screen flex-col items-center justify-center p-4">
         <div className="w-full max-w-md rounded-3xl border border-white/90 bg-white/85 p-8 text-center shadow-xl backdrop-blur-2xl">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 border border-rose-100">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#f2c7c3] bg-[#fff7f6] text-[#b42318]">
             <span>!</span>
           </div>
-          <h2 className="mb-2 text-xl font-extrabold text-slate-900">Survey Unavailable</h2>
-          <p className="text-sm text-slate-500 leading-relaxed">{error}</p>
+          <h2 className="mb-2 text-xl font-extrabold text-[#172342]">Survey unavailable</h2>
+          <p className="text-sm leading-relaxed text-[#66718a]">{error}</p>
         </div>
       </div>
     );
   }
 
   const configuredTheme: SurveyTheme = survey.theme || {
-    primaryColor: '#4f46e5',
-    backgroundColor: '#f6f8fc',
-    fontFamily: 'Manrope',
+    primaryColor: '#4169b2',
+    backgroundColor: '#fff9f0',
+    fontFamily: 'Plus Jakarta Sans',
     layout: 'single_page',
     customCSS: '',
   };
 
-  const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4f46e5';
-  const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#f6f8fc';
-  const fontFamily = configuredTheme.fontFamily || 'Manrope';
+  const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4169b2';
+  const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#fff9f0';
+  const fontFamily = configuredTheme.fontFamily || 'Plus Jakarta Sans';
   const currentQ = survey.questions[currentQuestionIndex];
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
   const answeredCount = visibleQuestions.filter((q) => {
@@ -445,7 +445,8 @@ export const PublicSurveyPage: React.FC = () => {
     return (
       <div className="public-survey-shell flex min-h-screen items-center justify-center p-4 sm:p-6" style={themeStyle}>
         {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
-        <div className="public-survey-card w-full max-w-lg rounded-3xl p-8 sm:p-12 text-center">
+        <div className="public-survey-card w-full max-w-lg rounded-3xl p-8 text-center sm:p-12">
+          <img src="/favicon.png" alt="Lunar mascot" className="mx-auto mb-5 h-16 w-16 object-contain drop-shadow-md" />
           <div
             className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-md"
             style={{
@@ -460,8 +461,8 @@ export const PublicSurveyPage: React.FC = () => {
           <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold uppercase tracking-wider">
             <span>✓</span> Response Completed
           </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">Thank you!</h2>
-          <p className="mt-2 text-sm leading-relaxed text-slate-500">Your response has been securely verified and saved.</p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-[#172342]">Thank you!</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#66718a]">Your response has been securely verified and saved.</p>
           {isPreview && (
             <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-xs font-semibold text-amber-800">
               Preview Mode: Response was simulated and not saved to database.
@@ -482,23 +483,26 @@ export const PublicSurveyPage: React.FC = () => {
 
       <div className={`flex flex-1 flex-col items-center p-4 pt-12 sm:p-6 sm:pt-14 lg:p-8 lg:pt-16 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
         <div className="w-full max-w-3xl">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <img src="/favicon.png" alt="Lunar mascot" className="h-9 w-9 object-contain drop-shadow-sm" />
+              <span className="text-sm font-extrabold tracking-tight text-[#172342]">Lunar</span>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Secure response</span>
+          </div>
           
           {/* Header Banner */}
           <div className="mb-8 flex items-end justify-between gap-6 pb-4">
             <div>
-              <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-xs">
-                <Sparkles className="h-3 w-3" />
-                Live Survey
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#172342] sm:text-4xl">
                 {survey.title}
               </h1>
               {survey.description && (
-                <p className="mt-2 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-500">{survey.description}</p>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#66718a] sm:text-base">{survey.description}</p>
               )}
             </div>
             <div className="shrink-0 text-right">
-              <span className="rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-bold text-slate-600 shadow-xs">
+              <span className="rounded-full border border-[#dce3f2] bg-white px-3 py-1 text-xs font-bold text-[#4169b2] shadow-xs">
                 {progressLabel}
               </span>
             </div>
@@ -506,14 +510,14 @@ export const PublicSurveyPage: React.FC = () => {
 
           {isSinglePage ? (
             <div className="public-survey-card rounded-3xl overflow-hidden">
-              <div className="p-6 sm:p-10 lg:p-12 space-y-12">
+              <div className="space-y-12 p-6 sm:p-10 lg:p-12">
                 {visibleQuestions.map((question, index) => (
                   <section key={question.id} className={index > 0 ? 'border-t border-slate-200/70 pt-10' : ''}>
                     <div className="mb-4">
                       <span className="mb-2 block text-xs font-extrabold uppercase tracking-wider" style={{ color: 'var(--survey-primary)' }}>
                         Question {index + 1}
                       </span>
-                      <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
+                      <h3 className="text-xl font-extrabold leading-snug text-[#172342] sm:text-2xl">
                         {question.title}
                         {question.required && <span className="ml-1" style={{ color: 'var(--survey-primary)' }}>*</span>}
                       </h3>
@@ -525,9 +529,9 @@ export const PublicSurveyPage: React.FC = () => {
                   </section>
                 ))}
               </div>
-              <div className="flex items-center justify-end border-t border-slate-200/70 bg-slate-50/60 px-6 py-5 sm:px-10">
+              <div className="flex items-center justify-end border-t border-[#e4e9f3] bg-[#f8faff] px-6 py-5 sm:px-10">
                 <div className="flex items-center gap-4">
-                  {validationError && <p className="text-xs font-bold text-rose-600">{validationError}</p>}
+                  {validationError && <p className="text-xs font-bold text-[#b42318]">{validationError}</p>}
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}

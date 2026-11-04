@@ -27,17 +27,17 @@ import { Save, Trash2, Plus, GitMerge } from 'lucide-react';
 
 const QuestionNode = ({ data }: { data: { title: string, isEnd: boolean, order: number } }) => {
   return (
-    <div className={`px-4 py-2 shadow-md rounded-md bg-card border-2 ${data.isEnd ? 'border-green-500' : 'border-primary'}`}>
-      <Handle type="target" position={Position.Top} className="w-2 h-2" />
+    <div className={`logic-question-node px-4 py-3 shadow-md rounded-xl bg-white border-2 ${data.isEnd ? 'border-[#27804d]' : 'border-[#4169b2]'}`}>
+      <Handle type="target" position={Position.Top} className="h-2 w-2" />
       <div className="flex flex-col">
-        <span className="text-xs text-muted-foreground font-mono mb-1">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-[#66718a]">
           {data.isEnd ? 'END' : `Q${data.order + 1}`}
         </span>
-        <span className="font-semibold text-sm max-w-37.5 truncate">
+        <span className="max-w-37.5 truncate text-sm font-bold text-[#172342]">
           {data.title || 'Untitled Question'}
         </span>
       </div>
-      <Handle type="source" position={Position.Bottom} className="w-2 h-2" />
+      <Handle type="source" position={Position.Bottom} className="h-2 w-2" />
     </div>
   );
 };
@@ -193,12 +193,23 @@ export const LogicFlowPage: React.FC = () => {
 
   return (
     <AppShell survey={survey}>
-      <div className="logic-flow-height flex gap-6">
+      <div className="flex h-full flex-col gap-5">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Logic flow</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Guide every response</h2>
+            <p className="mt-1 text-sm text-[#66718a]">Create rules that send respondents to the right next question.</p>
+          </div>
+          <span className="hidden rounded-full bg-[#eaf0ff] px-3 py-1.5 text-xs font-bold text-[#4169b2] sm:inline-flex">
+            {survey.logic?.length || 0} {(survey.logic?.length || 0) === 1 ? 'rule' : 'rules'}
+          </span>
+        </div>
+      <div className="logic-flow-height flex min-h-0 gap-6">
         {/* Logic Rules Sidebar */}
-        <div className="w-96 flex flex-col h-full bg-card rounded-xl border border-border shadow-sm overflow-hidden shrink-0">
-          <div className="p-4 border-b border-border flex justify-between items-center bg-muted/30">
-            <h3 className="font-semibold flex items-center">
-              <GitMerge className="w-4 h-4 mr-2 text-primary" />
+        <div className="flex h-full w-96 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#e4e9f3] bg-white shadow-sm">
+          <div className="flex items-center justify-between border-b border-[#e4e9f3] bg-[#f8faff] p-4">
+            <h3 className="flex items-center font-extrabold text-[#172342]">
+              <GitMerge className="mr-2 h-4 w-4 text-[#4169b2]" />
               Branching Logic
             </h3>
             <Button size="sm" onClick={handleSave} isLoading={isSaving}>
@@ -208,15 +219,15 @@ export const LogicFlowPage: React.FC = () => {
           
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {!survey.logic || survey.logic.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground text-sm">
+              <div className="rounded-xl border border-dashed border-[#dce3f2] bg-[#f8faff] px-4 py-8 text-center text-sm text-[#66718a]">
                 No logic rules defined.<br/>Survey will follow sequential order.
               </div>
             ) : (
               survey.logic.map((rule) => (
-                <Card key={rule.id} className="p-4 bg-muted/20 border-border shadow-none">
+                <Card key={rule.id} className="logic-rule-card border-[#e4e9f3] bg-[#f8faff] p-4 shadow-none">
                   <div className="space-y-3">
                     <div>
-                      <label className="text-xs font-semibold text-muted-foreground uppercase">If Answer To</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#66718a]">If answer to</label>
                       <Select 
                         value={rule.sourceQuestionId}
                         onChange={(e) => updateRule(rule.id, { sourceQuestionId: e.target.value })}
@@ -249,7 +260,7 @@ export const LogicFlowPage: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs font-semibold text-muted-foreground uppercase">Then Skip To</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#66718a]">Then skip to</label>
                       <Select 
                         value={rule.targetQuestionId}
                         onChange={(e) => updateRule(rule.id, { targetQuestionId: e.target.value })}
@@ -258,7 +269,7 @@ export const LogicFlowPage: React.FC = () => {
                       />
                     </div>
                     <div className="flex justify-end pt-2">
-                      <Button variant="ghost" size="sm" onClick={() => removeRule(rule.id)} className="h-7 text-red-500 hover:text-red-600 hover:bg-red-50">
+                      <Button variant="ghost" size="sm" onClick={() => removeRule(rule.id)} className="h-7 text-[#b42318] hover:bg-[#fff0ef] hover:text-[#8f1d14]">
                         <Trash2 className="w-3 h-3 mr-1" /> Remove
                       </Button>
                     </div>
@@ -274,7 +285,7 @@ export const LogicFlowPage: React.FC = () => {
         </div>
 
         {/* React Flow Canvas */}
-        <div className="logic-flow-canvas flex-1 rounded-2xl border border-border overflow-hidden relative shadow-inner">
+        <div className="logic-flow-canvas relative flex-1 overflow-hidden rounded-2xl border border-[#dce3f2] shadow-inner">
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -288,6 +299,7 @@ export const LogicFlowPage: React.FC = () => {
             <Controls />
           </ReactFlow>
         </div>
+      </div>
       </div>
     </AppShell>
   );

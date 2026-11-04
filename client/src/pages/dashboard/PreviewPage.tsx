@@ -66,9 +66,18 @@ export const PreviewPage: React.FC = () => {
       {!survey ? (
         <div className="h-full flex items-center justify-center"><Spinner size="lg" /></div>
       ) : (
-        <div className="preview-frame preview-height flex flex-col overflow-hidden rounded-2xl border">
-          <div className="preview-mode-banner border-b px-4 py-2 text-center font-mono text-xs font-medium">
-            Live Preview Mode (Responses will not be saved)
+        <div className="space-y-4">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Preview</p>
+              <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">See the respondent experience</h2>
+              <p className="mt-1 text-sm text-[#66718a]">Review your survey before sharing it with your audience.</p>
+            </div>
+            <span className="hidden rounded-full bg-[#fff6dd] px-3 py-1.5 text-xs font-bold text-[#9b6900] sm:inline-flex">Preview only</span>
+          </div>
+          <div className="preview-frame preview-height flex flex-col overflow-hidden rounded-2xl border">
+          <div className="preview-mode-banner border-b px-4 py-2 text-center text-xs font-semibold">
+            Preview mode · Responses will not be saved
           </div>
           <div className="flex-1 w-full relative">
             {/* We reuse the public route inside an iframe for exact 1:1 preview representation */}
@@ -78,6 +87,7 @@ export const PreviewPage: React.FC = () => {
               title="Survey Preview"
             />
           </div>
+        </div>
         </div>
       )}
     </AppShell>

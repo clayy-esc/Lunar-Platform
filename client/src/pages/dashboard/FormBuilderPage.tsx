@@ -187,21 +187,31 @@ export const FormBuilderPage: React.FC = () => {
 
   return (
     <AppShell survey={survey} onPublish={handlePublish} isPublishing={isPublishing} onUnpublish={handleUnpublish} isUnpublishing={isUnpublishing}>
-      <div className="max-w-3xl mx-auto pb-24 space-y-6">
+      <div className="mx-auto max-w-4xl space-y-6 pb-24">
         {/* Survey Header */}
-        <Card className="border-t-4" style={{ borderTopColor: survey.theme?.primaryColor || '#6366f1' }}>
-          <div className="p-6 space-y-4">
+        <div className="mb-2 flex items-end justify-between gap-4">
+          <div>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Form builder</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Shape your questions</h2>
+            <p className="mt-1 text-sm text-[#66718a]">Keep the flow focused and make every answer count.</p>
+          </div>
+          <span className="hidden rounded-full bg-[#eaf0ff] px-3 py-1.5 text-xs font-bold text-[#4169b2] sm:inline-flex">
+            {survey.questions.length} {survey.questions.length === 1 ? 'question' : 'questions'}
+          </span>
+        </div>
+        <Card className="border-t-4" style={{ borderTopColor: survey.theme?.primaryColor || '#4169b2' }}>
+          <div className="space-y-4 p-6">
             <input
               type="text"
               value={survey.title}
               onChange={(e) => setSurvey({ ...survey, title: e.target.value })}
-              className="w-full text-3xl font-bold bg-transparent border-none focus:outline-none focus:ring-0 px-0 placeholder:text-muted-foreground"
+              className="w-full border-none bg-transparent px-0 text-3xl font-extrabold text-[#172342] placeholder:text-[#a0a9ba] focus:outline-none focus:ring-0"
               placeholder="Survey title"
             />
             <textarea
               value={survey.description}
               onChange={(e) => setSurvey({ ...survey, description: e.target.value })}
-              className="w-full text-sm text-muted-foreground bg-transparent border-none focus:outline-none focus:ring-0 px-0 resize-none min-h-15"
+              className="min-h-15 w-full resize-none border-none bg-transparent px-0 text-sm text-[#66718a] placeholder:text-[#a0a9ba] focus:outline-none focus:ring-0"
               placeholder="Add a short description"
             />
           </div>
@@ -219,18 +229,21 @@ export const FormBuilderPage: React.FC = () => {
               onDragOver={(e) => e.preventDefault()}
               className={`transition-all duration-200 ${dragOverIdx === i ? 'pt-16 relative before:absolute before:top-4 before:left-0 before:right-0 before:h-1 before:bg-primary/50 before:rounded-full' : ''}`}
             >
-              <Card className={`group relative bg-card shadow-sm ${draggedIdx === i ? 'opacity-50 border-primary' : 'hover:border-primary/30'}`}>
+              <Card className={`builder-question-card group relative bg-white shadow-sm ${draggedIdx === i ? 'opacity-50 border-[#4169b2]' : 'hover:border-[#b8c8ed]'}`}>
                 <div className="absolute left-0 top-0 bottom-0 w-8 flex items-center justify-center cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-muted-foreground transition-colors" title="Drag to reorder">
                   <GripVertical className="w-5 h-5" />
                 </div>
                 
                 <div className="pl-10 p-6">
                   <div className="flex items-start justify-between gap-4 mb-4">
+                    <span className="mr-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf0ff] text-xs font-extrabold text-[#4169b2]">
+                      {i + 1}
+                    </span>
                     <input
                       type="text"
                       value={q.title}
                       onChange={(e) => updateQuestion(i, { title: e.target.value })}
-                      className="flex-1 text-base font-medium bg-transparent border-b border-transparent hover:border-border focus:border-primary focus:outline-none transition-colors pb-1"
+                      className="flex-1 border-b border-transparent bg-transparent pb-1 text-base font-bold text-[#172342] transition-colors placeholder:text-[#a0a9ba] hover:border-[#dce3f2] focus:border-[#4169b2] focus:outline-none"
                       placeholder="Question title"
                     />
                     <div className="flex items-center text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">

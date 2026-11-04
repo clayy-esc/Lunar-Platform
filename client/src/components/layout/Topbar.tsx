@@ -17,7 +17,7 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
   const navigate = useNavigate();
 
   return (
-    <header className="app-topbar relative z-10 flex h-20 shrink-0 items-center justify-between border-b border-slate-200/70 bg-white/75 px-4 backdrop-blur-2xl sm:px-6 lg:px-8 shadow-xs">
+    <header className="app-topbar relative z-10 flex h-20 shrink-0 items-center justify-between border-b px-4 sm:px-6 lg:px-8">
       <div className="flex min-w-0 items-center flex-1">
         {survey && (
           <Button
@@ -26,7 +26,7 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
             onClick={() => navigate('/dashboard')}
             title="Return to dashboard"
             aria-label="Return to dashboard"
-            className="mr-3 h-9 w-9 shrink-0 rounded-full border border-slate-200/80 bg-white/80 hover:bg-white shadow-xs"
+            className="mr-3 h-9 w-9 shrink-0 rounded-xl"
           >
             <ArrowLeft className="w-4 h-4 text-slate-700" />
           </Button>
@@ -37,13 +37,14 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
           aria-label="Open survey navigation"
           aria-expanded={Boolean(onMenuOpen)}
           aria-controls="survey-navigation"
-          className="mr-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/70 bg-white/80 text-foreground hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden shadow-xs"
+          className="mr-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#e4e9f3] bg-white text-[#172342] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4169b2] md:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
         {survey ? (
           <div>
-            <h1 className="survey-title-clamp truncate text-base font-extrabold leading-tight text-slate-900 sm:text-lg">{survey.title}</h1>
+            <div className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Survey workspace</div>
+            <h1 className="survey-title-clamp truncate text-base font-extrabold leading-tight text-[#172342] sm:text-lg">{survey.title}</h1>
             <div className="mt-1 flex items-center space-x-2">
               <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
                 survey.status === 'published' ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80' :
@@ -59,7 +60,7 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
                     href={`/s/${survey.publicSlug}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center text-[11px] font-semibold text-indigo-600 transition-colors hover:text-indigo-800 hover:underline"
+                    className="flex items-center text-[11px] font-semibold text-[#4169b2] transition-colors hover:text-[#293b65] hover:underline"
                   >
                     <ExternalLink className="w-3 h-3 mr-1" />
                     View Live Survey
@@ -78,15 +79,18 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-indigo-600" />
-            <h1 className="text-base font-bold text-slate-800">Survey Workspace</h1>
+            <span className="h-2 w-2 rounded-full bg-[#ffb928]" />
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Lunar</div>
+              <h1 className="text-base font-bold text-[#172342]">Survey workspace</h1>
+            </div>
           </div>
         )}
       </div>
 
       <div className="flex items-center space-x-2 sm:space-x-3">
         {survey && survey.status === 'draft' && onPublish && (
-          <Button size="sm" onClick={onPublish} isLoading={isPublishing} className="rounded-full shadow-md shadow-indigo-600/15">
+          <Button size="sm" onClick={onPublish} isLoading={isPublishing} className="shadow-md shadow-[#ffb928]/20">
             <Share className="w-4 h-4 mr-2" />
             Publish
           </Button>

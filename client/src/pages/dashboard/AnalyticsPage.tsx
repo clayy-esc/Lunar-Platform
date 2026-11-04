@@ -603,8 +603,9 @@ export const AnalyticsPage: React.FC = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Plot Builder</h2>
-            <p className="text-muted-foreground mt-1">
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Analytics</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Understand every answer</h2>
+            <p className="mt-1 text-sm text-[#66718a]">
               Configure and export individual charts — {analytics.totalResponses} responses collected
             </p>
           </div>
@@ -801,5 +802,4 @@ export const AnalyticsPage: React.FC = () => {
     </AppShell>
   );
 };
-
 

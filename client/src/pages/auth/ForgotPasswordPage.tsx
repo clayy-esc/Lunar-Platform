@@ -43,8 +43,8 @@ export const ForgotPasswordPage: React.FC = () => {
               <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
                 <span>✓</span> Reset Successful
               </div>
-              <CardTitle className="text-3xl font-extrabold text-slate-900">Password Changed</CardTitle>
-              <CardDescription className="text-sm text-slate-500">Your account credentials have been updated</CardDescription>
+              <CardTitle className="text-3xl font-extrabold text-[#172342]">Password changed</CardTitle>
+              <CardDescription className="text-sm text-[#66718a]">Your account credentials have been updated.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 pb-6 pt-2">
               <p className="text-sm text-slate-600 leading-relaxed">
@@ -66,9 +66,10 @@ export const ForgotPasswordPage: React.FC = () => {
   return (
     <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
-          <CardHeader className="space-y-1.5 text-center pb-2">
-            <CardTitle className="text-3xl font-extrabold tracking-tight text-slate-900">Reset Password</CardTitle>
-            <CardDescription className="text-sm text-slate-500">Enter your email and 8-character recovery code</CardDescription>
+          <CardHeader className="space-y-2 pb-3 text-left">
+            <div className="auth-form-kicker">Account recovery</div>
+            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#172342]">Reset your password</CardTitle>
+            <CardDescription className="text-sm text-[#66718a]">Use your recovery code to securely regain access.</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 pt-2">
@@ -112,7 +113,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 <RefreshCcw className="w-4 h-4 mr-2" />
                 Reset Password
               </Button>
-              <Link to="/login" className="text-sm font-semibold text-slate-500 hover:text-slate-900 flex items-center justify-center">
+              <Link to="/login" className="flex items-center justify-center text-sm font-semibold text-[#66718a] hover:text-[#172342]">
                 <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to login
               </Link>
             </CardFooter>

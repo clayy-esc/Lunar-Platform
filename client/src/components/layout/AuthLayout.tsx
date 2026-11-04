@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Check, Sparkles } from 'lucide-react';
 import { LunarLogo } from '../common/LunarLogo';
 import { AmbientBackground } from '../ui/AmbientBackground';
 
@@ -28,6 +28,11 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             </div>
 
             <div className="mt-auto max-w-md pb-8 pt-20">
+              <div className="auth-mascot-wrap" aria-hidden="true">
+                <img src="/favicon.png" alt="" className="auth-mascot" />
+                <span className="auth-mascot-orbit auth-mascot-orbit-one" />
+                <span className="auth-mascot-orbit auth-mascot-orbit-two" />
+              </div>
               <div className="auth-sparkle mb-6">
                 <Sparkles className="h-4 w-4" />
                 <span>Survey smarter</span>
@@ -38,6 +43,14 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
               <p className="mt-5 max-w-sm text-sm leading-6 text-slate-300">
                 Build thoughtful surveys, follow every signal, and make decisions with confidence.
               </p>
+              <div className="mt-7 grid max-w-sm grid-cols-2 gap-2">
+                {['Simple to build', 'Easy to share', 'Clear insights', 'Made for teams'].map((feature) => (
+                  <div key={feature} className="auth-feature">
+                    <Check className="h-3.5 w-3.5 text-[#ffb928]" />
+                    <span>{feature}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="auth-visual-footer">
@@ -56,7 +69,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
         <main className="auth-form-area">
           <div className="auth-form-topline">
-            <span>Welcome to Lunar</span>
+            <span className="auth-form-brand"><LunarLogo size="xs" showText imageClassName="h-5 w-5" textClassName="[&_.text-slate-900]:text-[#172342]" /></span>
             <span className="hidden sm:inline">Private &amp; purposeful</span>
           </div>
           {children}

@@ -97,8 +97,9 @@ export const SettingsPage: React.FC = () => {
     <AppShell survey={survey}>
       <div className="max-w-4xl mx-auto space-y-8">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-          <p className="text-muted-foreground mt-1">Manage survey configuration and storage limits.</p>
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Workspace settings</p>
+          <h2 className="text-2xl font-extrabold tracking-tight text-[#172342]">Protect your data</h2>
+          <p className="mt-1 text-sm text-[#66718a]">Manage storage health, backups, and response retention.</p>
         </div>
 
         {/* Storage Health Monitor */}
