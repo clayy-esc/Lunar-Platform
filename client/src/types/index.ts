@@ -22,6 +22,7 @@ export interface QuestionConfig {
   maxLabel?: string;
   step?: number;
   placeholder?: string;
+  shuffle?: boolean;
 }
 
 export interface Question {

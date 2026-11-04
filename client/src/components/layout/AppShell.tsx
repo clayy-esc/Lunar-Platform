@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { SurveyHeader } from './SurveyHeader';
 import { Survey } from '../../types';
 import { useAuth } from '../../contexts/useAuth';
+import api from '../../lib/api';
+import { useToast } from '../ui/useToast';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -13,11 +16,56 @@ interface AppShellProps {
   isUnpublishing?: boolean;
   onCreateSurvey?: () => void;
   isCreatingSurvey?: boolean;
+  isDirty?: boolean;
+  saveState?: 'idle' | 'saving' | 'saved' | 'error';
+  savedAt?: Date | null;
+  onTitleChange?: (title: string) => void;
+  onSaveDraft?: () => void;
 }
 
-export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish, isPublishing, onUnpublish, isUnpublishing, onCreateSurvey, isCreatingSurvey }) => {
+export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish, isPublishing, onUnpublish, isUnpublishing, onCreateSurvey, isCreatingSurvey, isDirty, saveState, savedAt, onTitleChange, onSaveDraft }) => {
   const { logout } = useAuth();
+  const { addToast } = useToast();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [headerSurvey, setHeaderSurvey] = useState(survey);
+
+  useEffect(() => setHeaderSurvey(survey), [survey]);
+
+  const handlePublish = async () => {
+    if (onPublish) return onPublish();
+    if (!headerSurvey) return;
+    try {
+      const response = await api.post(`/surveys/${headerSurvey._id}/publish`);
+      setHeaderSurvey(response.data.survey);
+      addToast('Survey published', 'success');
+    } catch (error: any) {
+      addToast(error.response?.data?.error || 'Failed to publish survey', 'error');
+    }
+  };
+
+  const handleUnpublish = async () => {
+    if (onUnpublish) return onUnpublish();
+    if (!headerSurvey || !window.confirm('Unpublish this survey? Respondents will no longer be able to answer it.')) return;
+    try {
+      const response = await api.post(`/surveys/${headerSurvey._id}/unpublish`);
+      setHeaderSurvey(response.data.survey);
+      addToast('Survey unpublished', 'success');
+    } catch (error: any) {
+      addToast(error.response?.data?.error || 'Failed to unpublish survey', 'error');
+    }
+  };
+
+  const handleTitleChange = async (title: string) => {
+    if (onTitleChange) return onTitleChange(title);
+    if (!headerSurvey) return;
+    try {
+      const response = await api.put(`/surveys/${headerSurvey._id}`, { title });
+      setHeaderSurvey(response.data.survey);
+      addToast('Survey title updated', 'success');
+    } catch (error: any) {
+      addToast(error.response?.data?.error || 'Failed to update survey title', 'error');
+    }
+  };
 
   return (
     <div className="app-shell relative flex h-screen overflow-hidden bg-[#eef4ff]">
@@ -45,16 +93,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish,
         onMobileClose={() => setIsMobileNavOpen(false)}
       />
       <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
-        <Topbar
-          survey={survey}
-          onPublish={onPublish}
-          isPublishing={isPublishing}
-          onUnpublish={onUnpublish}
-          isUnpublishing={isUnpublishing}
-          onCreateSurvey={onCreateSurvey}
-          isCreatingSurvey={isCreatingSurvey}
-          onMenuOpen={() => setIsMobileNavOpen(true)}
-        />
+        {headerSurvey ? <SurveyHeader survey={headerSurvey} isDirty={isDirty} saveState={saveState} savedAt={savedAt} isPublishing={isPublishing} isUnpublishing={isUnpublishing} onTitleChange={handleTitleChange} onSaveDraft={onSaveDraft} onPublish={handlePublish} onUnpublish={handleUnpublish} /> : <Topbar onCreateSurvey={onCreateSurvey} isCreatingSurvey={isCreatingSurvey} onMenuOpen={() => setIsMobileNavOpen(true)} />}
         <main className="min-h-0 flex-1 overflow-y-auto bg-transparent px-4 pb-20 pt-7 sm:px-6 lg:px-8">
           <div className="mx-auto min-h-full w-full max-w-[1280px]">
             {children}

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, PanelsTopLeft, GitBranch, MonitorPlay, ChartNoAxesCombined, ListChecks, Palette, Settings2, LogOut, X, Layers3 } from 'lucide-react';
+import { LayoutDashboard, PanelsTopLeft, GitBranch, MonitorPlay, ChartNoAxesCombined, ListChecks, Palette, Settings2, LogOut, X } from 'lucide-react';
 import { LunarLogo } from '../common/LunarLogo';
 import { useAuth } from '../../contexts/useAuth';
 
@@ -33,13 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
   const getNavLinks = () => {
     const links = [{ to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', end: true }];
     if (!surveyId) {
-      return [
-        ...links,
-        { to: '/dashboard', icon: PanelsTopLeft, label: 'My surveys' },
-        { to: '/dashboard', icon: Layers3, label: 'Templates' },
-        { to: '/dashboard', icon: ChartNoAxesCombined, label: 'Results' },
-        { to: '/dashboard', icon: Settings2, label: 'Settings' },
-      ];
+      return links;
     }
     const base = `/dashboard/${surveyId}`;
     return [
