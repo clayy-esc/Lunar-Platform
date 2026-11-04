@@ -69,7 +69,6 @@ export const RegisterPage: React.FC = () => {
             <Input id="confirm-password" type="password" label="Confirm password" placeholder="Re-enter your password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} icon={<LockKeyhole className="h-[18px] w-[18px]" aria-hidden="true" />} autoComplete="new-password" required disabled={isLoading} />
           </div>
           <Button type="submit" size="lg" className="auth-primary-button w-full" isLoading={isLoading}>{isLoading ? 'Creating account…' : 'Create account'}</Button>
-          <p className="auth-terms">By creating an account you agree to the Terms and Privacy Policy.</p>
           <div className="auth-footer">Already have an account? <Link to="/login">Sign in</Link></div>
         </form>
       </section>
