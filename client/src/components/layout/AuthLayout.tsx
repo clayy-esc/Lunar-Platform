@@ -1,5 +1,4 @@
 import React from 'react';
-import { Check } from 'lucide-react';
 import { LunarLogo } from '../common/LunarLogo';
 
 interface AuthLayoutProps {
@@ -25,7 +24,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
               </span>
             </div>
 
-            <div className="mt-auto max-w-md pb-8 pt-20">
+            <div className="mt-auto max-w-md pb-0 pt-20">
               <div className="auth-mascot-wrap" aria-hidden="true">
                 <img src="/favicon.png" alt="" className="auth-mascot" />
                 <span className="auth-mascot-orbit auth-mascot-orbit-one" />
@@ -37,14 +36,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
               <p className="mt-5 max-w-sm text-sm leading-6 text-slate-300">
                 Build thoughtful surveys, follow every signal, and make decisions with confidence.
               </p>
-              <div className="mt-7 grid max-w-sm grid-cols-2 gap-2">
-                {['Simple to build', 'Easy to share', 'Clear insights', 'Made for teams'].map((feature) => (
-                  <div key={feature} className="auth-feature">
-                    <Check className="h-3.5 w-3.5 text-[#ffb928]" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
           </div>

@@ -60,10 +60,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
           className="fixed inset-0 z-30 bg-slate-900/20 backdrop-blur-xs md:hidden"
         />
       )}
-      <aside id="survey-navigation" aria-label="Survey navigation" className={`app-sidebar fixed inset-y-0 left-0 z-40 flex h-full w-72 shrink-0 -translate-x-full flex-col transition-transform duration-200 ease-out md:static md:w-60 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
-        <div className="flex h-20 items-center border-b border-white/10 px-5">
+      <aside id="survey-navigation" aria-label="Survey navigation" className={`app-sidebar fixed inset-y-0 left-0 z-40 flex h-full w-64 shrink-0 -translate-x-full flex-col transition-transform duration-200 ease-out md:static md:w-56 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
+        <div className="flex h-16 items-center border-b border-white/10 px-4">
           <LunarLogo
-            size={36}
+            size={30}
             showText={true}
             textClassName="[&_.text-slate-900]:text-white [&_.text-slate-500]:text-slate-400"
           />
@@ -71,17 +71,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
             type="button"
             onClick={closeOnMobile}
             aria-label="Close survey navigation"
-            className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4169b2] focus-visible:ring-offset-2 md:hidden"
+            className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4169b2] focus-visible:ring-offset-2 md:hidden"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 py-6">
-          <div className="mb-3 px-3 text-xs font-semibold text-slate-400">
+        <div className="overflow-y-auto px-2.5 py-4">
+          <div className="mb-2 px-2.5 text-xs font-semibold text-slate-400">
             Workspace
           </div>
-          <nav className="space-y-1.5">
+          <nav className="space-y-1">
               {navLinks.map((link, index) => (
                 <React.Fragment key={link.to}>
                   <NavLink
@@ -89,14 +89,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
                   end={link.to === '/dashboard'}
                   onClick={closeOnMobile}
                   className={({ isActive }) =>
-                    `sidebar-nav-item group flex min-h-11 items-center rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
+                    `sidebar-nav-item group flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-semibold transition-all ${
                       isActive
                         ? 'sidebar-nav-item-active font-bold'
                         : 'border border-transparent'
                     }`
                   }
                 >
-                  <link.icon className="mr-3 h-4.5 w-4.5 opacity-80 transition-transform group-hover:scale-105" />
+                  <link.icon className="mr-2.5 h-4 w-4 opacity-80 transition-transform group-hover:scale-105" />
                   {link.label}
                 </NavLink>
                 {index === 0 && surveyId && (
@@ -109,9 +109,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
             </nav>
         </div>
 
-        <div className="border-t border-white/10 p-3">
-          <div className="mb-2 flex items-center gap-3 rounded-xl px-3 py-2">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#4169b2] text-xs font-extrabold text-white">
+        <div className="border-t border-white/10 p-2.5">
+          <div className="mb-1.5 flex items-center gap-2.5 rounded-xl px-2.5 py-1.5">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#4169b2] text-xs font-extrabold text-white">
               {(user?.email[0] || 'L').toUpperCase()}
             </div>
             <div className="min-w-0">
@@ -122,9 +122,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
           <button
             onClick={onLogout}
             type="button"
-            className="flex min-h-11 w-full items-center rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
+            className="flex min-h-10 w-full items-center rounded-xl px-2.5 py-2 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
           >
-            <LogOut className="mr-3 h-5 w-5 opacity-75" />
+            <LogOut className="mr-2.5 h-4 w-4 opacity-75" />
             Log out
           </button>
         </div>
