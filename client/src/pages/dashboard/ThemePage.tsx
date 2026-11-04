@@ -130,7 +130,7 @@ export const ThemePage: React.FC = () => {
 
   return (
     <AppShell survey={survey}>
-      <div className="flex h-full gap-8">
+      <div className="flex min-h-full gap-8">
         {/* Editor Controls */}
         <div className="w-96 shrink-0 space-y-6 overflow-y-auto pb-8 pr-2">
           <div>

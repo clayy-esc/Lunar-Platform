@@ -17,7 +17,7 @@ export const Topbar: React.FC<TopbarProps> = ({ survey, onPublish, isPublishing,
   const navigate = useNavigate();
 
   return (
-    <header className="app-topbar relative z-10 flex h-20 shrink-0 items-center justify-between border-b px-4 sm:px-6 lg:px-8">
+    <header className="app-topbar relative z-10 flex h-16 shrink-0 items-center justify-between border-b px-4 sm:px-6 lg:px-8">
       <div className="flex min-w-0 items-center flex-1">
         {survey && (
           <Button

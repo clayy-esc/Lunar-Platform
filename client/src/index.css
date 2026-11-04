@@ -68,12 +68,8 @@
   }
 
   body {
-  background-color: var(--background);
-  background-image:
-    radial-gradient(ellipse 75% 65% at 92% -8%, rgba(0, 150, 199, 0.38) 0%, transparent 66%),
-    radial-gradient(ellipse 60% 55% at 0% 60%, rgba(144, 224, 239, 0.55) 0%, transparent 68%),
-    radial-gradient(ellipse 70% 50% at 75% 100%, rgba(202, 240, 248, 0.9) 0%, transparent 72%);
-    background-attachment: fixed;
+  background-color: #f4f6fd;
+    background-image: none;
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -157,7 +153,8 @@
 
   .logic-flow-height,
   .preview-height {
-    height: calc(100vh - 8rem);
+    height: calc(100vh - 9rem);
+    min-height: 28rem;
   }
 
   .workspace-panel {
@@ -333,6 +330,10 @@
 
   .app-shell main {
     scrollbar-gutter: stable;
+  }
+
+  .app-shell main > div {
+    min-width: 0;
   }
 
   .logic-flow-canvas {
@@ -933,18 +934,18 @@
 @layer components {
   .app-shell {
     padding: 0;
-    background: #f5f7fc;
+    background: #f4f6fd;
     background-image: none;
   }
 
   .app-shell > .relative.z-10 {
     border-radius: 0;
-    background: #f5f7fc;
+    background: #f4f6fd;
     box-shadow: none;
   }
 
   .app-sidebar {
-    background: #172342;
+    background: #14214a;
     color: #c8d1e5;
     border-color: rgba(255, 255, 255, 0.08);
     border-radius: 0;
@@ -952,7 +953,7 @@
   }
 
   .app-topbar {
-    min-height: 76px;
+    min-height: 64px;
     background: #ffffff;
     border-color: #e4e9f3;
     box-shadow: 0 4px 18px rgba(23, 35, 66, 0.04);
@@ -968,7 +969,7 @@
   }
 
   .dashboard-hero {
-    background: #202f52;
+    background: #14214a;
     box-shadow: 0 12px 28px rgba(23, 35, 66, 0.14);
   }
 
@@ -976,6 +977,10 @@
     border: 1px solid #e4e9f3;
     background: #ffffff;
     box-shadow: 0 6px 18px rgba(23, 35, 66, 0.04);
+  }
+
+  .sidebar-help {
+    background: rgba(255, 255, 255, 0.07);
   }
 
   .dashboard-card:hover {
@@ -1033,5 +1038,27 @@
 
   .app-shell .border-border {
     border-color: #e4e9f3;
+  }
+
+  @media (max-width: 767px) {
+    .app-shell main {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 1.25rem;
+    }
+
+    .app-shell main > div {
+      min-height: 0;
+    }
+
+    .dashboard-hero {
+      padding: 1.5rem;
+    }
+
+    .logic-flow-height,
+    .preview-height {
+      height: auto;
+      min-height: 32rem;
+    }
   }
 }

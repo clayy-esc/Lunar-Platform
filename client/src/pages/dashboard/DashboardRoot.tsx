@@ -78,17 +78,15 @@ export const DashboardRoot: React.FC = () => {
     () => surveys.reduce((total, survey) => total + (Number(survey.responseCount) || 0), 0),
     [surveys]
   );
-  const firstName = user?.email?.split('@')[0] || 'there';
 
   return (
     <AppShell>
-      <div className="flex h-full flex-col gap-7">
+      <div className="flex min-h-full flex-col gap-7">
         <section className="dashboard-hero relative overflow-hidden rounded-3xl px-6 py-7 text-white sm:px-8 sm:py-8">
           <div className="absolute -right-12 -top-20 h-56 w-56 rounded-full border-[28px] border-white/10" />
           <div className="absolute -bottom-28 right-24 h-44 w-44 rounded-full border-[20px] border-[#ffb928]/20" />
-          <div className="relative flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div className="relative flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
             <div className="max-w-2xl">
-              <p className="mb-2 text-sm font-semibold text-[#ffcf66]">Good to see you, {firstName}</p>
               <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Your survey workspace</h1>
               <p className="mt-3 max-w-xl text-sm leading-6 text-[#dce7ff]">
                 Build thoughtful surveys, collect better answers, and turn every response into a clear next step.

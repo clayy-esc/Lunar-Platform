@@ -59,12 +59,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
           className="fixed inset-0 z-30 bg-slate-900/20 backdrop-blur-xs md:hidden"
         />
       )}
-      <aside id="survey-navigation" aria-label="Survey navigation" className={`app-sidebar fixed inset-y-0 left-0 z-40 flex h-full w-72 shrink-0 -translate-x-full flex-col transition-transform duration-200 ease-out md:static md:w-64 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
+      <aside id="survey-navigation" aria-label="Survey navigation" className={`app-sidebar fixed inset-y-0 left-0 z-40 flex h-full w-72 shrink-0 -translate-x-full flex-col transition-transform duration-200 ease-out md:static md:w-60 md:translate-x-0 md:transition-none ${isMobileOpen ? 'translate-x-0' : ''}`}>
         <div className="flex h-20 items-center border-b border-white/10 px-5">
           <LunarLogo
             size={36}
             showText={true}
-            subtitle="Survey Builder Platform"
             textClassName="[&_.text-slate-900]:text-white [&_.text-slate-500]:text-slate-400"
           />
           <button
@@ -101,7 +100,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
                 </NavLink>
               ))}
             </nav>
-          {surveyId && (
+            {surveyId && (
             <div className="mt-7 border-t border-white/10 pt-6">
               <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
                 Current survey

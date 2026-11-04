@@ -7,7 +7,7 @@ export interface LunarLogoProps {
   showText?: boolean;
   /** Stack the mark above the wordmark for hero-style brand lockups */
   stacked?: boolean;
-  /** Subtitle to show below brand name (e.g. 'Survey Builder Platform') */
+  /** Optional subtitle to show below the brand name */
   subtitle?: string;
   /** Custom class for root container */
   className?: string;
@@ -79,7 +79,7 @@ export const LunarLogo: React.FC<LunarLogoProps> = ({
       {/* Brand Typography Lockup */}
       {showText && (
         <div className={`flex flex-col leading-tight ${stacked ? 'items-center text-center' : ''} ${textClassName}`}>
-          <div className="flex items-baseline tracking-tight font-extrabold text-foreground">
+          <div className="flex items-baseline text-xl tracking-tight font-extrabold text-foreground">
             <span className="font-extrabold tracking-tight text-slate-900">
               Lunar
             </span>

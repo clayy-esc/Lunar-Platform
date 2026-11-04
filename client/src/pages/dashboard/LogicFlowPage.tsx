@@ -193,7 +193,7 @@ export const LogicFlowPage: React.FC = () => {
 
   return (
     <AppShell survey={survey}>
-      <div className="flex h-full flex-col gap-5">
+      <div className="flex min-h-full flex-col gap-5">
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#66718a]">Logic flow</p>

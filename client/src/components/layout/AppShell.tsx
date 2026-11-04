@@ -50,8 +50,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish,
           isUnpublishing={isUnpublishing}
           onMenuOpen={() => setIsMobileNavOpen(true)}
         />
-        <main className="flex-1 overflow-y-auto bg-transparent p-4 sm:p-6 lg:p-8">
-          <div className="mx-auto h-full max-w-360">
+        <main className="min-h-0 flex-1 overflow-y-auto bg-transparent px-4 pb-20 pt-7 sm:px-6 lg:px-8">
+          <div className="mx-auto min-h-full w-full max-w-[1280px]">
             {children}
           </div>
         </main>
