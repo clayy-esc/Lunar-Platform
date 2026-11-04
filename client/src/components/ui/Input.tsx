@@ -25,7 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 flex items-center pointer-events-none">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 flex items-center pointer-events-none">
               {icon}
             </div>
           )}
@@ -41,13 +41,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               authStyle
                 ? 'h-16 rounded-2xl border-slate-200/90 px-5 pb-1.5 pt-6 text-base placeholder:text-transparent'
                 : 'h-11 rounded-2xl border-slate-200/90 px-4 py-2 text-sm'
-            } ${icon ? 'pl-10' : ''} ${isPassword && authStyle ? 'pr-14' : ''} ${
+            } ${icon ? 'pl-9' : ''} ${isPassword ? 'pr-11' : ''} ${
               error ? 'border-rose-500 focus-visible:border-rose-500 focus-visible:ring-rose-500/15' : ''
             } ${className}`}
             {...props}
             type={inputType}
           />
-          {isPassword && authStyle && (
+          {isPassword && (
             <button
               type="button"
               onClick={() => setShowPassword((visible) => !visible)}

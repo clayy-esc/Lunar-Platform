@@ -610,7 +610,7 @@
     grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
     max-width: 1120px;
     height: min(720px, calc(100vh - 3rem));
-    min-height: 620px;
+    min-height: 0;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.78);
     border-radius: 30px;
@@ -622,8 +622,8 @@
 
   .auth-visual-panel {
     position: relative;
-    min-height: 640px;
-    overflow: hidden;
+    min-height: 0;
+    overflow: auto;
     padding: 2rem;
     color: #fff;
     background:
@@ -764,6 +764,10 @@
     text-transform: uppercase;
   }
 
+  .auth-mobile-mascot {
+    display: none;
+  }
+
   .auth-mascot-wrap {
     position: relative;
     width: 7rem;
@@ -871,7 +875,7 @@
     color: #293b65;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 819px) {
     .app-shell {
       padding: 0;
     }
@@ -885,14 +889,14 @@
     }
 
     .auth-layout {
-      grid-template-columns: 1fr;
+      display: block;
       max-width: 540px;
       height: auto;
       min-height: auto;
     }
 
     .auth-visual-panel {
-      min-height: 300px;
+      display: none;
     }
 
     .auth-visual-panel .mt-auto {
@@ -909,6 +913,19 @@
     .auth-form-area {
       justify-content: flex-start;
       padding: 2rem clamp(1.25rem, 7vw, 3.5rem) 2.25rem;
+    }
+
+    .auth-mobile-mascot {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    .auth-mobile-mascot img {
+      width: 5rem;
+      height: 5rem;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 14px rgba(20, 33, 74, 0.18));
     }
   }
 

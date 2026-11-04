@@ -6,7 +6,7 @@ import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../contexts/useAuth';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
-import { ArrowUpRight, KeyRound } from 'lucide-react';
+import { KeyRound } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
 import { AuthLayout } from '../../components/layout/AuthLayout';
 
@@ -49,19 +49,17 @@ export const RegisterPage: React.FC = () => {
   return (
     <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
-          <CardHeader className="space-y-1 pb-1 text-left">
-            <div className="auth-form-kicker">Start building with Lunar</div>
-            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#172342]">Create account</CardTitle>
-            <CardDescription className="text-sm text-[#66718a]">Set up your account and turn your next question into insight.</CardDescription>
+          <CardHeader className="space-y-2 pb-5 text-left">
+            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#14214a]">Create account</CardTitle>
+            <CardDescription className="text-sm text-[#5d6985]">Set up your account and turn your next question into insight.</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-2 pt-1">
+            <CardContent className="space-y-5 pt-1">
               <Input
                 id="email"
                 type="email"
-                label="Email"
-                authStyle
-                placeholder="name@company.com"
+                label="Email address"
+                placeholder="name@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -71,8 +69,7 @@ export const RegisterPage: React.FC = () => {
                 id="password"
                 type="password"
                 label="Password"
-                authStyle
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -82,9 +79,8 @@ export const RegisterPage: React.FC = () => {
               <Input
                 id="confirm-password"
                 type="password"
-                label="Confirm Password"
-                authStyle
-                placeholder="••••••••"
+                label="Confirm password"
+                placeholder="Re-enter your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -92,10 +88,9 @@ export const RegisterPage: React.FC = () => {
                 minLength={8}
               />
             </CardContent>
-            <CardFooter className="flex flex-col space-y-2 pt-2">
+            <CardFooter className="flex flex-col space-y-4 pt-2">
               <Button type="submit" size="lg" className="w-full rounded-full" isLoading={isLoading}>
                 Create account
-                <ArrowUpRight className="ml-2 h-4 w-4" />
               </Button>
               <div className="text-center text-sm font-medium text-[#66718a]">
                 Already have an account?{' '}

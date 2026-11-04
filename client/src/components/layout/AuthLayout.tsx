@@ -66,6 +66,9 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         </aside>
 
         <main className="auth-form-area">
+          <div className="auth-mobile-mascot" aria-hidden="true">
+            <img src="/favicon.png" alt="" />
+          </div>
           {children}
         </main>
       </div>

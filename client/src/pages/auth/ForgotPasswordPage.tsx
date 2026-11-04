@@ -5,7 +5,7 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
-import { RefreshCcw, ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { RefreshCcw, ArrowLeft } from 'lucide-react';
 import { AuthLayout } from '../../components/layout/AuthLayout';
 
 export const ForgotPasswordPage: React.FC = () => {
@@ -53,9 +53,8 @@ export const ForgotPasswordPage: React.FC = () => {
               <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl font-mono text-2xl font-bold tracking-widest my-4 text-slate-900">
                 {newCode}
               </div>
-              <Button onClick={() => navigate('/login')} size="lg" className="w-full rounded-full mt-4">
-                Return to Login
-                <ArrowUpRight className="ml-2 h-4 w-4" />
+              <Button onClick={() => navigate('/login')} size="lg" className="mt-4 w-full rounded-full">
+                Return to login
               </Button>
             </CardContent>
           </Card>
@@ -66,19 +65,17 @@ export const ForgotPasswordPage: React.FC = () => {
   return (
     <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
-          <CardHeader className="space-y-2 pb-3 text-left">
-            <div className="auth-form-kicker">Account recovery</div>
-            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#172342]">Reset your password</CardTitle>
-            <CardDescription className="text-sm text-[#66718a]">Use your recovery code to securely regain access.</CardDescription>
+          <CardHeader className="space-y-2 pb-5 text-left">
+            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#14214a]">Reset your password</CardTitle>
+            <CardDescription className="text-sm text-[#5d6985]">Use your recovery code to securely regain access.</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4 pt-2">
+            <CardContent className="space-y-5 pt-1">
               <Input
                 id="email"
                 type="email"
-                label="Account Email"
-                authStyle
-                placeholder="name@company.com"
+                label="Email address"
+                placeholder="name@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -87,7 +84,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <Input
                 id="code"
                 type="text"
-                label="Recovery Code"
+                label="Recovery code"
                 placeholder="8-character code"
                 value={recoveryCode}
                 onChange={(e) => setRecoveryCode(e.target.value)}
@@ -98,9 +95,8 @@ export const ForgotPasswordPage: React.FC = () => {
               <Input
                 id="new-password"
                 type="password"
-                label="New Password"
-                authStyle
-                placeholder="••••••••"
+                label="New password"
+                placeholder="Enter your new password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
@@ -108,10 +104,10 @@ export const ForgotPasswordPage: React.FC = () => {
                 minLength={8}
               />
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4 pt-4">
+            <CardFooter className="flex flex-col space-y-4 pt-2">
               <Button type="submit" size="lg" className="w-full rounded-full" isLoading={isLoading}>
                 <RefreshCcw className="w-4 h-4 mr-2" />
-                Reset Password
+                Reset password
               </Button>
               <Link to="/login" className="flex items-center justify-center text-sm font-semibold text-[#66718a] hover:text-[#172342]">
                 <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to login
