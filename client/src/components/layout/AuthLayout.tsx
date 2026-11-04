@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Check, Sparkles } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { LunarLogo } from '../common/LunarLogo';
 
 interface AuthLayoutProps {
@@ -31,10 +31,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                 <span className="auth-mascot-orbit auth-mascot-orbit-one" />
                 <span className="auth-mascot-orbit auth-mascot-orbit-two" />
               </div>
-              <div className="auth-sparkle mb-6">
-                <Sparkles className="h-4 w-4" />
-                <span>Survey smarter</span>
-              </div>
               <h1 className="auth-visual-title">
                 Turn questions into <span>clear direction.</span>
               </h1>
@@ -51,17 +47,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
               </div>
             </div>
 
-            <div className="auth-visual-footer">
-              <div className="auth-signal-bars" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
-              <span>One calm workspace for every insight</span>
-              <ArrowUpRight className="ml-auto h-4 w-4 text-slate-400" />
-            </div>
           </div>
         </aside>
 

@@ -650,7 +650,7 @@
     position: relative;
     min-height: 0;
     overflow: auto;
-    padding: 2rem;
+    padding: 2.25rem;
     color: #fff;
     background:
       radial-gradient(circle at 78% 8%, rgba(65, 105, 178, 0.38), transparent 28%),
@@ -910,31 +910,19 @@
       border-radius: 0 20px 20px 0;
     }
 
-    .auth-layout {
-      display: block;
-      max-width: 540px;
-      height: auto;
-      min-height: auto;
-    }
-
     .auth-visual-panel {
       display: none;
     }
 
     .auth-visual-panel .mt-auto {
-      margin-top: 4rem;
-      padding-bottom: 1.5rem;
+        margin-top: 3rem;
+        padding-bottom: 2rem;
       padding-top: 0;
     }
 
     .auth-visual-title {
       max-width: 30rem;
       font-size: clamp(2.2rem, 8vw, 3.2rem);
-    }
-
-    .auth-form-area {
-      justify-content: flex-start;
-      padding: 2rem clamp(1.25rem, 7vw, 3.5rem) 2.25rem;
     }
 
     .auth-mobile-mascot {
@@ -953,23 +941,63 @@
 
   @media (max-width: 480px) {
     .auth-page {
+      align-items: flex-start;
+      min-height: 100dvh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 1.25rem;
+    }
+
+    .auth-layout {
+      width: min(100%, 34rem);
+    }
+
+    .auth-form-area {
+      min-height: auto;
+      padding: clamp(1.5rem, 6vw, 2.5rem) clamp(1rem, 6vw, 3rem) 2.5rem;
+    }
+
+    .auth-form-panel {
+      max-width: 100%;
+    }
+
+    .auth-page .auth-panel .p-6,
+    .auth-page .auth-panel .sm\:p-7 {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  @media (min-width: 820px) and (max-width: 1100px) {
+    .auth-page {
+      padding: 1.5rem;
+    }
+
+    .auth-layout {
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+      height: min(720px, calc(100dvh - 3rem));
+    }
+
+    .auth-visual-panel {
+      padding: 1.75rem;
+    }
+
+    .auth-form-area {
+      padding: 2.5rem clamp(2rem, 5vw, 3.5rem);
+    }
+  }
+
+  @media (max-width: 819px) {
+    .auth-page {
       padding: 0;
     }
 
     .auth-layout {
+      width: 100%;
       border-radius: 0;
       border-right: 0;
       border-left: 0;
       box-shadow: none;
-    }
-
-    .auth-visual-panel {
-      min-height: 260px;
-      padding: 1.25rem;
-    }
-
-    .auth-visual-panel::after {
-      inset: 0.75rem;
     }
 
     .auth-live-pill {
