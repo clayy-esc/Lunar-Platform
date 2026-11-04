@@ -1,5 +1,5 @@
 import React, { InputHTMLAttributes, forwardRef, useId, useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -12,6 +12,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className = '', label, error, icon, authStyle = false, ...props }, ref) => {
     const generatedId = useId();
     const inputId = props.id ?? generatedId;
+    const errorId = `${inputId}-error`;
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = props.type === 'password';
     const inputType = isPassword && showPassword ? 'text' : props.type;
@@ -37,10 +38,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
-            className={`glass-input flex w-full border bg-white/55 backdrop-blur-md text-slate-900 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:bg-white focus-visible:border-blue-600 focus-visible:ring-4 focus-visible:ring-blue-600/15 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-xs ${
+            aria-describedby={props['aria-describedby'] || (error ? errorId : undefined)}
+            aria-invalid={props['aria-invalid'] ?? (error ? true : undefined)}
+            className={`glass-input flex w-full border bg-white text-slate-900 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#6b7699] focus-visible:outline-none focus-visible:bg-white focus-visible:border-[#3b62c4] focus-visible:ring-4 focus-visible:ring-[#3b62c4]/20 disabled:cursor-not-allowed disabled:opacity-50 transition-all ${
               authStyle
                 ? 'h-16 rounded-2xl border-slate-200/90 px-5 pb-1.5 pt-6 text-base placeholder:text-transparent'
-                : 'h-11 rounded-2xl border-slate-200/90 px-4 py-2 text-sm'
+                : 'h-12 rounded-xl border-[#e3e8f6] px-4 py-2 text-[15px]'
             } ${icon ? 'pl-9' : ''} ${isPassword ? 'pr-11' : ''} ${
               error ? 'border-rose-500 focus-visible:border-rose-500 focus-visible:ring-rose-500/15' : ''
             } ${className}`}
@@ -59,7 +62,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             </button>
           )}
         </div>
-        {error && <p className="mt-1.5 text-xs font-semibold text-rose-500">{error}</p>}
+        {error && <p id={errorId} className="mt-1.5 flex items-center gap-1 text-[13px] font-semibold text-[#d9534f]"><AlertCircle className="h-3.5 w-3.5" aria-hidden="true" />{error}</p>}
       </div>
     );
   }

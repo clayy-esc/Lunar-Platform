@@ -5,7 +5,7 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/useToast';
 import api from '../../lib/api';
-import { RefreshCcw, ArrowLeft } from 'lucide-react';
+import { RefreshCcw, ArrowLeft, KeyRound, LockKeyhole, Mail } from 'lucide-react';
 import { AuthLayout } from '../../components/layout/AuthLayout';
 
 export const ForgotPasswordPage: React.FC = () => {
@@ -37,13 +37,13 @@ export const ForgotPasswordPage: React.FC = () => {
 
   if (success) {
     return (
-      <AuthLayout>
-          <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 text-center shadow-2xl backdrop-blur-2xl">
+      <AuthLayout variant="forgot">
+          <Card className="auth-panel auth-form-panel auth-state-panel text-center">
             <CardHeader className="pb-2">
               <div className="mx-auto mb-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                 <span>✓</span> Reset successful
               </div>
-              <CardTitle className="text-3xl font-extrabold text-[#172342]">Password changed</CardTitle>
+              <CardTitle className="text-3xl font-extrabold text-[#14214a]">Password changed</CardTitle>
               <CardDescription className="text-sm text-[#66718a]">Your account credentials have been updated.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 pb-6 pt-2">
@@ -63,14 +63,14 @@ export const ForgotPasswordPage: React.FC = () => {
   }
 
   return (
-    <AuthLayout>
-        <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
+    <AuthLayout variant="forgot">
+      <Card className="auth-panel auth-form-panel">
           <CardHeader className="space-y-2 pb-5 text-left">
             <CardTitle className="text-3xl font-extrabold tracking-tight text-[#14214a]">Reset your password</CardTitle>
-            <CardDescription className="text-sm text-[#5d6985]">Use your recovery code to securely regain access.</CardDescription>
+            <CardDescription className="text-sm text-[#6b7699]">Enter your email and recovery details to regain access.</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-5 pt-1">
+            <CardContent className="auth-field-region space-y-4 pt-1">
               <Input
                 id="email"
                 type="email"
@@ -78,6 +78,8 @@ export const ForgotPasswordPage: React.FC = () => {
                 placeholder="name@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                icon={<Mail className="h-[18px] w-[18px]" aria-hidden="true" />}
+                autoComplete="email"
                 required
                 disabled={isLoading}
               />
@@ -88,6 +90,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 placeholder="8-character code"
                 value={recoveryCode}
                 onChange={(e) => setRecoveryCode(e.target.value)}
+                icon={<KeyRound className="h-[18px] w-[18px]" aria-hidden="true" />}
                 required
                 disabled={isLoading}
                 className="tracking-normal"
@@ -99,15 +102,17 @@ export const ForgotPasswordPage: React.FC = () => {
                 placeholder="Enter your new password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
+                icon={<LockKeyhole className="h-[18px] w-[18px]" aria-hidden="true" />}
+                autoComplete="new-password"
                 required
                 disabled={isLoading}
                 minLength={8}
               />
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 pt-2">
-              <Button type="submit" size="lg" className="w-full rounded-full" isLoading={isLoading}>
+              <Button type="submit" size="lg" className="auth-primary-button w-full" isLoading={isLoading}>
                 <RefreshCcw className="w-4 h-4 mr-2" />
-                Reset password
+                {isLoading ? 'Resetting password…' : 'Reset password'}
               </Button>
               <Link to="/login" className="flex items-center justify-center text-sm font-semibold text-[#66718a] hover:text-[#172342]">
                 <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to login

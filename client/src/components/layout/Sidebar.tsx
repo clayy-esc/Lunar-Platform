@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, PanelsTopLeft, GitBranch, MonitorPlay, ChartNoAxesCombined, ListChecks, Palette, Settings2, LogOut, X } from 'lucide-react';
+import { LayoutDashboard, PanelsTopLeft, GitBranch, MonitorPlay, ChartNoAxesCombined, ListChecks, Palette, Settings2, LogOut, X, Layers3 } from 'lucide-react';
 import { LunarLogo } from '../common/LunarLogo';
 import { useAuth } from '../../contexts/useAuth';
 
@@ -32,7 +32,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
 
   const getNavLinks = () => {
     const links = [{ to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', end: true }];
-    if (!surveyId) return links;
+    if (!surveyId) {
+      return [
+        ...links,
+        { to: '/dashboard', icon: PanelsTopLeft, label: 'My surveys' },
+        { to: '/dashboard', icon: Layers3, label: 'Templates' },
+        { to: '/dashboard', icon: ChartNoAxesCombined, label: 'Results' },
+        { to: '/dashboard', icon: Settings2, label: 'Settings' },
+      ];
+    }
     const base = `/dashboard/${surveyId}`;
     return [
       ...links,
@@ -86,11 +94,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
                 <React.Fragment key={link.to}>
                   <NavLink
                   to={link.to}
-                  end={link.to === '/dashboard'}
+                  end={link.label === 'Dashboard'}
                   onClick={closeOnMobile}
                   className={({ isActive }) =>
                     `sidebar-nav-item group flex min-h-10 items-center rounded-xl px-3 py-2 text-sm font-semibold transition-all ${
-                      isActive
+                      isActive && link.label === 'Dashboard'
                         ? 'sidebar-nav-item-active font-bold'
                         : 'border border-transparent'
                     }`

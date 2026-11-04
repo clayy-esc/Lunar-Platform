@@ -11,9 +11,11 @@ interface AppShellProps {
   isPublishing?: boolean;
   onUnpublish?: () => void;
   isUnpublishing?: boolean;
+  onCreateSurvey?: () => void;
+  isCreatingSurvey?: boolean;
 }
 
-export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish, isPublishing, onUnpublish, isUnpublishing }) => {
+export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish, isPublishing, onUnpublish, isUnpublishing, onCreateSurvey, isCreatingSurvey }) => {
   const { logout } = useAuth();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
@@ -49,6 +51,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children, survey, onPublish,
           isPublishing={isPublishing}
           onUnpublish={onUnpublish}
           isUnpublishing={isUnpublishing}
+          onCreateSurvey={onCreateSurvey}
+          isCreatingSurvey={isCreatingSurvey}
           onMenuOpen={() => setIsMobileNavOpen(true)}
         />
         <main className="min-h-0 flex-1 overflow-y-auto bg-transparent px-4 pb-20 pt-7 sm:px-6 lg:px-8">

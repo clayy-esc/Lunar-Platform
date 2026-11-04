@@ -216,6 +216,12 @@ export const PublicSurveyPage: React.FC = () => {
   };
 
   const handleNext = () => {
+    if (!isAnswerValid) {
+      setValidationError('Please answer this required question before continuing.');
+      return;
+    }
+
+    setValidationError(null);
     const nextIdx = getNextQuestionIndex(currentQuestionIndex);
     if (nextIdx === 'end') {
       handleSubmit();
@@ -224,7 +230,6 @@ export const PublicSurveyPage: React.FC = () => {
       setCurrentQuestionIndex(nextIdx);
     }
   };
-
   const handlePrevious = () => {
     if (history.length > 0) {
       const newHistory = [...history];
@@ -233,6 +238,27 @@ export const PublicSurveyPage: React.FC = () => {
       setCurrentQuestionIndex(prevIdx);
     }
   };
+
+  useEffect(() => {
+    const question = survey?.questions[currentQuestionIndex];
+    const answer = question ? answers[question.id] : undefined;
+    const answerIsValid = !question?.required
+      || (answer !== undefined && answer !== null && answer !== '' && (!Array.isArray(answer) || answer.length > 0));
+
+    if (isSinglePage || isSubmitted || !survey) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && !event.shiftKey && answerIsValid && !isSubmitting) {
+        event.preventDefault();
+        handleNext();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  // handleNext intentionally uses the latest answer state from this render.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers, currentQuestionIndex, isSinglePage, isSubmitting, isSubmitted, survey]);
 
   if (isLoading) {
     return (
@@ -245,12 +271,15 @@ export const PublicSurveyPage: React.FC = () => {
   if (error || !survey) {
     return (
       <div className="public-survey-shell flex min-h-screen flex-col items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-3xl border border-white/90 bg-white/85 p-8 text-center shadow-xl backdrop-blur-2xl">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#f2c7c3] bg-[#fff7f6] text-[#b42318]">
-            <span>!</span>
-          </div>
-          <h2 className="mb-2 text-xl font-extrabold text-[#172342]">Survey unavailable</h2>
-          <p className="text-sm leading-relaxed text-[#66718a]">{error}</p>
+        <div className="public-survey-card public-survey-state-card w-full max-w-[620px] p-8 text-center sm:p-12">
+          <img src="/favicon.png" alt="Lunar owl" className="mx-auto mb-5 h-20 w-20 object-contain drop-shadow-md" />
+          <h2 className="mb-2 text-2xl font-extrabold text-[#14214a]">
+            {error === "This survey is currently closed." ? "This survey isn't accepting responses." : 'Survey unavailable'}
+          </h2>
+          <p className="text-sm leading-relaxed text-[#5d6985]">
+            {error === "This survey is currently closed." ? 'The survey owner has closed this survey for now.' : error}
+          </p>
+          <p className="mt-8 text-xs font-semibold text-[#98a2b8]">Powered by Lunar</p>
         </div>
       </div>
     );
@@ -266,11 +295,7 @@ export const PublicSurveyPage: React.FC = () => {
 
   const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4169b2';
   const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#fff9f0';
-  const fontFamily = configuredTheme.fontFamily === 'Lora'
-    ? "'Lora', Georgia, serif"
-    : configuredTheme.fontFamily === 'Inter'
-      ? "'Inter', system-ui, sans-serif"
-      : "'Plus Jakarta Sans', system-ui, sans-serif";
+  const fontFamily = "'Plus Jakarta Sans', system-ui, sans-serif";
   const currentQ = survey.questions[currentQuestionIndex];
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
   const answeredCount = visibleQuestions.filter((q) => {
@@ -449,8 +474,8 @@ export const PublicSurveyPage: React.FC = () => {
     return (
       <div className="public-survey-shell flex min-h-screen items-center justify-center p-4 sm:p-6" style={themeStyle}>
         {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
-        <div className="public-survey-card w-full max-w-lg rounded-3xl p-8 text-center sm:p-12">
-          <img src="/favicon.png" alt="Lunar mascot" className="mx-auto mb-5 h-16 w-16 object-contain drop-shadow-md" />
+        <div className="public-survey-card public-survey-state-card w-full max-w-[620px] p-8 text-center sm:p-12">
+          <img src="/favicon.png" alt="Lunar owl waving" className="mx-auto mb-5 h-20 w-20 object-contain drop-shadow-md" />
           <div
             className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-md"
             style={{
@@ -465,13 +490,16 @@ export const PublicSurveyPage: React.FC = () => {
           <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold">
             <span>✓</span> Response completed
           </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#172342]">Thank you!</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#66718a]">Your response has been securely verified and saved.</p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-[#14214a]">Thanks for your response</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#5d6985]">
+            {survey.settings?.thankYouMessage || 'Your response has been securely saved.'}
+          </p>
           {isPreview && (
             <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-xs font-semibold text-amber-800">
               Preview Mode: Response was simulated and not saved to database.
             </div>
           )}
+          <p className="mt-8 text-xs font-semibold text-[#98a2b8]">Powered by Lunar</p>
         </div>
       </div>
     );
@@ -486,19 +514,19 @@ export const PublicSurveyPage: React.FC = () => {
       </div>
 
       <div className={`flex flex-1 flex-col items-center p-4 pt-12 sm:p-6 sm:pt-14 lg:p-8 lg:pt-16 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
-        <div className="w-full max-w-3xl">
+        <div className="w-full max-w-[620px]">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <img src="/favicon.png" alt="Lunar mascot" className="h-9 w-9 object-contain drop-shadow-sm" />
-              <span className="text-sm font-extrabold tracking-tight text-[#172342]">Lunar</span>
+              <span className="max-w-[13rem] truncate text-sm font-extrabold tracking-tight text-[#14214a]">{survey.title}</span>
             </div>
-            <span className="text-[13px] font-semibold text-[#66718a]">Secure response</span>
+            <span className="public-survey-secure-badge"><span aria-hidden="true">✓</span> Secure response</span>
           </div>
           
           {/* Header Banner */}
           <div className="mb-8 flex items-end justify-between gap-6 pb-4">
             <div>
-              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#172342] sm:text-4xl">
+              <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#14214a] sm:text-4xl">
                 {survey.title}
               </h1>
               {survey.description && (
@@ -506,7 +534,7 @@ export const PublicSurveyPage: React.FC = () => {
               )}
             </div>
             <div className="shrink-0 text-right">
-              <span className="rounded-full border border-[#dce3f2] bg-white px-3 py-1 text-xs font-bold text-[#4169b2] shadow-xs">
+              <span className="public-survey-question-count">
                 {progressLabel}
               </span>
             </div>
@@ -535,13 +563,13 @@ export const PublicSurveyPage: React.FC = () => {
               </div>
               <div className="flex items-center justify-end border-t border-[#e4e9f3] bg-[#f8faff] px-6 py-5 sm:px-10">
                 <div className="flex items-center gap-4">
-                  {validationError && <p className="text-xs font-bold text-[#b42318]">{validationError}</p>}
+                  {validationError && <p role="alert" className="text-xs font-bold text-[#d9534f]">{validationError}</p>}
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                     className="public-survey-btn-primary px-8 py-3.5 text-sm"
                   >
-                    Send response
+                    Submit response
                     <ArrowUpRight className="ml-2 h-4 w-4" />
                   </button>
                 </div>
@@ -574,15 +602,15 @@ export const PublicSurveyPage: React.FC = () => {
                   className="rounded-full px-5 text-slate-700"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Previous
+                  Back
                 </Button>
                 
                 <button 
                   onClick={handleNext} 
-                  disabled={!isAnswerValid || isSubmitting}
+                  disabled={isSubmitting}
                   className="public-survey-btn-primary px-8 py-3.5 text-sm"
                 >
-                  {isLastQuestion ? 'Send response' : 'Continue'}
+                  {isLastQuestion ? 'Submit response' : 'Next'}
                   {isLastQuestion ? <Check className="ml-2 h-4 w-4" /> : <ArrowUpRight className="ml-2 h-4 w-4" />}
                 </button>
               </div>
