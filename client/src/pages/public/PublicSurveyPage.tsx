@@ -321,154 +321,284 @@ export const PublicSurveyPage: React.FC = () => {
     ? (currentAnswer !== undefined && currentAnswer !== null && currentAnswer !== '' && (Array.isArray(currentAnswer) ? currentAnswer.length > 0 : true))
     : true;
 
-  const renderQuestionInputs = (question: Survey['questions'][number]) => (
-    <div className="public-survey-answer mt-6">
-      {['short_text', 'number', 'date'].includes(question.type) && (
-        <input
-          type={question.type === 'number' ? 'number' : question.type === 'date' ? 'date' : 'text'}
-          value={answers[question.id] || ''}
-          onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-          placeholder="Type your response here..."
-          className="public-survey-input h-14 w-full rounded-2xl px-5 text-base sm:text-lg text-slate-900 shadow-xs focus:outline-none"
-        />
-      )}
+  const renderQuestionInputs = (question: Survey['questions'][number]) => {
+    const isSingleChoice = ['single_choice', 'multiple_choice', 'yes_no'].includes(question.type);
+    const isMultiChoice = ['multi_choice', 'checkboxes'].includes(question.type);
+    const isShortText = ['short_text', 'short_answer', 'number', 'date'].includes(question.type);
+    const isLongText = ['long_text', 'long_answer'].includes(question.type);
+    const isLinearOrNps = ['linear_scale', 'nps'].includes(question.type);
+    const isDropdown = question.type === 'dropdown';
+    const isRating = question.type === 'rating';
 
-      {question.type === 'long_text' && (
-        <textarea
-          value={answers[question.id] || ''}
-          onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-          placeholder="Share your detailed response..."
-          rows={4}
-          className="public-survey-input min-h-36 w-full resize-y rounded-2xl p-5 text-base text-slate-900 shadow-xs focus:outline-none"
-        />
-      )}
+    // Normalize options
+    let rawOptions = question.options || [];
+    if (question.type === 'yes_no' || question.displayType === 'yes_no') {
+      const yesLabel = question.yesNo?.yesLabel || 'Yes';
+      const noLabel = question.yesNo?.noLabel || 'No';
+      rawOptions = [{ id: 'opt_yes', label: yesLabel }, { id: 'opt_no', label: noLabel }];
+      if (question.yesNo?.allowNA) {
+        rawOptions.push({ id: 'opt_na', label: question.yesNo?.naLabel || 'N/A' });
+      }
+    }
 
-      {(question.type === 'single_choice' || question.type === 'multi_choice') && (
-        <div className="space-y-3">
-          {question.options.map((opt, i) => {
-            const isMulti = question.type === 'multi_choice';
-            const isSelected = isMulti
-              ? (answers[question.id] || []).includes(opt)
-              : answers[question.id] === opt;
+    const placeholderText = question.placeholder || question.config?.placeholder || (isLongText ? "Share your detailed response..." : "Type your response here...");
 
-            return (
-              <label
-                key={i}
-                className={`public-survey-option group flex cursor-pointer items-center justify-between rounded-2xl p-4 sm:p-5 transition-all ${
-                  isSelected ? 'is-selected' : 'border-slate-200/80 bg-white/70 hover:bg-white'
-                }`}
-              >
-                <div className="flex items-center min-w-0 pr-4">
-                  <div
-                    className={`mr-4 flex h-8 w-8 shrink-0 items-center justify-center transition-all ${
-                      isMulti ? 'rounded-xl' : 'rounded-full'
-                    } ${
-                      isSelected
-                        ? 'text-white shadow-xs'
-                        : 'border border-slate-300 bg-white'
-                    }`}
-                    style={isSelected ? { backgroundColor: 'var(--survey-primary)' } : undefined}
-                  >
-                    {isSelected && <Check className="h-4 w-4" strokeWidth={3} />}
-                  </div>
-                  <span className={`text-base leading-snug ${isSelected ? 'font-bold text-slate-900' : 'font-medium text-slate-800'}`}>
-                    {opt}
-                  </span>
-                </div>
-                <div
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
-                    isSelected ? 'opacity-100' : 'text-slate-400 opacity-0 group-hover:opacity-100 group-hover:bg-slate-100'
+    return (
+      <div className="public-survey-answer mt-6">
+        {isShortText && (
+          <input
+            type={question.type === 'number' ? 'number' : question.type === 'date' ? 'date' : 'text'}
+            value={answers[question.id] || ''}
+            onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
+            placeholder={placeholderText}
+            maxLength={question.maxLength}
+            className="public-survey-input h-14 w-full rounded-2xl px-5 text-base sm:text-lg text-slate-900 shadow-xs focus:outline-none"
+          />
+        )}
+
+        {isLongText && (
+          <textarea
+            value={answers[question.id] || ''}
+            onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
+            placeholder={placeholderText}
+            maxLength={question.maxLength}
+            rows={4}
+            className="public-survey-input min-h-36 w-full resize-y rounded-2xl p-5 text-base text-slate-900 shadow-xs focus:outline-none"
+          />
+        )}
+
+        {(isSingleChoice || isMultiChoice) && (
+          <div className="space-y-3">
+            {rawOptions.map((opt, i) => {
+              const optLabel = typeof opt === 'string' ? opt : (opt?.label ?? '');
+              const optId = typeof opt === 'string' ? `opt_${i}` : (opt?.id ?? `opt_${i}`);
+              const isSelected = isMultiChoice
+                ? (answers[question.id] || []).includes(optLabel)
+                : answers[question.id] === optLabel;
+
+              return (
+                <label
+                  key={optId}
+                  className={`public-survey-option group flex cursor-pointer items-center justify-between rounded-2xl p-4 sm:p-5 transition-all ${
+                    isSelected ? 'is-selected' : 'border-slate-200/80 bg-white/70 hover:bg-white'
                   }`}
-                  style={isSelected ? {
-                    backgroundColor: 'color-mix(in srgb, var(--survey-primary) 14%, transparent)',
-                    color: 'var(--survey-primary)'
-                  } : undefined}
                 >
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </div>
-                <input
-                  type={isMulti ? "checkbox" : "radio"}
-                  name={question.id}
-                  value={opt}
-                  className="sr-only"
-                  checked={isSelected}
-                  onChange={(e) => {
-                    if (isMulti) {
-                      const curr = answers[question.id] || [];
-                      if (e.target.checked) setAnswers({...answers, [question.id]: [...curr, opt]});
-                      else setAnswers({...answers, [question.id]: curr.filter((val: string) => val !== opt)});
-                    } else {
-                      setAnswers({...answers, [question.id]: opt});
+                  <div className="flex items-center min-w-0 pr-4">
+                    <div
+                      className={`mr-4 flex h-8 w-8 shrink-0 items-center justify-center transition-all ${
+                        isMultiChoice ? 'rounded-xl' : 'rounded-full'
+                      } ${
+                        isSelected
+                          ? 'text-white shadow-xs'
+                          : 'border border-slate-300 bg-white'
+                      }`}
+                      style={isSelected ? { backgroundColor: 'var(--survey-primary)' } : undefined}
+                    >
+                      {isSelected && <Check className="h-4 w-4" strokeWidth={3} />}
+                    </div>
+                    <span className={`text-base leading-snug ${isSelected ? 'font-bold text-slate-900' : 'font-medium text-slate-800'}`}>
+                      {optLabel}
+                    </span>
+                  </div>
+                  <div
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
+                      isSelected ? 'opacity-100' : 'text-slate-400 opacity-0 group-hover:opacity-100 group-hover:bg-slate-100'
+                    }`}
+                    style={isSelected ? {
+                      backgroundColor: 'color-mix(in srgb, var(--survey-primary) 14%, transparent)',
+                      color: 'var(--survey-primary)'
+                    } : undefined}
+                  >
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </div>
+                  <input
+                    type={isMultiChoice ? "checkbox" : "radio"}
+                    name={question.id}
+                    value={optLabel}
+                    className="sr-only"
+                    checked={isSelected}
+                    onChange={(e) => {
+                      if (isMultiChoice) {
+                        const curr = answers[question.id] || [];
+                        if (e.target.checked) setAnswers({...answers, [question.id]: [...curr, optLabel]});
+                        else setAnswers({...answers, [question.id]: curr.filter((val: string) => val !== optLabel)});
+                      } else {
+                        setAnswers({...answers, [question.id]: optLabel});
+                      }
+                    }}
+                  />
+                </label>
+              );
+            })}
+
+            {question.allowOther && (
+              <div className="pt-1">
+                <label
+                  className={`public-survey-option group flex cursor-pointer flex-col gap-2 rounded-2xl p-4 sm:p-5 transition-all ${
+                    (isMultiChoice ? (answers[question.id] || []).some((v: string) => v.startsWith('Other: ')) : String(answers[question.id] || '').startsWith('Other: '))
+                      ? 'is-selected'
+                      : 'border-slate-200/80 bg-white/70 hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center min-w-0">
+                    <div
+                      className={`mr-4 flex h-8 w-8 shrink-0 items-center justify-center transition-all ${
+                        isMultiChoice ? 'rounded-xl' : 'rounded-full'
+                      } ${
+                        (isMultiChoice ? (answers[question.id] || []).some((v: string) => v.startsWith('Other: ')) : String(answers[question.id] || '').startsWith('Other: '))
+                          ? 'text-white shadow-xs'
+                          : 'border border-slate-300 bg-white'
+                      }`}
+                      style={(isMultiChoice ? (answers[question.id] || []).some((v: string) => v.startsWith('Other: ')) : String(answers[question.id] || '').startsWith('Other: ')) ? { backgroundColor: 'var(--survey-primary)' } : undefined}
+                    >
+                      <Check className="h-4 w-4" strokeWidth={3} />
+                    </div>
+                    <span className="text-base font-semibold text-slate-800">Other</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Please specify..."
+                    value={
+                      isMultiChoice
+                        ? ((answers[question.id] || []).find((v: string) => v.startsWith('Other: ')) || '').replace('Other: ', '')
+                        : (String(answers[question.id] || '').startsWith('Other: ') ? String(answers[question.id]).replace('Other: ', '') : '')
                     }
-                  }}
-                />
-              </label>
-            );
-          })}
-        </div>
-      )}
-
-      {question.type === 'dropdown' && (
-        <select
-          value={answers[question.id] || ''}
-          onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-          className="public-survey-input h-14 w-full rounded-2xl px-5 text-base text-slate-900 shadow-xs focus:outline-none"
-        >
-          <option value="" disabled>Select an option from list</option>
-          {question.options.map((opt, i) => (
-            <option key={i} value={opt}>{opt}</option>
-          ))}
-        </select>
-      )}
-
-      {question.type === 'linear_scale' && (
-        <div className="py-2">
-          <div className="mb-4 flex justify-between px-2 text-[13px] font-semibold text-slate-400">
-            <span>{question.config?.minLabel || 'Min'}</span>
-            <span>{question.config?.maxLabel || 'Max'}</span>
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => {
+                      const otherVal = e.target.value ? `Other: ${e.target.value}` : 'Other: ';
+                      if (isMultiChoice) {
+                        const curr = (answers[question.id] || []).filter((v: string) => !v.startsWith('Other: '));
+                        setAnswers({...answers, [question.id]: [...curr, otherVal]});
+                      } else {
+                        setAnswers({...answers, [question.id]: otherVal});
+                      }
+                    }}
+                    className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </label>
+              </div>
+            )}
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
-            {Array.from({ length: (question.config?.max || 5) - (question.config?.min || 1) + 1 }, (_, i) => i + (question.config?.min || 1)).map(val => (
-              <button
-                key={val}
-                type="button"
-                onClick={() => setAnswers({...answers, [question.id]: val})}
-                className={`public-survey-scale h-13 w-13 rounded-2xl text-lg font-extrabold transition-all sm:h-14 sm:w-14 ${
-                  answers[question.id] === val
-                    ? 'is-selected'
-                    : 'text-slate-800'
-                }`}
-              >
-                {val}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+        )}
 
-      {question.type === 'rating' && (
-        <div className="flex flex-wrap items-center gap-3 py-2">
-          {Array.from({ length: question.config?.max || 5 }, (_, i) => i + 1).map(val => (
-            <button
-              key={val}
-              type="button"
-              onClick={() => setAnswers({...answers, [question.id]: val})}
-              className="group rounded-2xl p-2.5 transition-all hover:scale-110 focus:outline-none"
-            >
-              <svg
-                className="h-10 w-10 sm:h-12 sm:w-12 transition-colors"
-                fill={(answers[question.id] || 0) >= val ? 'var(--survey-primary)' : '#f1f5f9'}
-                stroke={(answers[question.id] || 0) >= val ? 'var(--survey-primary)' : '#cbd5e1'}
-                viewBox="0 0 24 24" strokeWidth={1.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.563.563 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-              </svg>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+        {isDropdown && (
+          <select
+            value={answers[question.id] || ''}
+            onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
+            className="public-survey-input h-14 w-full rounded-2xl px-5 text-base text-slate-900 shadow-xs focus:outline-none"
+          >
+            <option value="" disabled>Select an option from list</option>
+            {rawOptions.map((opt, i) => {
+              const optLabel = typeof opt === 'string' ? opt : (opt?.label ?? '');
+              const optId = typeof opt === 'string' ? `opt_${i}` : (opt?.id ?? `opt_${i}`);
+              return <option key={optId} value={optLabel}>{optLabel}</option>;
+            })}
+          </select>
+        )}
+
+        {isLinearOrNps && (
+          <div className="py-2">
+            <div className="mb-4 flex justify-between px-2 text-[13px] font-semibold text-slate-500">
+              <span>{question.nps?.minLabel || question.config?.minLabel || 'Not likely'}</span>
+              <span>{question.nps?.maxLabel || question.config?.maxLabel || 'Extremely likely'}</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              {Array.from(
+                { length: question.type === 'nps' || question.displayType === 'nps' ? 11 : ((question.config?.max || 5) - (question.config?.min || 1) + 1) },
+                (_, i) => (question.type === 'nps' || question.displayType === 'nps' ? i : i + (question.config?.min || 1))
+              ).map(val => (
+                <button
+                  key={val}
+                  type="button"
+                  onClick={() => setAnswers({...answers, [question.id]: val})}
+                  className={`public-survey-scale h-11 w-11 sm:h-12 sm:w-12 rounded-2xl text-base sm:text-lg font-extrabold transition-all ${
+                    answers[question.id] === val
+                      ? 'is-selected'
+                      : 'text-slate-800'
+                  }`}
+                >
+                  {val}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {isRating && (
+          <div className="py-2">
+            <div className="flex flex-wrap items-center gap-3">
+              {Array.from({ length: question.rating?.max || question.config?.max || 5 }, (_, i) => i + 1).map(val => {
+                const style = question.rating?.style || 'star';
+                const isSelected = (answers[question.id] || 0) >= val;
+                const isExact = answers[question.id] === val;
+
+                if (style === 'number') {
+                  return (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setAnswers({...answers, [question.id]: val})}
+                      className={`h-12 w-12 rounded-2xl text-lg font-extrabold transition-all border ${
+                        isExact
+                          ? 'border-blue-600 bg-blue-600 text-white shadow-md'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                      }`}
+                      style={isExact ? { backgroundColor: 'var(--survey-primary)', borderColor: 'var(--survey-primary)' } : undefined}
+                    >
+                      {val}
+                    </button>
+                  );
+                }
+
+                if (style === 'emoji') {
+                  const emojis = ['😠', '🙁', '😐', '😊', '😍', '🤩', '🥳', '🙌', '🔥', '💯'];
+                  const emojiChar = emojis[Math.min(val - 1, emojis.length - 1)];
+                  return (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setAnswers({...answers, [question.id]: val})}
+                      className={`text-3xl sm:text-4xl p-2 rounded-2xl transition-all hover:scale-125 ${
+                        isExact ? 'scale-125 bg-blue-50' : 'opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      {emojiChar}
+                    </button>
+                  );
+                }
+
+                // Default: Star
+                return (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setAnswers({...answers, [question.id]: val})}
+                    className="group rounded-2xl p-2 transition-all hover:scale-110 focus:outline-none"
+                    aria-label={`${val} star`}
+                  >
+                    <svg
+                      className="h-10 w-10 sm:h-12 sm:w-12 transition-colors"
+                      fill={isSelected ? 'var(--survey-primary)' : '#f1f5f9'}
+                      stroke={isSelected ? 'var(--survey-primary)' : '#cbd5e1'}
+                      viewBox="0 0 24 24" strokeWidth={1.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.563.563 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                    </svg>
+                  </button>
+                );
+              })}
+            </div>
+            {(question.rating?.minLabel || question.rating?.maxLabel || question.config?.minLabel || question.config?.maxLabel) && (
+              <div className="mt-2 flex justify-between px-2 text-xs font-semibold text-slate-500">
+                <span>{question.rating?.minLabel || question.config?.minLabel || ''}</span>
+                <span>{question.rating?.maxLabel || question.config?.maxLabel || ''}</span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   if (isSubmitted) {
     return (

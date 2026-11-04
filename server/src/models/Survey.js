@@ -9,12 +9,34 @@ const questionSchema = new Schema({
     enum: [
       'short_text', 'long_text', 'single_choice', 'multi_choice',
       'rating', 'linear_scale', 'dropdown', 'date', 'number',
+      'multiple_choice', 'checkboxes', 'short_answer', 'long_answer',
+      'yes_no', 'nps',
     ],
   },
   title: { type: String, required: true, default: 'Untitled Question' },
   description: { type: String, default: '' },
   required: { type: Boolean, default: false },
-  options: [{ type: String }],
+  options: [{ type: Schema.Types.Mixed }],
+  allowOther: { type: Boolean, default: false },
+  shuffle: { type: Boolean, default: false },
+  placeholder: { type: String },
+  maxLength: { type: Number },
+  rating: {
+    max: { type: Number },
+    style: { type: String },
+    minLabel: { type: String },
+    maxLabel: { type: String },
+  },
+  yesNo: {
+    yesLabel: { type: String },
+    noLabel: { type: String },
+    allowNA: { type: Boolean },
+    naLabel: { type: String },
+  },
+  nps: {
+    minLabel: { type: String },
+    maxLabel: { type: String },
+  },
   config: {
     min: { type: Number },
     max: { type: Number },
@@ -22,9 +44,10 @@ const questionSchema = new Schema({
     maxLabel: { type: String },
     step: { type: Number },
     placeholder: { type: String },
+    shuffle: { type: Boolean },
   },
   order: { type: Number, required: true },
-}, { _id: false });
+}, { _id: false, strict: false });
 
 const logicRuleSchema = new Schema({
   id: { type: String, required: true },

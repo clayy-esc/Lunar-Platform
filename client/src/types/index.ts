@@ -13,7 +13,37 @@ export type QuestionType =
   | 'linear_scale'
   | 'dropdown'
   | 'date'
-  | 'number';
+  | 'number'
+  | 'multiple_choice'
+  | 'checkboxes'
+  | 'short_answer'
+  | 'long_answer'
+  | 'yes_no'
+  | 'nps';
+
+export interface OptionItem {
+  id: string;
+  label: string;
+}
+
+export interface QuestionRatingConfig {
+  max: 5 | 7 | 10;
+  style: 'star' | 'number' | 'emoji';
+  minLabel?: string;
+  maxLabel?: string;
+}
+
+export interface QuestionYesNoConfig {
+  yesLabel: string;
+  noLabel: string;
+  allowNA?: boolean;
+  naLabel?: string;
+}
+
+export interface QuestionNpsConfig {
+  minLabel: string;
+  maxLabel: string;
+}
 
 export interface QuestionConfig {
   min?: number;
@@ -29,10 +59,18 @@ export interface Question {
   id: string;
   type: QuestionType;
   title: string;
-  description: string;
+  description?: string;
   required: boolean;
-  options: string[];
-  config: QuestionConfig;
+  options: (OptionItem | string)[];
+  allowOther?: boolean;
+  shuffle?: boolean;
+  placeholder?: string;
+  maxLength?: number;
+  rating?: QuestionRatingConfig;
+  yesNo?: QuestionYesNoConfig;
+  nps?: QuestionNpsConfig;
+  config?: QuestionConfig;
+  displayType?: string;
   order: number;
 }
 
