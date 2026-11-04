@@ -537,7 +537,7 @@ export const PublicSurveyPage: React.FC = () => {
                     disabled={isSubmitting}
                     className="public-survey-btn-primary px-8 py-3.5 text-sm"
                   >
-                    Submit Response
+                    Send response
                     <ArrowUpRight className="ml-2 h-4 w-4" />
                   </button>
                 </div>
@@ -578,7 +578,7 @@ export const PublicSurveyPage: React.FC = () => {
                   disabled={!isAnswerValid || isSubmitting}
                   className="public-survey-btn-primary px-8 py-3.5 text-sm"
                 >
-                  {isLastQuestion ? 'Submit Response' : 'Continue'}
+                  {isLastQuestion ? 'Send response' : 'Continue'}
                   {isLastQuestion ? <Check className="ml-2 h-4 w-4" /> : <ArrowUpRight className="ml-2 h-4 w-4" />}
                 </button>
               </div>

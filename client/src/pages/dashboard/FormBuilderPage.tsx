@@ -13,10 +13,10 @@ import api from '../../lib/api';
 import { GripVertical, Plus, Trash2, AlignLeft, CheckSquare, CircleDot, Star, Hash, Calendar, Settings2, ChevronDown, Type } from 'lucide-react';
 
 const questionTypes: { type: QuestionType; label: string; icon: any }[] = [
-  { type: 'short_text', label: 'Short Text', icon: Type },
-  { type: 'long_text', label: 'Long Text', icon: AlignLeft },
-  { type: 'single_choice', label: 'Single Choice', icon: CircleDot },
-  { type: 'multi_choice', label: 'Multiple Choice', icon: CheckSquare },
+  { type: 'short_text', label: 'Short text', icon: Type },
+  { type: 'long_text', label: 'Long text', icon: AlignLeft },
+  { type: 'single_choice', label: 'Single choice', icon: CircleDot },
+  { type: 'multi_choice', label: 'Multiple choice', icon: CheckSquare },
   { type: 'dropdown', label: 'Dropdown', icon: ChevronDown },
   { type: 'rating', label: 'Rating', icon: Star },
   { type: 'linear_scale', label: 'Linear Scale', icon: Settings2 },
@@ -438,7 +438,7 @@ export const FormBuilderPage: React.FC = () => {
             trigger={
               <Button size="lg" className="rounded-full shadow-lg shadow-primary/25 px-6">
                 <Plus className="w-5 h-5 mr-2" />
-                Add Question
+                Add question
               </Button>
             }
           >

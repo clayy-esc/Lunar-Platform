@@ -16,25 +16,25 @@
 
 @layer base {
   :root {
-    --ocean-950: #03045e;
-    --ocean-900: #023e8a;
-    --ocean-800: #0077b6;
-    --ocean-700: #0096c7;
-    --ocean-600: #00b4d8;
-    --ocean-500: #48cae4;
-    --ocean-400: #90e0ef;
-    --ocean-300: #ade8f4;
-    --ocean-200: #caf0f8;
-    --background: #f5f7fc;
-    --foreground: #172342;
+    --ocean-950: #14214a;
+    --ocean-900: #1d2f63;
+    --ocean-800: #3b62c4;
+    --ocean-700: #5278d4;
+    --ocean-600: #6d8fe0;
+    --ocean-500: #8ca8ed;
+    --ocean-400: #b7c8f4;
+    --ocean-300: #d3ddfa;
+    --ocean-200: #e7edff;
+    --background: #f4f6fd;
+    --foreground: #14214a;
     --card: #ffffff;
-    --card-foreground: #172342;
-    --primary: #ffb928;
+    --card-foreground: #14214a;
+    --primary: #fdb92b;
     --primary-foreground: #ffffff;
-    --border: #e4e9f3;
-    --muted: #eef2fa;
-    --muted-foreground: #66718a;
-    --accent-amber: #ffb928;
+    --border: #e3e8f6;
+    --muted: #eef1fa;
+    --muted-foreground: #5d6985;
+    --accent-amber: #fdb92b;
     --accent-amber-foreground: #ffffff;
     --ambient-navy: rgba(15, 23, 42, 0.06);
     --ambient-blue: rgba(37, 99, 235, 0.08);
@@ -43,7 +43,7 @@
 
   * {
     border-color: var(--border);
-    caret-color: #0077b6;
+    caret-color: #3b62c4;
   }
 
   ::selection {
@@ -75,6 +75,24 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  button, a, input, textarea, select {
+    transition-duration: 180ms;
+  }
+
+  :focus-visible {
+    outline: 3px solid rgba(59, 98, 196, 0.38);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   h1, h2, h3 {
     letter-spacing: -0.025em;
   }
@@ -83,11 +101,9 @@
 @layer components {
   /* Ethereal Frosted Glass Utilities */
   .glass-panel {
-    background: rgba(202, 240, 248, 0.38);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.74);
-    box-shadow: 0 20px 40px -15px rgba(3, 62, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    background: #ffffff;
+    border: 1px solid #e3e8f6;
+    box-shadow: 0 6px 22px rgba(30, 45, 99, 0.08);
   }
 
   .glass-pill {
@@ -167,34 +183,32 @@
 
   .app-shell {
     isolation: isolate;
-    padding: 18px;
-    background-image:
-      radial-gradient(circle at 92% -8%, rgba(0, 119, 182, 0.3), transparent 42%),
-      radial-gradient(circle at 4% 92%, rgba(144, 224, 239, 0.48), transparent 38%);
+    padding: 0;
+    background: #f4f6fd;
   }
 
   .app-shell > .relative.z-10 {
-    border-radius: 0 24px 24px 0;
-    background: rgba(202, 240, 248, 0.35);
-    box-shadow: 0 18px 50px -30px rgba(3, 62, 138, 0.42);
+    border-radius: 0;
+    background: #f4f6fd;
+    box-shadow: none;
   }
 
   .app-sidebar {
-    background: rgba(202, 240, 248, 0.5);
-    box-shadow: 12px 0 36px -28px rgba(3, 62, 138, 0.38);
-    border-radius: 24px 0 0 24px;
+    background: #14214a;
+    box-shadow: 8px 0 24px rgba(20, 33, 74, 0.12);
+    border-radius: 0;
   }
 
   .app-topbar {
     min-height: 72px;
-    background: rgba(202, 240, 248, 0.36);
-    box-shadow: 0 12px 30px -26px rgba(3, 62, 138, 0.4);
+    background: #ffffff;
+    box-shadow: 0 1px 0 #e3e8f6;
   }
 
   .surface-card {
-    background: rgba(202, 240, 248, 0.4);
-    border-color: rgba(255, 255, 255, 0.78);
-    box-shadow: 0 18px 42px -24px rgba(3, 62, 138, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    background: #ffffff;
+    border-color: #e3e8f6;
+    box-shadow: 0 6px 22px rgba(30, 45, 99, 0.08);
   }
 
   .glass-icon {
@@ -272,8 +286,8 @@
   }
 
   .glass-input {
-    border-color: rgba(148, 181, 220, 0.38) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 5px 14px -12px rgba(37, 99, 235, 0.45);
+    border-color: #e3e8f6 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
   }
 
   .not-found-page {
@@ -963,14 +977,14 @@
   .workspace-panel,
   .glass-panel {
     background: #ffffff;
-    border-color: #e4e9f3;
-    box-shadow: 0 8px 24px rgba(23, 35, 66, 0.05);
+    border-color: #e3e8f6;
+    box-shadow: 0 6px 22px rgba(30, 45, 99, 0.08);
     backdrop-filter: none;
   }
 
   .dashboard-hero {
     background: #14214a;
-    box-shadow: 0 12px 28px rgba(23, 35, 66, 0.14);
+    box-shadow: 0 10px 24px rgba(20, 33, 74, 0.16);
   }
 
   .dashboard-stat {
@@ -999,9 +1013,9 @@
   }
 
   .sidebar-nav-item-active {
-    background: #4169b2;
+    background: #3b62c4;
     color: #ffffff;
-    box-shadow: 0 8px 18px rgba(65, 105, 178, 0.25);
+    box-shadow: 0 8px 18px rgba(59, 98, 196, 0.25);
   }
 
   .preview-frame {
@@ -1037,10 +1051,16 @@
   }
 
   .app-shell .border-border {
-    border-color: #e4e9f3;
+    border-color: #e3e8f6;
   }
 
   @media (max-width: 767px) {
+    .app-topbar {
+      min-height: 72px;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
     .app-shell main {
       padding-left: 1rem;
       padding-right: 1rem;

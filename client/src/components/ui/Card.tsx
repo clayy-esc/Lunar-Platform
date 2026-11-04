@@ -8,7 +8,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className = '', glass = true, ...props }, ref) => (
     <div
       ref={ref}
-      className={`surface-card rounded-3xl border border-white/90 bg-white/80 text-card-foreground shadow-xl shadow-slate-900/4 backdrop-blur-2xl transition-all ${
+      className={`surface-card rounded-2xl border border-[#e3e8f6] bg-white text-card-foreground shadow-[0_6px_22px_rgba(30,45,99,0.08)] transition-all ${
         glass ? 'glass-panel' : ''
       } ${className}`}
       {...props}
@@ -32,7 +32,7 @@ export const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttrib
   ({ className = '', ...props }, ref) => (
     <h3
       ref={ref}
-      className={`text-2xl font-extrabold leading-tight tracking-tight text-slate-900 ${className}`}
+      className={`text-2xl font-extrabold leading-tight tracking-tight text-[#14214a] ${className}`}
       {...props}
     />
   )

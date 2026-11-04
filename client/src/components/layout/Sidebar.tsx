@@ -35,8 +35,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
     const base = `/dashboard/${surveyId}`;
     return [
       ...links,
-      { to: `${base}/builder`, icon: PanelsTopLeft, label: 'Form Builder' },
-      { to: `${base}/logic`, icon: GitBranch, label: 'Logic Flow' },
+      { to: `${base}/builder`, icon: PanelsTopLeft, label: 'Form builder' },
+      { to: `${base}/logic`, icon: GitBranch, label: 'Logic flow' },
       { to: `${base}/preview`, icon: MonitorPlay, label: 'Preview' },
       { to: `${base}/analytics`, icon: ChartNoAxesCombined, label: 'Analytics' },
       { to: `${base}/submissions`, icon: ListChecks, label: 'Submissions' },
@@ -77,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
         </div>
 
         <div className="flex-1 overflow-y-auto px-3 py-6">
-          <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+          <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
             Workspace
           </div>
           <nav className="space-y-1.5">
@@ -102,7 +102,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, onLogout, isMobileOp
             </nav>
             {surveyId && (
             <div className="mt-7 border-t border-white/10 pt-6">
-              <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+              <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
                 Current survey
               </div>
               <div className="mx-2 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs font-semibold text-slate-300">
