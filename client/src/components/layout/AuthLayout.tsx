@@ -1,7 +1,6 @@
 import React from 'react';
 import { ArrowUpRight, Check, Sparkles } from 'lucide-react';
 import { LunarLogo } from '../common/LunarLogo';
-import { AmbientBackground } from '../ui/AmbientBackground';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -10,7 +9,6 @@ interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="auth-page relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-6 sm:px-8 lg:px-10">
-      <AmbientBackground />
       <div className="auth-layout relative z-10 w-full">
         <aside className="auth-visual-panel">
           <div className="auth-visual-glow auth-visual-glow-top" />
@@ -68,14 +66,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         </aside>
 
         <main className="auth-form-area">
-          <div className="auth-form-topline">
-            <span className="auth-form-brand"><LunarLogo size="xs" showText imageClassName="h-5 w-5" textClassName="[&_.text-slate-900]:text-[#172342]" /></span>
-            <span className="hidden sm:inline">Private &amp; purposeful</span>
-          </div>
           {children}
-          <p className="auth-legal">
-            By continuing, you agree to Lunar&apos;s terms and privacy policy.
-          </p>
         </main>
       </div>
     </div>

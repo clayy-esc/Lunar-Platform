@@ -49,13 +49,13 @@ export const RegisterPage: React.FC = () => {
   return (
     <AuthLayout>
         <Card className="auth-panel auth-form-panel rounded-3xl border border-white/90 bg-white/85 shadow-2xl backdrop-blur-2xl">
-          <CardHeader className="space-y-2 pb-3 text-left">
+          <CardHeader className="space-y-1 pb-1 text-left">
             <div className="auth-form-kicker">Start building with Lunar</div>
-            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#172342]">Create your workspace</CardTitle>
+            <CardTitle className="text-3xl font-extrabold tracking-tight text-[#172342]">Create account</CardTitle>
             <CardDescription className="text-sm text-[#66718a]">Set up your account and turn your next question into insight.</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4 pt-2">
+            <CardContent className="space-y-2 pt-1">
               <Input
                 id="email"
                 type="email"
@@ -92,7 +92,7 @@ export const RegisterPage: React.FC = () => {
                 minLength={8}
               />
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4 pt-4">
+            <CardFooter className="flex flex-col space-y-2 pt-2">
               <Button type="submit" size="lg" className="w-full rounded-full" isLoading={isLoading}>
                 Create account
                 <ArrowUpRight className="ml-2 h-4 w-4" />
