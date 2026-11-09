@@ -322,6 +322,10 @@ export const PublicSurveyPage: React.FC = () => {
     ? `${answeredCount} of ${visibleQuestions.length} answered`
     : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
 
+  const roundness = configuredTheme.roundness || 'rounded';
+  const radiusCard = roundness === 'sharp' ? '4px' : roundness === 'pill' ? '28px' : '16px';
+  const radiusElement = roundness === 'sharp' ? '4px' : roundness === 'pill' ? '9999px' : '14px';
+
   const rawAlign = configuredTheme.descriptionAlignment;
   const isShortDesc = (survey.description || '').trim().length < 120;
   let descAlign: 'left' | 'right' | 'justify' = 'left';
@@ -347,6 +351,9 @@ export const PublicSurveyPage: React.FC = () => {
     ['--survey-bg' as any]: backgroundColor,
     ['--description-align' as any]: descAlign,
     ['--description-align-last' as any]: descAlignLast,
+    ['--survey-radius-card' as any]: radiusCard,
+    ['--survey-radius-element' as any]: radiusElement,
+    ['--survey-radius' as any]: radiusCard,
   };
 
   // Validation for multi-step
@@ -386,7 +393,8 @@ export const PublicSurveyPage: React.FC = () => {
             onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
             placeholder={placeholderText}
             maxLength={question.maxLength}
-            className="public-survey-input h-14 w-full rounded-2xl px-5 text-base sm:text-lg text-slate-900 shadow-xs focus:outline-none"
+            className="public-survey-input h-14 w-full px-5 text-base sm:text-lg text-slate-900 shadow-xs focus:outline-none"
+            style={{ borderRadius: radiusElement }}
           />
         )}
 
@@ -397,7 +405,8 @@ export const PublicSurveyPage: React.FC = () => {
             placeholder={placeholderText}
             maxLength={question.maxLength}
             rows={4}
-            className="public-survey-input min-h-36 w-full resize-y rounded-2xl p-5 text-base text-slate-900 shadow-xs focus:outline-none"
+            className="public-survey-input min-h-36 w-full resize-y p-5 text-base text-slate-900 shadow-xs focus:outline-none"
+            style={{ borderRadius: radiusElement }}
           />
         )}
 
@@ -413,9 +422,10 @@ export const PublicSurveyPage: React.FC = () => {
               return (
                 <label
                   key={optId}
-                  className={`public-survey-option group flex cursor-pointer items-center justify-between rounded-2xl p-4 sm:p-5 transition-all ${
+                  className={`public-survey-option group flex cursor-pointer items-center justify-between p-4 sm:p-5 transition-all ${
                     isSelected ? 'is-selected' : 'border-slate-200/80 bg-white/70 hover:bg-white'
                   }`}
+                  style={{ borderRadius: radiusElement }}
                 >
                   <div className="flex items-center min-w-0 pr-4">
                     <div
@@ -468,11 +478,12 @@ export const PublicSurveyPage: React.FC = () => {
             {question.allowOther && (
               <div className="pt-1">
                 <label
-                  className={`public-survey-option group flex cursor-pointer flex-col gap-2 rounded-2xl p-4 sm:p-5 transition-all ${
+                  className={`public-survey-option group flex cursor-pointer flex-col gap-2 p-4 sm:p-5 transition-all ${
                     (isMultiChoice ? (answers[question.id] || []).some((v: string) => v.startsWith('Other: ')) : String(answers[question.id] || '').startsWith('Other: '))
                       ? 'is-selected'
                       : 'border-slate-200/80 bg-white/70 hover:bg-white'
                   }`}
+                  style={{ borderRadius: radiusElement }}
                 >
                   <div className="flex items-center min-w-0">
                     <div
@@ -507,7 +518,8 @@ export const PublicSurveyPage: React.FC = () => {
                         setAnswers({...answers, [question.id]: otherVal});
                       }
                     }}
-                    className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{ borderRadius: radiusElement }}
                   />
                 </label>
               </div>
@@ -519,7 +531,8 @@ export const PublicSurveyPage: React.FC = () => {
           <select
             value={answers[question.id] || ''}
             onChange={(e) => setAnswers({...answers, [question.id]: e.target.value})}
-            className="public-survey-input h-14 w-full rounded-2xl px-5 text-base text-slate-900 shadow-xs focus:outline-none"
+            className="public-survey-input h-14 w-full px-5 text-base text-slate-900 shadow-xs focus:outline-none"
+            style={{ borderRadius: radiusElement }}
           >
             <option value="" disabled>Select an option from list</option>
             {rawOptions.map((opt, i) => {
@@ -545,11 +558,12 @@ export const PublicSurveyPage: React.FC = () => {
                   key={val}
                   type="button"
                   onClick={() => setAnswers({...answers, [question.id]: val})}
-                  className={`public-survey-scale h-11 w-11 sm:h-12 sm:w-12 rounded-2xl text-base sm:text-lg font-extrabold transition-all ${
+                  className={`public-survey-scale h-11 w-11 sm:h-12 sm:w-12 text-base sm:text-lg font-extrabold transition-all ${
                     answers[question.id] === val
                       ? 'is-selected'
                       : 'text-slate-800'
                   }`}
+                  style={{ borderRadius: radiusElement }}
                 >
                   {val}
                 </button>
@@ -572,12 +586,15 @@ export const PublicSurveyPage: React.FC = () => {
                       key={val}
                       type="button"
                       onClick={() => setAnswers({...answers, [question.id]: val})}
-                      className={`h-12 w-12 rounded-2xl text-lg font-extrabold transition-all border ${
+                      className={`h-12 w-12 text-lg font-extrabold transition-all border ${
                         isExact
                           ? 'border-blue-600 bg-blue-600 text-white shadow-md'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                       }`}
-                      style={isExact ? { backgroundColor: 'var(--survey-primary)', borderColor: 'var(--survey-primary)' } : undefined}
+                      style={{
+                        borderRadius: radiusElement,
+                        ...(isExact ? { backgroundColor: 'var(--survey-primary)', borderColor: 'var(--survey-primary)' } : {}),
+                      }}
                     >
                       {val}
                     </button>
@@ -727,7 +744,7 @@ export const PublicSurveyPage: React.FC = () => {
           )}
 
           {isSinglePage ? (
-            <div className="public-survey-card rounded-3xl overflow-hidden">
+            <div className="public-survey-card overflow-hidden" style={{ borderRadius: radiusCard }}>
               <div className="space-y-12 p-6 sm:p-10 lg:p-12">
                 {visibleQuestions.map((question, index) => (
                   <section key={question.id} className={index > 0 ? 'border-t border-slate-200/70 pt-10' : ''}>
@@ -754,6 +771,7 @@ export const PublicSurveyPage: React.FC = () => {
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                     className="public-survey-btn-primary px-8 py-3.5 text-sm"
+                    style={{ borderRadius: radiusElement }}
                   >
                     Submit response
                     <ArrowUpRight className="ml-2 h-4 w-4" />
@@ -762,7 +780,7 @@ export const PublicSurveyPage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="public-survey-card rounded-3xl overflow-hidden">
+            <div className="public-survey-card overflow-hidden" style={{ borderRadius: radiusCard }}>
               <div className="p-6 sm:p-10 lg:p-12">
                 <div className="mb-4">
                   <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-[11px] font-bold">
@@ -785,7 +803,8 @@ export const PublicSurveyPage: React.FC = () => {
                   variant="secondary" 
                   onClick={handlePrevious} 
                   disabled={history.length === 0 || isSubmitting}
-                  className="rounded-full px-5 text-slate-700"
+                  className="px-5 text-slate-700"
+                  style={{ borderRadius: radiusElement }}
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
@@ -795,6 +814,7 @@ export const PublicSurveyPage: React.FC = () => {
                   onClick={handleNext} 
                   disabled={isSubmitting}
                   className="public-survey-btn-primary px-8 py-3.5 text-sm"
+                  style={{ borderRadius: radiusElement }}
                 >
                   {isLastQuestion ? 'Submit response' : 'Next'}
                   {isLastQuestion ? <Check className="ml-2 h-4 w-4" /> : <ArrowUpRight className="ml-2 h-4 w-4" />}

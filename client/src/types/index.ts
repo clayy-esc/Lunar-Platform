@@ -89,6 +89,7 @@ export interface SurveyTheme {
   lightPrimaryColor?: string;
   lightBackgroundColor?: string;
   fontFamily: string;
+  roundness?: 'sharp' | 'rounded' | 'pill';
   customCSS: string;
   descriptionAlignment?: 'left' | 'right' | 'justified';
 }

@@ -63,6 +63,7 @@ export const ThemePage: React.FC = () => {
             backgroundColor: current.theme.backgroundColor || '#F4F6FD',
             fontFamily: current.theme.fontFamily?.includes('Inter') ? 'Inter' : 'Plus Jakarta Sans',
             layout: current.theme.layout || 'single_page',
+            roundness: current.theme.roundness || 'rounded',
             descriptionAlignment: current.theme.descriptionAlignment || 'left',
           }));
         }
@@ -110,6 +111,7 @@ export const ThemePage: React.FC = () => {
           ...theme,
           lightPrimaryColor: theme.primaryColor,
           lightBackgroundColor: theme.backgroundColor,
+          roundness: theme.roundness || 'rounded',
           descriptionAlignment: theme.descriptionAlignment || 'left',
         },
       });

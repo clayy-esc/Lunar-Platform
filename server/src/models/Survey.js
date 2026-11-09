@@ -105,6 +105,11 @@ const surveySchema = new Schema({
       enum: ['single_page', 'one_at_a_time'],
       default: 'single_page',
     },
+    roundness: {
+      type: String,
+      enum: ['sharp', 'rounded', 'pill'],
+      default: 'rounded',
+    },
     descriptionAlignment: {
       type: String,
       enum: ['left', 'right', 'justified'],

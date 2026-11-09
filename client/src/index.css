@@ -645,7 +645,7 @@
 
     .public-survey-card {
       border: 1px solid #e3e8f6;
-      border-radius: 1.25rem;
+      border-radius: var(--survey-radius-card, 1.25rem) !important;
       background: #ffffff;
       box-shadow: 0 6px 22px rgba(30, 45, 99, 0.08);
     }
@@ -703,7 +703,7 @@
 
     .public-survey-option {
       min-height: 3rem;
-      border-radius: 0.875rem;
+      border-radius: var(--survey-radius-element, 0.875rem) !important;
       border-color: #e3e8f6;
     }
 
@@ -714,6 +714,7 @@
 
     .public-survey-btn-primary {
       min-height: 3rem;
+      border-radius: var(--survey-radius-element, 9999px) !important;
       background: #fdb92b;
       color: #14214a;
     }
@@ -1275,6 +1276,7 @@
   }
 
   .public-survey-card {
+    border-radius: var(--survey-radius-card, 1.5rem) !important;
     background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1285,6 +1287,7 @@
   }
 
   .public-survey-option {
+    border-radius: var(--survey-radius-element, 1rem) !important;
     background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1307,6 +1310,7 @@
   }
 
   .public-survey-input {
+    border-radius: var(--survey-radius-element, 1rem) !important;
     background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1325,6 +1329,7 @@
   }
 
   .public-survey-scale {
+    border-radius: var(--survey-radius-element, 1rem) !important;
     background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1352,7 +1357,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 9999px;
+    border-radius: var(--survey-radius-element, 9999px) !important;
     background-color: var(--survey-primary);
     color: #172342;
     font-weight: 700;
