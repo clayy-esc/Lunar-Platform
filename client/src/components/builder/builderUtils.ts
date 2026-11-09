@@ -96,34 +96,6 @@ export const normalizeQuestion = (q: any, index: number = 0): Question => {
   };
 };
 
-export const getSuggestedOptions = (title: string): string[] | null => {
-  const lower = title.toLowerCase();
-  if (lower.includes('age')) {
-    return ['Under 18', '18–24', '25–34', '35–44', '45–54', '55–64', '65+'];
-  }
-  if (lower.includes('satisf') || lower.includes('happy')) {
-    return ['Very satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very dissatisfied'];
-  }
-  if (lower.includes('agree')) {
-    return ['Strongly agree', 'Agree', 'Neutral', 'Disagree', 'Strongly disagree'];
-  }
-  if (lower.includes('often') || lower.includes('frequen') || lower.includes('how many times')) {
-    return ['Daily', 'Weekly', 'Monthly', 'A few times a year', 'Never'];
-  }
-  if (lower.includes('gender')) {
-    return ['Female', 'Male', 'Non-binary', 'Prefer not to say'];
-  }
-  if (lower.includes('experience') || lower.includes('quality')) {
-    return ['Excellent', 'Good', 'Average', 'Poor', 'Very poor'];
-  }
-  if (lower.includes('likely') || lower.includes('recommend')) {
-    return ['Very likely', 'Somewhat likely', 'Neutral', 'Unlikely', 'Very unlikely'];
-  }
-  if (lower.includes('device') || lower.includes('platform')) {
-    return ['Mobile / Smartphone', 'Desktop / Laptop', 'Tablet', 'Other'];
-  }
-  return null;
-};
 
 export const createDefaultQuestion = (type: QuestionType, displayType?: string, currentCount: number = 0): Question => {
   const order = currentCount;

@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { OptionItem, Question } from '../../types';
-import { getSuggestedOptions } from './builderUtils';
-import { GripVertical, Plus, X, Sparkles, Star } from 'lucide-react';
+import { GripVertical, Plus, X, Star } from 'lucide-react';
 
 interface QuestionEditorProps {
   question: Question;
@@ -128,14 +127,6 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpda
     }
   };
 
-  const suggested = getSuggestedOptions(question.title);
-
-  const applySuggestedOptions = () => {
-    if (!suggested) return;
-    const next = suggested.map((label) => ({ id: nanoid(8), label }));
-    onUpdate({ options: next });
-    announce('Applied suggested options');
-  };
 
   // Check for duplicates
   const labelsCount = options.reduce<Record<string, number>>((acc, o) => {
@@ -153,16 +144,6 @@ export const QuestionEditor: React.FC<QuestionEditorProps> = ({ question, onUpda
       {/* Choice Types (Multiple choice, Checkboxes, Dropdown) */}
       {isChoice && !isYesNo && (
         <div className="space-y-2">
-          {suggested && options.length <= 2 && (
-            <button
-              type="button"
-              onClick={applySuggestedOptions}
-              className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-blue-600" />
-              Use suggested options ({suggested.length})
-            </button>
-          )}
 
           <div className="space-y-1.5">
             {options.map((opt, idx) => {
