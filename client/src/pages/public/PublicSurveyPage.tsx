@@ -322,14 +322,31 @@ export const PublicSurveyPage: React.FC = () => {
     ? `${answeredCount} of ${visibleQuestions.length} answered`
     : `Question ${currentQuestionIndex + 1} of ${survey.questions.length}`;
 
+  const rawAlign = configuredTheme.descriptionAlignment;
   const isShortDesc = (survey.description || '').trim().length < 120;
-  const descAlign = configuredTheme.descriptionAlignment || (isShortDesc ? 'left' : 'justify');
+  let descAlign: 'left' | 'right' | 'justify' = 'left';
+  let descAlignLast: 'left' | 'right' | 'auto' = 'auto';
+
+  if (rawAlign === 'right') {
+    descAlign = 'right';
+    descAlignLast = 'right';
+  } else if (rawAlign === 'justified') {
+    descAlign = 'justify';
+    descAlignLast = 'left';
+  } else if (rawAlign === 'left') {
+    descAlign = 'left';
+    descAlignLast = 'left';
+  } else {
+    descAlign = isShortDesc ? 'left' : 'justify';
+    descAlignLast = isShortDesc ? 'left' : 'left';
+  }
 
   const themeStyle: React.CSSProperties = {
     fontFamily,
     ['--survey-primary' as any]: primaryColor,
     ['--survey-bg' as any]: backgroundColor,
     ['--description-align' as any]: descAlign,
+    ['--description-align-last' as any]: descAlignLast,
   };
 
   // Validation for multi-step
@@ -673,7 +690,14 @@ export const PublicSurveyPage: React.FC = () => {
               {survey.title}
             </h1>
             {survey.description && (
-              <p lang="en" className="survey-description">
+              <p
+                lang="en"
+                className="survey-description"
+                style={{
+                  textAlign: descAlign,
+                  textAlignLast: descAlignLast,
+                }}
+              >
                 {survey.description}
               </p>
             )}

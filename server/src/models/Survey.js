@@ -107,7 +107,7 @@ const surveySchema = new Schema({
     },
     descriptionAlignment: {
       type: String,
-      enum: ['left', 'justified'],
+      enum: ['left', 'right', 'justified'],
       default: 'left',
     },
     customCSS: { type: String, default: '' },

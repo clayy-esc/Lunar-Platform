@@ -13,7 +13,7 @@ type ThemeDraft = {
   fontFamily: string;
   layout: 'single_page' | 'one_at_a_time';
   roundness: 'sharp' | 'rounded' | 'pill';
-  descriptionAlignment?: 'left' | 'justified';
+  descriptionAlignment?: 'left' | 'right' | 'justified';
 };
 
 const palettes = [
@@ -133,11 +133,15 @@ export const ThemePage: React.FC = () => {
   }
 
   const previewRadius = theme.roundness === 'sharp' ? '4px' : theme.roundness === 'pill' ? '28px' : '16px';
+  const previewAlign = theme.descriptionAlignment === 'right' ? 'right' : (theme.descriptionAlignment === 'justified' ? 'justify' : 'left');
+  const previewAlignLast = previewAlign === 'right' ? 'right' : (previewAlign === 'justify' ? 'left' : 'auto');
+
   const previewStyle = {
     fontFamily: theme.fontFamily,
     backgroundColor: theme.backgroundColor,
     ['--theme-accent' as string]: theme.primaryColor,
     ['--theme-radius' as string]: previewRadius,
+    ['--description-align' as string]: previewAlign,
   } as React.CSSProperties;
 
   return (
@@ -239,6 +243,13 @@ export const ThemePage: React.FC = () => {
                 </button>
                 <button
                   type="button"
+                  onClick={() => updateTheme({ descriptionAlignment: 'right' })}
+                  className={theme.descriptionAlignment === 'right' ? 'is-active' : ''}
+                >
+                  Right
+                </button>
+                <button
+                  type="button"
                   onClick={() => updateTheme({ descriptionAlignment: 'justified' })}
                   className={theme.descriptionAlignment === 'justified' ? 'is-active' : ''}
                 >
@@ -293,6 +304,20 @@ export const ThemePage: React.FC = () => {
                   <img src="/favicon.png" alt="Lunar" />
                   <strong>Lunar</strong>
                   <span>✓ Secure response</span>
+                </div>
+                <div className="theme-preview-intro mb-2">
+                  <h4 className="text-xs font-bold text-[#14214a] leading-tight mb-1 text-left">{survey.title || 'Survey Title'}</h4>
+                  <p
+                    className="text-[11px] text-[#5a6585] leading-relaxed"
+                    style={{
+                      textAlign: previewAlign,
+                      textAlignLast: previewAlignLast,
+                      textJustify: 'inter-word',
+                      hyphens: 'auto',
+                    }}
+                  >
+                    {survey.description || 'Thank you for taking the time to participate in our survey. Your feedback is valuable to us.'}
+                  </p>
                 </div>
                 <div className="theme-preview-progress">
                   <span style={{ width: '42%', backgroundColor: theme.primaryColor }} />

@@ -682,9 +682,9 @@
       font-size: 18px;
       line-height: 1.7;
       color: #5a6585;
-      text-align: var(--description-align, justify);
+      text-align: var(--description-align, left);
       text-justify: inter-word;
-      text-align-last: left;
+      text-align-last: var(--description-align-last, auto);
       hyphens: auto;
       -webkit-hyphens: auto;
       overflow-wrap: break-word;
@@ -695,7 +695,6 @@
 
     @media (max-width: 640px) {
       .survey-description {
-        text-align: left !important;
         hyphens: manual;
         font-size: 16px;
         line-height: 1.6;
