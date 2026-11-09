@@ -55,6 +55,10 @@ export const PublicSurveyPage: React.FC = () => {
     };
   }, [survey?.title]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentQuestionIndex]);
+
   const evaluateRule = (rule: LogicRule, answer: any): boolean => {
     if (answer === undefined || answer === null || answer === '') return false;
 
@@ -649,11 +653,11 @@ export const PublicSurveyPage: React.FC = () => {
   }
 
   return (
-    <div className={`public-survey-shell flex flex-col ${isSinglePage || isPreview ? 'min-h-screen overflow-y-auto' : 'h-screen overflow-hidden'}`} style={themeStyle}>
+    <div className="public-survey-shell flex min-h-screen flex-col overflow-y-auto" style={themeStyle}>
       {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
 
-      <div className={`flex flex-1 flex-col items-center p-4 pt-10 sm:p-6 sm:pt-12 lg:p-8 lg:pt-14 ${isSinglePage || isPreview ? 'justify-start' : 'min-h-0 justify-center'}`}>
-        <div className="w-full max-w-[620px]">
+      <div className="flex flex-1 flex-col items-center p-4 pt-10 pb-12 sm:p-6 sm:pt-12 sm:pb-16 lg:p-8 lg:pt-14 lg:pb-16 justify-start">
+        <div className={`w-full max-w-[620px] ${isSinglePage ? '' : 'my-auto'}`}>
           {/* Brand Row */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
