@@ -1914,16 +1914,34 @@
     box-shadow: 0 8px 18px rgba(59, 98, 196, 0.25);
   }
 
+  .sidebar-survey-title-block {
+    margin: 0.5rem 0 0.35rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+  }
+
+  .sidebar-survey-title-label {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: #7a92c4;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
   .sidebar-survey-title {
+    display: -webkit-box;
     overflow: hidden;
-    margin: 0.45rem 0 0.25rem;
-    padding: 0 0.625rem;
-    color: #9db8ff;
+    color: #ffffff;
     font-size: 0.8rem;
-    font-weight: 600;
-    line-height: 1.25rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight: 700;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    word-break: break-word;
   }
 
   .preview-frame {

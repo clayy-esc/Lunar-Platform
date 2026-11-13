@@ -102,8 +102,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
                   {link.label}
                 </NavLink>
                 {index === 0 && surveyId && (
-                  <div className="sidebar-survey-title" title={surveyTitle || 'Survey workspace'}>
-                    {surveyTitle || 'Survey workspace'}
+                  <div className="sidebar-survey-title-block">
+                    <span className="sidebar-survey-title-label">Current survey</span>
+                    <span className="sidebar-survey-title" title={surveyTitle || 'Survey workspace'}>
+                      {surveyTitle || 'Survey workspace'}
+                    </span>
                   </div>
                 )}
               </React.Fragment>
