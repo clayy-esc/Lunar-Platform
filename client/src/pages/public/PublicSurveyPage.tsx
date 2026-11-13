@@ -328,17 +328,17 @@ export const PublicSurveyPage: React.FC = () => {
   const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4169b2';
   const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#fff9f0';
   const FONT_STACKS: Record<string, string> = {
-    'Open Sans': "'Open Sans', sans-serif",
-    'Aptos': "'Aptos', 'Segoe UI', system-ui, sans-serif",
-    'Roboto': "'Roboto', sans-serif",
+    'Open Sans': "'Open Sans', 'Helvetica Neue', Arial, sans-serif",
+    'Aptos': "'Aptos', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    'Roboto': "'Roboto', 'Helvetica Neue', Arial, sans-serif",
     'Arial': 'Arial, Helvetica, sans-serif',
-    'Calibri': "'Calibri', 'Gill Sans', sans-serif",
-    'Verdana': 'Verdana, Geneva, sans-serif',
-    'Georgia': "Georgia, 'Times New Roman', serif",
-    'Times New Roman': "'Times New Roman', Times, serif",
+    'Calibri': "'Calibri', 'Gill Sans MT', 'Gill Sans', Optima, 'Helvetica Neue', Arial, sans-serif",
+    'Verdana': 'Verdana, Geneva, Tahoma, sans-serif',
+    'Georgia': 'Georgia, Cambria, serif',
+    'Times New Roman': "'Times New Roman', Times, 'Georgia', serif",
     // legacy fallbacks
-    'Plus Jakarta Sans': "'Plus Jakarta Sans', system-ui, sans-serif",
-    'Inter': "'Inter', system-ui, sans-serif",
+    'Plus Jakarta Sans': "'Plus Jakarta Sans', 'Helvetica Neue', Arial, sans-serif",
+    'Inter': "'Inter', 'Helvetica Neue', Arial, sans-serif",
     'system-ui': 'system-ui, sans-serif',
   };
   const savedFont = configuredTheme.fontFamily || 'Open Sans';

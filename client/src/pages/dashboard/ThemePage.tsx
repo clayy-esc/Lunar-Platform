@@ -134,12 +134,26 @@ export const ThemePage: React.FC = () => {
     );
   }
 
+  const FONT_STACKS: Record<string, string> = {
+    'Open Sans': "'Open Sans', 'Helvetica Neue', Arial, sans-serif",
+    'Aptos': "'Aptos', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+    'Roboto': "'Roboto', 'Helvetica Neue', Arial, sans-serif",
+    'Arial': 'Arial, Helvetica, sans-serif',
+    'Calibri': "'Calibri', 'Gill Sans MT', 'Gill Sans', Optima, 'Helvetica Neue', Arial, sans-serif",
+    'Verdana': 'Verdana, Geneva, Tahoma, sans-serif',
+    'Georgia': 'Georgia, Cambria, serif',
+    'Times New Roman': "'Times New Roman', Times, Georgia, serif",
+    'Plus Jakarta Sans': "'Plus Jakarta Sans', 'Helvetica Neue', Arial, sans-serif",
+    'Inter': "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    'system-ui': 'system-ui, sans-serif',
+  };
+
   const previewRadius = theme.roundness === 'sharp' ? '4px' : theme.roundness === 'pill' ? '28px' : '16px';
   const previewAlign = theme.descriptionAlignment === 'right' ? 'right' : (theme.descriptionAlignment === 'justified' ? 'justify' : 'left');
   const previewAlignLast = previewAlign === 'right' ? 'right' : (previewAlign === 'justify' ? 'left' : 'auto');
 
   const previewStyle = {
-    fontFamily: theme.fontFamily,
+    fontFamily: FONT_STACKS[theme.fontFamily] ?? `'${theme.fontFamily}', 'Helvetica Neue', Arial, sans-serif`,
     backgroundColor: theme.backgroundColor,
     ['--theme-accent' as string]: theme.primaryColor,
     ['--theme-radius' as string]: previewRadius,
