@@ -99,7 +99,7 @@ const surveySchema = new Schema({
     lightBackgroundColor: { type: String, default: '#ffffff' },
     darkPrimaryColor: { type: String, default: '#818cf8' },
     darkBackgroundColor: { type: String, default: '#0f172a' },
-    fontFamily: { type: String, default: 'Inter' },
+    fontFamily: { type: String, default: 'Open Sans' },
     layout: {
       type: String,
       enum: ['single_page', 'one_at_a_time'],

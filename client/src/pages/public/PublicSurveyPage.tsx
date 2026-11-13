@@ -273,6 +273,25 @@ export const PublicSurveyPage: React.FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers, currentQuestionIndex, isSinglePage, isSubmitting, isSubmitted, survey]);
 
+  // Dynamically inject Google Fonts for web fonts that need loading
+  useEffect(() => {
+    const webFonts: Record<string, string> = {
+      'Open Sans': 'Open+Sans:wght@400;600;700;800',
+      'Roboto': 'Roboto:wght@400;500;700',
+    };
+    const fontKey = survey?.theme?.fontFamily;
+    if (fontKey && webFonts[fontKey]) {
+      const id = `gf-${fontKey.replace(/\s+/g, '-')}`;
+      if (!document.getElementById(id)) {
+        const link = document.createElement('link');
+        link.id = id;
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${webFonts[fontKey]}&display=swap`;
+        document.head.appendChild(link);
+      }
+    }
+  }, [survey?.theme?.fontFamily]);
+
   if (isLoading) {
     return (
       <div className="public-survey-loading public-survey-shell flex min-h-screen items-center justify-center">
@@ -301,14 +320,29 @@ export const PublicSurveyPage: React.FC = () => {
   const configuredTheme: SurveyTheme = survey.theme || {
     primaryColor: '#4169b2',
     backgroundColor: '#fff9f0',
-    fontFamily: 'Plus Jakarta Sans',
+    fontFamily: 'Open Sans',
     layout: 'single_page',
     customCSS: '',
   };
 
   const primaryColor = configuredTheme.primaryColor || configuredTheme.lightPrimaryColor || '#4169b2';
   const backgroundColor = configuredTheme.backgroundColor || configuredTheme.lightBackgroundColor || '#fff9f0';
-  const fontFamily = "'Plus Jakarta Sans', system-ui, sans-serif";
+  const FONT_STACKS: Record<string, string> = {
+    'Open Sans': "'Open Sans', sans-serif",
+    'Aptos': "'Aptos', 'Segoe UI', system-ui, sans-serif",
+    'Roboto': "'Roboto', sans-serif",
+    'Arial': 'Arial, Helvetica, sans-serif',
+    'Calibri': "'Calibri', 'Gill Sans', sans-serif",
+    'Verdana': 'Verdana, Geneva, sans-serif',
+    'Georgia': "Georgia, 'Times New Roman', serif",
+    'Times New Roman': "'Times New Roman', Times, serif",
+    // legacy fallbacks
+    'Plus Jakarta Sans': "'Plus Jakarta Sans', system-ui, sans-serif",
+    'Inter': "'Inter', system-ui, sans-serif",
+    'system-ui': 'system-ui, sans-serif',
+  };
+  const savedFont = configuredTheme.fontFamily || 'Open Sans';
+  const fontFamily = FONT_STACKS[savedFont] ?? `'${savedFont}', system-ui, sans-serif`;
   const currentQ = survey.questions[currentQuestionIndex];
   const isLastQuestion = getNextQuestionIndex(currentQuestionIndex) === 'end';
   const answeredCount = visibleQuestions.filter((q) => {

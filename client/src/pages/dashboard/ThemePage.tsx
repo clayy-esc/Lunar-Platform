@@ -44,7 +44,7 @@ export const ThemePage: React.FC = () => {
   const [theme, setTheme] = useState<ThemeDraft>({
     primaryColor: '#3B62C4',
     backgroundColor: '#F4F6FD',
-    fontFamily: 'Plus Jakarta Sans',
+    fontFamily: 'Open Sans',
     layout: 'single_page',
     roundness: 'rounded',
     descriptionAlignment: 'left',
@@ -61,7 +61,7 @@ export const ThemePage: React.FC = () => {
             ...previous,
             primaryColor: current.theme.primaryColor || '#3B62C4',
             backgroundColor: current.theme.backgroundColor || '#F4F6FD',
-            fontFamily: current.theme.fontFamily?.includes('Inter') ? 'Inter' : 'Plus Jakarta Sans',
+            fontFamily: current.theme.fontFamily || 'Open Sans',
             layout: current.theme.layout || 'single_page',
             roundness: current.theme.roundness || 'rounded',
             descriptionAlignment: current.theme.descriptionAlignment || 'left',
@@ -95,7 +95,7 @@ export const ThemePage: React.FC = () => {
     setTheme({
       primaryColor: '#3B62C4',
       backgroundColor: '#F4F6FD',
-      fontFamily: 'Plus Jakarta Sans',
+      fontFamily: 'Open Sans',
       layout: 'single_page',
       roundness: 'rounded',
       descriptionAlignment: 'left',
@@ -204,12 +204,12 @@ export const ThemePage: React.FC = () => {
             <div className="theme-section">
               <h2>Font</h2>
               <div className="theme-choice-row">
-                {['Plus Jakarta Sans', 'Inter', 'System'].map((font) => (
+                {(['Open Sans', 'Aptos', 'Roboto', 'Arial', 'Calibri', 'Verdana', 'Georgia', 'Times New Roman'] as const).map((font) => (
                   <button
                     type="button"
                     key={font}
-                    onClick={() => updateTheme({ fontFamily: font === 'System' ? 'system-ui' : font })}
-                    className={theme.fontFamily === (font === 'System' ? 'system-ui' : font) ? 'is-active' : ''}
+                    onClick={() => updateTheme({ fontFamily: font })}
+                    className={theme.fontFamily === font ? 'is-active' : ''}
                   >
                     {font}
                   </button>
