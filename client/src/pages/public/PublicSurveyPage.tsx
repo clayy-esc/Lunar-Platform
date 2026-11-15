@@ -729,7 +729,7 @@ export const PublicSurveyPage: React.FC = () => {
           {/* Brand Row */}
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <img src="/favicon.png" alt="Lunar mascot" className="h-9 w-9 object-contain drop-shadow-sm" />
+              <img src="/survey-owl.png" alt="Lunar mascot" className="h-9 w-9 object-contain drop-shadow-sm" />
               <span className="text-[16px] font-bold tracking-tight text-[#14214a]">Lunar</span>
             </div>
             <span className="public-survey-secure-badge"><span aria-hidden="true">✓</span> Secure response</span>

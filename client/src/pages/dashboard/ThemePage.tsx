@@ -317,7 +317,7 @@ export const ThemePage: React.FC = () => {
             <div className={`theme-preview-canvas ${previewMode}`} style={previewStyle}>
               <div className="theme-preview-survey" style={{ borderRadius: previewRadius }}>
                 <div className="theme-preview-brand">
-                  <img src="/favicon.png" alt="Lunar" />
+                  <img src="/survey-owl.png" alt="Lunar" />
                   <strong>Lunar</strong>
                   <span>✓ Secure response</span>
                 </div>
