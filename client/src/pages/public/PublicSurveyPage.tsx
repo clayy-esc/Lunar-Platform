@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { Survey, LogicRule, SurveyTheme } from '../../types';
 import api from '../../lib/api';
 import { Button } from '../../components/ui/Button';
-import { ArrowLeft, ArrowUpRight, Check, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react';
 
 export const PublicSurveyPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -690,18 +690,11 @@ export const PublicSurveyPage: React.FC = () => {
       <div className="public-survey-shell flex min-h-screen items-center justify-center p-4 sm:p-6" style={themeStyle}>
         {configuredTheme.customCSS && <style>{configuredTheme.customCSS}</style>}
         <div className="public-survey-card public-survey-state-card w-full max-w-[620px] p-8 text-center sm:p-12">
-          <img src="/favicon.png" alt="Lunar owl waving" className="mx-auto mb-5 h-20 w-20 object-contain drop-shadow-md" />
-          <div
-            className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-md"
-            style={{
-              backgroundColor: 'color-mix(in srgb, var(--survey-primary) 12%, white)',
-              borderColor: 'color-mix(in srgb, var(--survey-primary) 25%, transparent)',
-              color: 'var(--survey-primary)',
-              borderWidth: 1,
-            }}
-          >
-            <CheckCircle2 className="h-10 w-10" />
-          </div>
+          <img
+            src="/survey-success-owl.png"
+            alt="Response completed"
+            className="mx-auto mb-6 h-36 w-36 object-contain drop-shadow-md"
+          />
           <div className="public-survey-badge mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-bold">
             <span>✓</span> Response completed
           </div>
