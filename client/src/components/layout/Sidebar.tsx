@@ -67,6 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ surveyId, surveyTitle, onLogou
           <LunarLogo
             size={30}
             showText={true}
+            imageClassName="brightness-0 invert"
             textClassName="[&_.text-slate-900]:text-white [&_.text-slate-500]:text-slate-400"
           />
           <button

@@ -59,13 +59,15 @@ export const LunarLogo: React.FC<LunarLogoProps> = ({
         }}
       >
         {/* Subtle Mascot Ambient Aura */}
-        <div
-          className="absolute inset-0 rounded-full pointer-events-none blur-md"
-          style={{
-            background: 'radial-gradient(circle, rgba(245, 158, 11, 0.24) 0%, rgba(37, 99, 235, 0.12) 55%, transparent 75%)',
-            opacity: 0.5,
-          }}
-        />
+        {!imageClassName?.includes('invert') && (
+          <div
+            className="absolute inset-0 rounded-full pointer-events-none blur-md"
+            style={{
+              background: 'radial-gradient(circle, rgba(245, 158, 11, 0.24) 0%, rgba(37, 99, 235, 0.12) 55%, transparent 75%)',
+              opacity: 0.5,
+            }}
+          />
+        )}
 
         {/* Lunar Mascot */}
         <img
