@@ -107,7 +107,7 @@ export const DashboardRoot: React.FC = () => {
                 Continue building
               </Button>
             </div>
-            <img src="/favicon.png" alt="" aria-hidden="true" className="dashboard-hero-owl absolute bottom-4 right-5 h-32 w-32 object-contain sm:right-10 sm:h-40 sm:w-40" />
+            <img src="/dashboard-owl.png" alt="" aria-hidden="true" className="dashboard-hero-owl absolute bottom-4 right-5 h-32 w-32 object-contain sm:right-10 sm:h-40 sm:w-40" />
           </div>
         </section>
 
