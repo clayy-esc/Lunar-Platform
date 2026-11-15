@@ -235,7 +235,7 @@
     .auth-mascot-wrap {
       width: 140px;
       height: 140px;
-      margin: 0 auto 28px;
+      margin: 0 0 28px 0;
     }
 
     .auth-mascot {
@@ -2121,7 +2121,7 @@
   .auth-visual-panel::after, .auth-visual-glow, .auth-visual-orbit { display: none; }
   .auth-brand-content { display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: flex-start; }
   .auth-mascot-wrap, .auth-mascot { width: 140px; height: 140px; }
-  .auth-mascot-wrap { margin: 0 auto 28px; }
+  .auth-mascot-wrap { margin: 0 0 28px 0; }
   .auth-visual-title { max-width: 14em; font-size: 40px; line-height: 1.15; letter-spacing: -.02em; text-wrap: balance; }
   .auth-visual-title span { color: #fdb92b; }
   .auth-tagline { max-width: 28rem; margin-top: 18px; color: #b8c3ee; font-size: 16px; line-height: 1.6; }

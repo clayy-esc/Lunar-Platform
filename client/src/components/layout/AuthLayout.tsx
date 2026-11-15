@@ -18,7 +18,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, variant = 'log
       <div className="auth-layout relative z-10 w-full">
         <aside className="auth-visual-panel">
           <div className="relative z-10 flex h-full flex-col">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-end w-full">
               <div className="flex items-center gap-2.5">
                 <LunarLogo size="sm" imageClassName="brightness-0 invert" showText={false} />
                 <span className="text-lg font-extrabold tracking-tight text-white">Lunar</span>
@@ -26,7 +26,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, variant = 'log
             </div>
 
             <div className="auth-brand-content">
-              <div className="auth-mascot-wrap" aria-hidden="true">
+              <div className="auth-mascot-wrap self-start" aria-hidden="true">
                 <img src="/favicon.png" alt="" className="auth-mascot" />
               </div>
               <h1 className="auth-visual-title">
