@@ -54,7 +54,7 @@ export const SurveyHeader: React.FC<SurveyHeaderProps> = ({
         <div className="survey-header-title">
           <div className="survey-header-eyebrow">Survey workspace</div>
           {isEditing ? <input autoFocus value={title} onChange={(event) => setTitle(event.target.value)} onBlur={commitTitle} onKeyDown={(event) => {
-            if (event.key === 'Enter') commitTitle();
+            if (event.key === 'Enter' && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229) commitTitle();
             if (event.key === 'Escape') { setTitle(survey.title); setIsEditing(false); }
           }} aria-label="Survey title" /> : <button type="button" onClick={() => onTitleChange && setIsEditing(true)} className="survey-header-name" title={onTitleChange ? 'Edit survey title' : survey.title}>{survey.title}</button>}
         </div>
