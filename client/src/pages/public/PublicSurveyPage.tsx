@@ -381,6 +381,7 @@ export const PublicSurveyPage: React.FC = () => {
 
   const themeStyle: React.CSSProperties = {
     fontFamily,
+    backgroundColor,
     ['--survey-primary' as any]: primaryColor,
     ['--survey-bg' as any]: backgroundColor,
     ['--description-align' as any]: descAlign,
@@ -478,17 +479,7 @@ export const PublicSurveyPage: React.FC = () => {
                       {optLabel}
                     </span>
                   </div>
-                  <div
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-all ${
-                      isSelected ? 'opacity-100' : 'text-slate-400 opacity-0 group-hover:opacity-100 group-hover:bg-slate-100'
-                    }`}
-                    style={isSelected ? {
-                      backgroundColor: 'color-mix(in srgb, var(--survey-primary) 14%, transparent)',
-                      color: 'var(--survey-primary)'
-                    } : undefined}
-                  >
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </div>
+
                   <input
                     type={isMultiChoice ? "checkbox" : "radio"}
                     name={question.id}

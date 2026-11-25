@@ -638,12 +638,10 @@
   @layer components {
     .public-survey-shell {
       --survey-primary: #3b62c4;
-      --survey-bg: #f4f1ff;
+      --survey-bg: #f4f6fd;
       min-height: 100dvh;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(216, 207, 255, 0.72), transparent 34%),
-        radial-gradient(circle at 88% 92%, rgba(226, 234, 255, 0.8), transparent 38%),
-        #f4f1ff;
+      background-color: var(--survey-bg);
+      background-image: none;
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     }
 
@@ -1276,16 +1274,9 @@
   /* Public Survey Dynamic Atmosphere Driven by Survey Theme */
   .public-survey-shell {
     --survey-primary: #4169b2;
-    --survey-bg: #fff9f0;
+    --survey-bg: #f4f6fd;
     background-color: var(--survey-bg);
-    background-image: 
-      radial-gradient(ellipse 75% 55% at 85% -10%, color-mix(in srgb, var(--survey-primary) 14%, transparent) 0%, transparent 65%),
-      radial-gradient(ellipse 65% 50% at 10% 20%, rgba(234, 240, 255, 0.8) 0%, transparent 60%),
-      radial-gradient(ellipse 70% 55% at 95% 60%, rgba(255, 196, 61, 0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 45% at 5% 85%, rgba(234, 240, 255, 0.75) 0%, transparent 55%);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-attachment: fixed;
+    background-image: none;
   }
 
   .public-survey-loading {
@@ -1978,7 +1969,8 @@
   }
 
   .public-survey-shell {
-    background-color: #f5f7fc;
+    background-color: var(--survey-bg, #f4f6fd);
+    background-image: none;
   }
 
   .app-shell .bg-muted,
